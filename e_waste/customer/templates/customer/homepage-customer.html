@@ -1,0 +1,69 @@
+{% extends 'customer/base_customer.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/homepage-customer.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Sansita+Swashed:wght@500&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block title %}Home Page{% endblock %}
+
+{% block content %}
+
+<header class="header-section">
+    <h1><span class="welcome">Welcome to</span> <br> <span class="title">Jabatan Alam Sekitar</span> <br> <span
+            class="short-title">JAS</span></h1>
+</header>
+
+<div class="container">
+    <div class="info-box">
+        <h2>Schedule E-Waste Pickup</h2>
+        <p>Book an e-waste pickup with us today! Just fill in the form with the type and
+            weight of e-waste and we will schedule a pickup time for you!</p>
+        <a href="schedulePick.html">Schedule Now!</a>
+    </div>
+
+    <div class="info-box">
+        <h2>Redeem Rewards</h2>
+        <p>Collected enough points? Visit our rewards redemption page now to grab limited edition gifts or cashback
+            deals!</p>
+        <a href="redeemRewards.html">Redeem Now!</a>
+    </div>
+
+    <div class="info-box">
+        <h2>View Pickup Status</h2>
+        <p>Have you scheduled an e-waste pickup? View the status of the request and arrival time. Click the link
+            below to be directed to the page!</p>
+        <a href="pickupStatus.html">Check Now!</a>
+    </div>
+
+    <div class="info-box">
+        <h2>View Recent Activity</h2>
+        <p>Curious about your past pickup schedules with us? Click the link below to view your previous pickups and
+            earned points!</p>
+        <a href="activityHis-All.html">View Now!</a>
+    </div>
+</div>
+{% endblock %}
+
+{% comment %} {% block extra_js %}
+<script>
+    fetch('header-customer.html')
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('embedded-header').innerHTML = html;
+        });
+
+    fetch('navbar-customer.html')
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('embedded-navbar').innerHTML = html;
+        });
+
+    fetch('footer.html')
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('embedded-footer').innerHTML = html;
+        });
+</script>
+{% endblock %} {% endcomment %}
