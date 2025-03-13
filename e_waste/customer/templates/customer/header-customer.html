@@ -73,9 +73,9 @@
     <div class="header">
         <a href="{% url 'customer:homepage-customer' %}"><img id="logo" src="{% static 'images/companylogo.jpg' %}" alt="company logo"></a>
         <div class="topright">
-            <a href="userprofile-customer.html">
+            <a href="{% url 'customer:user_profile' %}">
                 <div class="userprofile">
-                    <img id="user" src="{% static 'images/userprofilelogo.jpg' %}" width="70"; height="70"; alt="user profile logo">
+                    <img id="user" src="{% static 'images/userprofilelogo.jpg' %}" width="70"; height="70"; alt="user profile logo" onclick="userProfile">
                 </div>
             </a>
             <a href="{% url 'landing'%}">
@@ -86,4 +86,5 @@
         </div>
     </div>
 </body>
+
 </html>

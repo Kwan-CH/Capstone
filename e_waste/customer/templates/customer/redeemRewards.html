@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="redeemRewards.css">
+    <title>E-Waste Category</title>
+    <div id="embedded-header"></div>
+    <div id="embedded-navbar"></div>
+</head>
+<body>
+    <h1>Reward Points</h1>
+    <div class="small-box">
+    <p>Redeem your gifts using your points below<p>
+    </div>
+    <div class="points-box">
+        <p>Total Points: 1000</p>
+    </div>
+
+    <div class="container">
+        <div class="reward-box" data-reward="15% Discount Coffee" data-points="100">
+            <p>15% Discount Coffee</p>
+            <p class="points">100 points</p>
+        </div>
+        <div class="reward-box" data-reward="15% Discount Orange Juice" data-points="200">
+            <p>15% Discount Orange Juice</p>
+            <p class="points">200 points</p>
+        </div>
+        <div class="reward-box" data-reward="One FREE Coffee" data-points="250">
+            <p>One FREE Coffee</p>
+            <p class="points">250 points</p>
+        </div>
+        <div class="reward-box" data-reward="One FREE Orange Juice" data-points="350">
+            <p>One FREE Orange Juice</p>
+            <p class="points">350 points</p>
+        </div>
+        <div class="reward-box" data-reward="One FREE iPhone XR" data-points="888">
+            <p>One FREE iPhone XR</p>
+            <p class="points">888 points</p>
+        </div>
+        <div class="reward-box" data-reward="One FREE iPhone XS" data-points="999">
+            <p>One FREE iPhone XS</p>
+            <p class="points">999 points</p>
+        </div>
+    </div>
+    <button type="submit" class="redeem" disabled>Redeem</button>
+
+    <!-- Confirmation Popup -->
+    <div id="confirmation-popup" class="popup-container" style="display: none;">
+        <div class="popup-content">
+            <h2><i>Confirmation</i></h2>
+            <p>Please verify that you have chosen the correct reward before proceeding.</p>
+            <button class="btn cancel" onclick="closeConfirmationPopup()">Cancel</button>
+            <button class="btn proceed" onclick="confirmRedemption()">Proceed</button>
+        </div>
+    </div>
+
+    <!---------- Redemption Successful Popup ------------>
+    <div id="successful-popup" class="popup-container" style="display: none;">
+        <div class="popup-content">
+            <img src="Images/companylogo.jpg" alt="JAS Logo" class="popup-logo">
+            <h2>Your Reward Has Been Successfuly Redeemed!</h2>
+            <button class="btn return" onclick="closeSuccessfulPopup()">Return</button>
+        </div>
+    </div>
+
+
+    <div id="embedded-footer"></div>
+
+    <script>
+        fetch('header-customer.html')
+          .then(response => response.text())
+          .then(html => {
+            document.getElementById('embedded-header').innerHTML = html;
+        });
+
+        fetch('navbar-customer.html')
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('embedded-navbar').innerHTML = html;
+        });
+
+        fetch('footer.html')
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('embedded-footer').innerHTML = html;
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            let selectedReward = null;
+            let selectedPoints = 0;
+            const rewardBoxes = document.querySelectorAll(".reward-box");
+            const redeemButton = document.querySelector(".redeem");
+            const confirmationPopup = document.getElementById("confirmation-popup");
+            const successfulPopup = document.getElementById("successful-popup");
+
+            rewardBoxes.forEach(box => {
+                box.addEventListener("click", function () {
+                    // Remove previous selection
+                    rewardBoxes.forEach(b => b.classList.remove("selected"));
+
+                    // Select the clicked one
+                    this.classList.add("selected");
+                    selectedReward = this.getAttribute("data-reward");
+                    selectedPoints = parseInt(this.getAttribute("data-points"));
+
+                    // Enable redeem button
+                    redeemButton.disabled = false;
+                });
+            });
+
+            redeemButton.addEventListener("click", function () {
+                if (selectedReward) {
+                    // Show the confirmation popup instead of alert
+                    confirmationPopup.style.display = "flex";
+                }
+            });
+        });
+
+        // Function to close the confirmation popup
+        function closeConfirmationPopup() {
+            document.getElementById("confirmation-popup").style.display = "none";
+        }
+
+        // Function to show successful redemption after confirming redemption
+        function confirmRedemption() {
+            document.getElementById("confirmation-popup").style.display = "none"; // Close confirmation popup
+            document.getElementById("successful-popup").style.display = "flex"; // Show succesful popup
+        }
+
+        // Function to close successful popup
+        function closeSuccessfulPopup() {
+            document.getElementById("successful-popup").style.display = "none";
+
+            // Reset selection and disable redeem button
+            document.querySelectorAll(".reward-box").forEach(b => b.classList.remove("selected"));
+            document.querySelector(".redeem").disabled = true;
+        }
+
+    </script>
+</body>
+</html>

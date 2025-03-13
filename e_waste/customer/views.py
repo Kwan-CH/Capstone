@@ -2,6 +2,9 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.contrib import messages
 from database.models import Customer, PickupRequest, ItemCategory
+from django.template.context_processors import request
+
+
 # from .utils import authenticate_user
 
 def index(request):
@@ -15,7 +18,7 @@ def pickup_status(request):
     customer_id = request.session.get('user_id')
     if not customer_id:
         return redirect('login')
-    deliveries = PickupRequest.objects.filter(customer__customerID=customer_id)
+    deliveries = PickupRequest.objects.filter(customer__customerID=customer_id).order_by('-trackingnumber')
     return render(request, 'customer/pickupStatus.html', {'deliveries': deliveries})
 
 @login_required
@@ -86,6 +89,15 @@ def schedule_pickup(request):
 #     return render(request, 'customer/redeemRewards.html')
 
 
+def user_profile(request):
+    # get logged in customer id
+    customerID = request.session.get("user_id")
+    userInfo = Customer.objects.get(customerID=customerID)
+    return render(request, "customer/userprofile-customer.html", {"profile": userInfo})
+
+def edit_profile(request):
+    # return redirect('customer:renderEditPage')
+    return render(request, "customer/edituserprofile-customer.html")
 
 
 # def recent_activity(request):
@@ -93,4 +105,4 @@ def schedule_pickup(request):
 
 def logout(request):
     request.session.flush()
-    return redirect('landing')
+    return redirect('e-waste: landing')

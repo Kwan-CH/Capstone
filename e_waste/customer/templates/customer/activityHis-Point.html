@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Device Recycle - JAS E-Waste</title>
+    <link rel="stylesheet" href="activityHis-Point.css">
+    <script defer src="activityHis-Point.js"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Sansita+Swashed:wght@300;400;700&display=swap" rel="stylesheet">
+
+</head>
+<body>
+    <div id="embedded-header"></div>
+    <div id="embedded-navbar"></div>
+
+    <h1 class="title">Activity History</h1>
+
+    <!-- Navigation Buttons -->
+    <div class="btn-container">
+        <button class="tab-btn" onclick="switchPage('activityHis-All.html')">All</button>
+        <button class="tab-btn" onclick="switchPage('activityHis-Device.html')">Device Recycle</button>
+        <button class="tab-btn active" onclick="switchPage('activityHis-Point.html')">Points Spend</button>        
+    </div>
+
+    <div class="activity-container">
+        <div class="activity-card">
+            <table>
+                <tr>
+                    <td><strong>Item Code: CO001</strong></td>
+                    <td>📅 Date: 2 Feb 2025</td>
+                </tr>
+                <tr>
+                    <td>📱 Item Name: iPhone XR Plus</td>
+                    <td>⏰ Time: 1:45 p.m.</td>
+                </tr>
+            </table>
+            <div class="points-deducted">Points Deducted: -1092 points</div>
+        </div>
+    </div>
+
+
+
+
+    <div id="embedded-footer"></div>
+
+
+
+    <script>
+        fetch('header-customer.html')
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('embedded-header').innerHTML = html;
+        });
+    </script>
+
+    <script>
+        fetch('navbar-customer.html')
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('embedded-navbar').innerHTML = html;
+        });
+    </script>
+
+    <script>
+        fetch('footer.html')
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('embedded-footer').innerHTML = html;
+        });
+    </script>
+
+</body>
+</html> 
