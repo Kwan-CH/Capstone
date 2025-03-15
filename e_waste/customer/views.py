@@ -5,6 +5,8 @@ from django.contrib import messages
 from database.models import Customer, PickupRequest, ItemCategory, CustomerRedemption, Voucher
 from django.core.paginator import Paginator
 from django.db.models import F
+import json
+from django.http import JsonResponse
 
 
 # from .utils import authenticate_user
@@ -175,7 +177,7 @@ def voucher_redeemed(request):
 
     vouchers_redeemed = (CustomerRedemption.objects.filter(customer__customerID=customerID, status=False).select_related('voucher')
                          .values('voucher__voucherID', 'voucher__name', 'date', 'time', 'voucher__pointsRequired')
-                         .order_by('-voucher__voucherID')
+                         .order_by('-time')
                          )
 
     pagination = Paginator(vouchers_redeemed, 4)
@@ -194,9 +196,9 @@ def logout(request):
 
 def redeem_rewards_page(request): # need to add paginator in the future to consider the case of too much voucher
     customerID = request.session.get('user_id')
-    customerPoint = Customer.objects.get(customerID=customerID).values('points')
+    customerPoint = Customer.objects.filter(customerID=customerID).values_list('points', flat=True).first()
 
-    vouchersAvailable = Voucher.objects.all()
+    vouchersAvailable = Voucher.objects.all().filter(quantity__gt=0).order_by('voucherID')
     pagination = Paginator(vouchersAvailable, 4)
     page = request.GET.get('page')
 
@@ -206,3 +208,35 @@ def redeem_rewards_page(request): # need to add paginator in the future to consi
         return render(request, 'customer/redeemRewards.html', {"Empty": True, 'points':customerPoint})
 
     return render(request, 'customer/redeemRewards.html', {'vouchers':vouchers, 'points':customerPoint})
+
+def redeem_voucher(request):
+    print('OUTSIDE IF BLOCK')
+    if request.method == 'POST':
+        print("IN THE FUNCTION")
+        try:
+            data = json.loads(request.body)
+            voucherID = data.get("reward")
+            points_required = data.get("points")
+
+            customerID = request.session.get('user_id')
+            customer = Customer.objects.get(customerID=customerID)
+            voucher = Voucher.objects.get(voucherID=voucherID)
+
+            # check if customer have enough points
+            if customer.points < points_required:
+                return JsonResponse({"success": False, "message": "Not enough points."}, status=400)
+
+            customer.points -=points_required
+            customer.save()
+            voucher.quantity -= 1
+            voucher.save()
+
+            print("save pending")
+            redemption = CustomerRedemption.objects.create(customer=customer, voucher=voucher, status=False)
+            print("saved")
+            redemption.save()
+            return JsonResponse({"success": True, "message": "Voucher redeemed successfully!"})
+
+        except Exception as e:
+            return JsonResponse({"success": False, "message": str(e)}, status=500)
+    return JsonResponse({"success": False, "message": "Invalid request method."}, status=405)

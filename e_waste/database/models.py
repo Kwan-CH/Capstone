@@ -154,12 +154,12 @@ class CustomerRedemption(models.Model):
             last_redemption = CustomerRedemption.objects.order_by('-redemptionID').first()
 
             if last_redemption:
-                last_number = int(last_redemption.redemtionID[1:])
+                last_number = int(last_redemption.redemptionID[1:])
                 new_number = last_number + 1
             else:
                 new_number = 1
 
-            self.redemptionID = f"C{new_number:04d}"
+            self.redemptionID = f"R{new_number:04d}"
 
         super().save(*args, **kwargs)
 
