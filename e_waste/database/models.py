@@ -94,7 +94,6 @@ class Driver(models.Model):
 class ItemCategory (models.Model):
     categoryID = models.CharField(primary_key=True, max_length=50)
     itemType = models.CharField(max_length=50)
-    example = models.CharField(max_length=200)
     pointsGiven = models.IntegerField()
 
     def save(self, *args, **kwargs):
@@ -113,7 +112,7 @@ class ItemCategory (models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.categoryID} {self.itemType} {self.example}"
+        return f"{self.categoryID} {self.itemType}"
 
 class Voucher(models.Model):
     voucherID = models.CharField(primary_key=True, max_length=200)
@@ -139,7 +138,7 @@ class Voucher(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.voucherID} {self.name} {self.quantity}"
+        return f"{self.voucherID} {self.name}\tQuantity: {self.quantity}"
 
 class CustomerRedemption(models.Model):
     redemptionID = models.CharField(primary_key=True, max_length=200)
