@@ -17,7 +17,7 @@
         </div>
 
         <form method="post" id="schedule-pickup-form" action="{% url 'customer:schedule_pickup' %}">
-        {% comment %} <form method="post"> {% endcomment %}
+<!--        {% comment %} <form method="post"> {% endcomment %}-->
             {% csrf_token %}
             <!-- Waste Type (Dropdown) -->
             <label for="waste-type">A. Waste Type:</label>
@@ -56,8 +56,8 @@
             <input type="date" id="pickup-date" name="pickup_date" required>
             <input type="time" id="pickup-time" name="pickup_time" required>
             <br><br>
-            {% comment %} <a href="{% url 'customer:waste_category' %}"><p>View the waste category and points here</p></a> {% endcomment %}
-            <a href="wasteCategory.html"><p>View the waste category and points here</p></a>
+<!--            {% comment %} <a href="{% url 'customer:waste_category' %}"><p>View the waste category and points here</p></a> {% endcomment %}-->
+            <a href="{% url 'customer:waste_category' %}"><p>View the waste category and points here</p></a>
             <br><br>
 
             <!-- Buttons -->

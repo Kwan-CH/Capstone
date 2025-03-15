@@ -113,7 +113,7 @@
             <label>Password</label>
             <div class="password-container">
                 <input type="password" class="input-box password-box" value="{{profile.password}}" disabled>
-                <a href="editpassword-customer.html" id="editpassword">Edit Password</a>
+                <a href="{% url 'customer:edit_password' %}" id="editpassword">Edit Password</a>
             </div>
 
             <label>Address</label>
@@ -153,7 +153,11 @@
 <!--            document.getElementById('embedded-footer').innerHTML = html;-->
 <!--        });-->
 <!--    </script>-->
-
+    {% if update_success %}
+        <script>
+            alert('Profile has been updated');
+        </script>
+    {% endif %}
 
 </body>
 

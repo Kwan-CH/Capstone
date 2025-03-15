@@ -44,10 +44,26 @@
                 {% endfor %}
             </tbody>
         </table>
+        
+        <div>
+            {% if not Empty %}
+                {% if deliveries.has_previous %}
+                    <a href="?page={{ deliveries.previous_page_number }}" style="text-decoration:none;"> &larr; Previous</a>
+                {% endif %}
+
+                <span>Page {{ deliveries.number }} of {{ deliveries.paginator.num_pages }}</span>
+
+                {% if deliveries.has_next %}
+                    <a href="?page={{ deliveries.next_page_number }}" style="text-decoration:none;">Next &rarr; </a>
+                {% endif %}
+            {% else %}
+                <p>No History Available</p>
+            {% endif %}
+        </div>
 
         <p class="note">
             {% comment %} <b>Note:</b> Completed pickups will only remain on this page for 24 hours. After this, they will be moved to the <a href ="{% url 'customer:activity' %} style="font-weight: bold;"> Activity History</a> page. {% endcomment %}
-            <b>Note:</b> Completed pickups will only remain on this page for 24 hours. After this, they will be moved to the <a href ="#" style="font-weight: bold;"> Activity History</a> page.
+            <b>Note:</b> Completed pickups will only remain on this page for 24 hours. After this, they will be moved to the <a href ="{% url 'customer:device_recycled' %}" style="font-weight: bold;"> Activity History</a> page.
         </p>
     </div>
 

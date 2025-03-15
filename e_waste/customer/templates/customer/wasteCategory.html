@@ -1,12 +1,19 @@
+{% extends 'customer/base_customer.html' %}
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="wasteCategory.css">
+    {% block extra_css %}
+        <link rel="stylesheet" href="{% static 'css/wasteCategory.css' %}">
+    {% endblock %}
     <title>E-Waste Category</title>
-    <div id="embedded-header"></div>
-    <div id="embedded-navbar"></div>
+<!--    <div id="embedded-header"></div>-->
+<!--    <div id="embedded-navbar"></div>-->
 </head>
+
+{% block content %}
 <body>
     <div class="main-content">
         <h1>E-Waste Classification</h1>
@@ -57,32 +64,34 @@
         </div>
     </div>
 
-    <a href="schedulePick.html" id="backButton">Back</a>
+    <a href="{% url 'customer:schedule_pickup' %}" id="backButton">Back</a>
 
-    <div id="embedded-footer"></div>
+<!--    <div id="embedded-footer"></div>-->
 
-    <script>
-        fetch('header-customer.html')
-          .then(response => response.text())
-          .then(html => {
-            document.getElementById('embedded-header').innerHTML = html;
-        });
-    </script>
+<!--    <script>-->
+<!--        fetch('header-customer.html')-->
+<!--          .then(response => response.text())-->
+<!--          .then(html => {-->
+<!--            document.getElementById('embedded-header').innerHTML = html;-->
+<!--        });-->
+<!--    </script>-->
 
-    <script>
-        fetch('navbar-customer.html')
-        .then(response => response.text())
-        .then(html => {
-            document.getElementById('embedded-navbar').innerHTML = html;
-        });
-    </script>
+<!--    <script>-->
+<!--        fetch('navbar-customer.html')-->
+<!--        .then(response => response.text())-->
+<!--        .then(html => {-->
+<!--            document.getElementById('embedded-navbar').innerHTML = html;-->
+<!--        });-->
+<!--    </script>-->
 
-    <script>
-        fetch('footer.html')
-        .then(response => response.text())
-        .then(html => {
-            document.getElementById('embedded-footer').innerHTML = html;
-        });
-    </script>
+<!--    <script>-->
+<!--        fetch('footer.html')-->
+<!--        .then(response => response.text())-->
+<!--        .then(html => {-->
+<!--            document.getElementById('embedded-footer').innerHTML = html;-->
+<!--        });-->
+<!--    </script>-->
 </body>
+{% endblock %}
+
 </html>

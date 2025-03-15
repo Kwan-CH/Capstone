@@ -48,9 +48,9 @@
 
 <ul>
     <li><a class="active" href="{% url 'customer:schedule_pickup'%}">Schedule Pickup</a></li>
-    <li><a href="redeemRewards.html">Earned Reward Points</a></li>
-    <li><a href="{% url 'customer:pickup_status'%}">Pickup Status</a></li>
-    <li><a href="activityHis-All.html">Recent Activity</a></li>
+    <li><a href="{% url 'customer:redeem_rewards_page' %}">Earned Reward Points</a></li>
+    <li><a href="{% url 'customer:pickup_status' %}">Pickup Status</a></li>
+    <li><a href="{% url 'customer:device_recycled' %}">Recent Activity</a></li>
 </ul>
 
 </body>

@@ -1,7 +1,8 @@
 from django.db import models
 from django.contrib.auth.hashers import make_password
 from django.utils import timezone
-
+import datetime
+import time
 # Create your models here.
 
 class Customer (models.Model):
@@ -117,9 +118,9 @@ class ItemCategory (models.Model):
 class Voucher(models.Model):
     voucherID = models.CharField(primary_key=True, max_length=200)
     name = models.CharField(max_length=150)
-    description = models.CharField(max_length=200)
+    # description = models.CharField(max_length=200)
     pointsRequired = models.IntegerField()
-    termsCondition = models.CharField(max_length=200)
+    # termsCondition = models.CharField(max_length=200)
     quantity = models.IntegerField()
 
     def save(self, *args, **kwargs):
@@ -144,6 +145,8 @@ class CustomerRedemption(models.Model):
     redemptionID = models.CharField(primary_key=True, max_length=200)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     voucher = models.ForeignKey(Voucher, on_delete=models.CASCADE)
+    date = models.DateField(auto_now=True)
+    time = models.TimeField(auto_now=True)
     status = models.BooleanField() # used status, if True = the voucher had been used vice versa
 
     def save(self, *args, **kwargs):
@@ -162,7 +165,7 @@ class CustomerRedemption(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.redemptionID} {self.customer} {self.voucher}"
+        return f"{self.redemptionID} {self.customer} {self.voucher} {self.date}"
 
 class PickupRequest(models.Model):
     requestID = models.CharField(primary_key=True, max_length=200)
