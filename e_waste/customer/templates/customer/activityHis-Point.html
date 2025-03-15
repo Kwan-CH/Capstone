@@ -1,74 +1,104 @@
+{% extends 'customer/base_customer.html' %}
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Device Recycle - JAS E-Waste</title>
-    <link rel="stylesheet" href="activityHis-Point.css">
-    <script defer src="activityHis-Point.js"></script>
 
-    <link href="https://fonts.googleapis.com/css2?family=Sansita+Swashed:wght@300;400;700&display=swap" rel="stylesheet">
+    {% block extra_css %}
+        <link rel="stylesheet" href="{% static 'css/activityHis-Point.css' %}">
+        <link href="https://fonts.googleapis.com/css2?family=Sansita+Swashed:wght@300;400;700&display=swap" rel="stylesheet">
+    {% endblock %}
+
+    <!--    <script defer src="activityHis-Point.js"></script>-->
 
 </head>
+
+{% block content %}
 <body>
-    <div id="embedded-header"></div>
-    <div id="embedded-navbar"></div>
+<!--    <div id="embedded-header"></div>-->
+<!--    <div id="embedded-navbar"></div>-->
 
     <h1 class="title">Activity History</h1>
 
     <!-- Navigation Buttons -->
     <div class="btn-container">
-        <button class="tab-btn" onclick="switchPage('activityHis-All.html')">All</button>
-        <button class="tab-btn" onclick="switchPage('activityHis-Device.html')">Device Recycle</button>
-        <button class="tab-btn active" onclick="switchPage('activityHis-Point.html')">Points Spend</button>        
+        <a href="{% url 'customer:device_recycled' %}">
+            <button class="tab-btn" onclick="location.href={% url 'customer:device_recycled' %}">Device Recycle</button>
+        </a>
+        <a href="{% url 'customer:voucher_redeemed' %}">
+            <button class="tab-btn active" onclick="location.href={% url 'customer:voucher_redeemed' %}">Points Spend</button>
+        </a>
     </div>
 
-    <div class="activity-container">
-        <div class="activity-card">
-            <table>
-                <tr>
-                    <td><strong>Item Code: CO001</strong></td>
-                    <td>📅 Date: 2 Feb 2025</td>
-                </tr>
-                <tr>
-                    <td>📱 Item Name: iPhone XR Plus</td>
-                    <td>⏰ Time: 1:45 p.m.</td>
-                </tr>
-            </table>
-            <div class="points-deducted">Points Deducted: -1092 points</div>
+    {% for voucher in vouchers %}
+        <div class="activity-container">
+            <div class="activity-card">
+                <table>
+                    <tr>
+                        <td><strong>Item Code: {{voucher.voucher__voucherID}}</strong></td>
+                        <td>📅 Date: {{voucher.date}}</td>
+                    </tr>
+                    <tr>
+                        <td>📱 Item Name: {{voucher.voucher__name}}</td>
+                        <td>⏰ Time: {{voucher.time}}</td>
+                    </tr>
+                </table>
+                <div class="points-deducted">Points Deducted: {{voucher.voucher__pointsRequired}} points</div>
+            </div>
         </div>
+    {% endfor %}
+
+
+
+<!--    <div id="embedded-footer"></div>-->
+
+
+
+<!--    <script>-->
+<!--        fetch('header-customer.html')-->
+<!--        .then(response => response.text())-->
+<!--        .then(html => {-->
+<!--            document.getElementById('embedded-header').innerHTML = html;-->
+<!--        });-->
+<!--    </script>-->
+
+<!--    <script>-->
+<!--        fetch('navbar-customer.html')-->
+<!--        .then(response => response.text())-->
+<!--        .then(html => {-->
+<!--            document.getElementById('embedded-navbar').innerHTML = html;-->
+<!--        });-->
+<!--    </script>-->
+
+<!--    <script>-->
+<!--        fetch('footer.html')-->
+<!--        .then(response => response.text())-->
+<!--        .then(html => {-->
+<!--            document.getElementById('embedded-footer').innerHTML = html;-->
+<!--        });-->
+<!--    </script>-->
+
+    <div>
+        {% if not Empty %}
+            {% if vouchers.has_previous %}
+                <a href="?page={{ vouchers.previous_page_number }}" style="text-decoration:none;"> &larr; Previous</a>
+            {% endif %}
+
+            <span>Page {{ vouchers.number }} of {{ vouchers.paginator.num_pages }}</span>
+
+            {% if vouchers.has_next %}
+                <a href="?page={{ vouchers.next_page_number }}" style="text-decoration:none;">Next &rarr; </a>
+            {% endif %}
+        {% else %}
+            <p>No vouchers Have Been Redeemed</p>
+        {% endif %}
     </div>
-
-
-
-
-    <div id="embedded-footer"></div>
-
-
-
-    <script>
-        fetch('header-customer.html')
-        .then(response => response.text())
-        .then(html => {
-            document.getElementById('embedded-header').innerHTML = html;
-        });
-    </script>
-
-    <script>
-        fetch('navbar-customer.html')
-        .then(response => response.text())
-        .then(html => {
-            document.getElementById('embedded-navbar').innerHTML = html;
-        });
-    </script>
-
-    <script>
-        fetch('footer.html')
-        .then(response => response.text())
-        .then(html => {
-            document.getElementById('embedded-footer').innerHTML = html;
-        });
-    </script>
 
 </body>
-</html> 
+{% endblock %}
+
+</html>

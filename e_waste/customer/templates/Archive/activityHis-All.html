@@ -1,20 +1,27 @@
+{% extends 'customer/base_customer.html' %}
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Activity History</title>
-    <link rel="stylesheet" href="activityHis-All.css">
-    <script src="activityHis-All.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Sansita+Swashed:wght@300;400;700&display=swap" rel="stylesheet">
+    {% block extra_css %}
+        <link rel="stylesheet" href="{% static 'css/activityHis-All.css' %}">
+        <link href="https://fonts.googleapis.com/css2?family=Sansita+Swashed:wght@300;400;700&display=swap" rel="stylesheet">
+    {% endblock %}
 
+    {% block extra_js %}
+        <script src="{% static 'js/activityHis-All.js' %}"></script>
+    {% endblock %}
 
 </head>
 
-
+{% block content %}
 <body>
-    <div id="embedded-header"></div>
-    <div id="embedded-navbar"></div>
+<!--    <div id="embedded-header"></div>-->
+<!--    <div id="embedded-navbar"></div>-->
 
 
 
@@ -22,7 +29,6 @@
 
     <!-- Navigation Buttons -->
     <div class="btn-container">
-        <button class="tab-btn active" onclick="switchPage('activityHis-All.html')">All</button>
         <button class="tab-btn" onclick="switchPage('activityHis-Device.html')">Device Recycle</button>
         <button class="tab-btn" onclick="switchPage('activityHis-Point.html')">Points Spend</button>
     </div>
@@ -120,31 +126,32 @@
         </div>
     </div>
 
-    <div id="embedded-footer"></div>
+<!--    <div id="embedded-footer"></div>-->
 
-    <script>
-        fetch('header-customer.html')
-        .then(response => response.text())
-        .then(html => {
-            document.getElementById('embedded-header').innerHTML = html;
-        });
-    </script>
+<!--    <script>-->
+<!--        fetch('header-customer.html')-->
+<!--        .then(response => response.text())-->
+<!--        .then(html => {-->
+<!--            document.getElementById('embedded-header').innerHTML = html;-->
+<!--        });-->
+<!--    </script>-->
 
-    <script>
-        fetch('navbar-customer.html')
-        .then(response => response.text())
-        .then(html => {
-            document.getElementById('embedded-navbar').innerHTML = html;
-        });
-    </script>
+<!--    <script>-->
+<!--        fetch('navbar-customer.html')-->
+<!--        .then(response => response.text())-->
+<!--        .then(html => {-->
+<!--            document.getElementById('embedded-navbar').innerHTML = html;-->
+<!--        });-->
+<!--    </script>-->
 
-    <script>
-        fetch('footer.html')
-        .then(response => response.text())
-        .then(html => {
-            document.getElementById('embedded-footer').innerHTML = html;
-        });
-    </script>
+<!--    <script>-->
+<!--        fetch('footer.html')-->
+<!--        .then(response => response.text())-->
+<!--        .then(html => {-->
+<!--            document.getElementById('embedded-footer').innerHTML = html;-->
+<!--        });-->
+<!--    </script>-->
 
 </body>
+{% endblock %}
 </html>
