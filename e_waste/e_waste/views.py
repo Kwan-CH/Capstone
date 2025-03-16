@@ -67,20 +67,23 @@ def user_login(request):
             if Customer.objects.filter(email=email).exists():
                 user_role = 'customer'
                 user_obj = Customer.objects.get(email=email)
+                userID = user_obj.customerID
                 redirect_url = 'customer:homepage-customer'
             # Check if the user is a Driver
             elif Driver.objects.filter(email=email).exists():
                 user_role = 'driver'
                 user_obj = Driver.objects.get(email=email)
+                userID = user_obj.driverID
                 redirect_url = 'driver:homepage-driver'
             # Check if the user is an Operator
             elif Operator.objects.filter(email=email).exists():
                 user_role = 'operator'
                 user_obj = Operator.objects.get(email=email)
+                userID = user_obj.operatorID
                 redirect_url = 'operator:homepage-operator'
 
             # Store user details in session
-            request.session['user_id'] = user_obj.customerID
+            request.session['user_id'] = userID
             request.session['user_email'] = user_obj.email
             request.session['user_role'] = user_role
             return redirect(redirect_url)
