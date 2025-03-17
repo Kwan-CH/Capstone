@@ -1,0 +1,221 @@
+{% extends 'e_waste_operator/base_operator.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/operator-manageReq.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Sansita+Swashed:wght@500&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block title %}Manage Request{% endblock %}
+
+{% block content %}
+
+<body>
+    {% comment %} <div id="embedded-header"></div>
+    <div id="embedded-navbar"></div> {% endcomment %}
+
+    <h1 class="title">Manage Request</h1>
+    
+    <div class="manageTable">
+      <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Address</th>
+                <th>Category</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+         <tbody>
+          {% for request in requests %}
+            <tr>
+              <td class="name">{{ request.customer.name }}</td>  <!-- Customer Name -->
+              <td class="date">{{ request.date }}</td>
+              <td class="time">{{ request.time }}</td>
+              <td class="address">{{ request.address }}</td>
+              <td class="category">{{ request.category.name }}</td>  <!-- Waste Type (Category Name) -->
+              <td class="status">{{ request.status }}</td>
+              <td><button class="update-btn">Update</button></td>
+            </tr>
+          {% endfor %}
+        </tbody> 
+
+        {% comment %} <tbody>
+          {% for request in requests %}
+          <tr data-request-id="{{ request.requestID }}">
+              <td class="name">{{ request.customer.name }}</td>  <!-- Customer Name -->
+              <td class="date">{{ request.date }}</td>
+              <td class="time">{{ request.time }}</td>
+              <td class="address">{{ request.address }}</td>
+              <td class="category">{{ request.category.name }}</td>  <!-- Waste Type (Category Name) -->
+              <td class="status">{{ request.status }}</td>
+              <td>
+                  <button class="update-btn" 
+                      data-name="{{ request.customer.name }}" 
+                      data-date="{{ request.date }}" 
+                      data-time="{{ request.time }}" 
+                      data-address="{{ request.address }}" 
+                      data-category="{{ request.category.name }}" 
+                      data-status="{{ request.status }}" 
+                      data-request-id="{{ request.requestID }}">
+                      Update
+                  </button>
+              </td>
+          </tr>
+          {% endfor %}
+      </tbody>
+      <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">       {% endcomment %}
+      </table>
+    </div>
+
+  <!-- Confirmation Popup -->
+  <div id="confirmation-popup" class="popup-container" style="display: none;">
+    <div class="popup-content">
+        <h2><i>Update Request Status</i></h2>
+        <img src="{% static 'images/update-req.png' %}" class="popup-logo">
+        {% comment %} <form>
+          <!-- Name Field -->
+          <div class="form-group">
+              <label for="name">Name:</label>
+              <div class="input-container">
+                  <input id="modal-name" type="text" value="  Akau" disabled required>
+              </div>
+          </div>
+
+          <!-- Item Category Field -->
+          <div class="form-group">
+              <label for="category">Item's category:</label>
+              <div class="input-container">
+                  <input id="modal-category" type="text" value="Large household appliance" disabled required>
+              </div>
+          </div>
+
+          <!-- Address Field -->
+          <div class="form-group">
+              <label for="address">Address:</label>
+              <div class="input-container">
+                  <input id="modal-address" type="text" value="No.19, Jalan Bunga Mawar, Cheras, Kuala Lumpur" disabled required>
+              </div>
+          </div>
+        </form> {% endcomment %}
+
+        <!-- Buttons -->
+        <div class="btn-container">
+          <div class="button1">
+            <button onclick="showSucessfulPopup()" class="btn-save">Approve</button>
+          </div>
+        
+          <div class="button2">
+            <button class="btn-cancel" onclick="showRejectReqPopup()">Reject</button>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+
+  <!---------- Approved Popup ------------>
+    <div id="sucessful-popup" class="popup-container" style="display: none;">
+        <div class="popup-content">
+            <img src="{% static 'images/approved.png' %}" alt="JAS Logo" class="popup-logo">
+            <p class="popup-text">A pickup request has been approved.</p>
+
+            <!-- Buttons -->
+            <div class="btn-container">
+              <div class="button1">
+                <a href="assign-driver.html">
+                  <button class="btn-save">Proceed</button>
+                </a>
+              </div>
+            
+              <div class="button2">
+                <button class="btn-cancel" onclick="closeTrackingPopup()">Back</button>
+              </div>
+            </div>
+        </div>
+    </div>
+
+    <!------- Reject Request Popup ------>
+    <div id="rejectReq-popup" class="popup-container">
+      <div class="popup-content">
+          <h2><i>Reject Request</i></h2>
+          <form class="reject-form">
+           
+            <label for="reason" class="reject-label">
+                Please specify why the pickup request was denied:
+            </label>
+            <select id="reason" class="reject-dropdown">
+                <option value="">Select Reason</option>
+                <option value="Invalid address">Invalid address</option>
+                <option value="Item not acceptable">Item not acceptable</option>
+                <option value="Duplicate request">Duplicate request</option>
+                <option value="Other">Other</option>
+            </select>
+            
+        </form>
+        
+
+          <!-- Buttons -->
+          <div class="btn-container">
+            <div class="button1">
+              <button onclick="rejectedPopup()" class="btn-save">Proceed</button>
+            </div>
+          
+            <div class="button2">
+              <button class="btn-cancel" onclick="showConfirmationPopup2()">Back</button>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+
+       <!---------- Rejected Popup ------------>
+      <div id="rejected-popup" class="popup-container" style="display: none;">
+        <div class="popup-content">
+            <img src="{% static 'images/rejected.png' %}" alt="JAS Logo" class="popup-logo">
+            <p class="popup-text">A pickup request has been rejected.</p>
+
+            <div class="button2">
+              <button class="btn-cancel" onclick="closeRejectedPopup()">Back</button>
+            </div>
+        </div> 
+      </div>
+
+  {% comment %} <script src="createacc-pop.js"></script>  {% endcomment %}
+           
+    <div id="embedded-footer"></div>
+
+    {% comment %} <script src="manageRequest.js"></script> {% endcomment %}
+
+    {% comment %} <script>
+        fetch('operator-header.html')
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('embedded-header').innerHTML = html;
+        });
+    </script>
+
+    <script>
+        fetch('operator-navbar.html')
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('embedded-navbar').innerHTML = html;
+        });
+    </script>
+
+    <script>
+        fetch('footer.html')
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('embedded-footer').innerHTML = html;
+        });
+    </script> {% endcomment %}
+{% block extra_js %}
+    <script src="{% static 'js/manageRequest.js' %}"></script>
+{% endblock %}
+
+</body>
+{% endblock %}
+</html>
