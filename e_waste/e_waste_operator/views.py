@@ -1,7 +1,7 @@
 
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from database.models import Driver, PickupRequest
+from database.models import Driver, PickupRequest, Reason
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.http import JsonResponse

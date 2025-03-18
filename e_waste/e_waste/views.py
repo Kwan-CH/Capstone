@@ -80,7 +80,7 @@ def user_login(request):
                 user_role = 'operator'
                 user_obj = Operator.objects.get(email=email)
                 userID = user_obj.operatorID
-                redirect_url = 'operator:homepage-operator'
+                redirect_url = 'e_waste_operator:homepage-operator'
 
             # Store user details in session
             request.session['user_id'] = userID

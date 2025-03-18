@@ -56,12 +56,12 @@
 
 <body>
     <div class="header">
-        <a href="operator-homepage.html"><img id="logo" src="{% static 'images/companylogo.jpg' %}" alt="company logo"></a>
-            <a href="landing.html">
+        <a href="{% url 'e_waste_operator:homepage-operator' %}"><img id="logo" src="{% static 'images/companylogo.jpg' %}" alt="company logo"></a>
+            <a href="{% url 'landing' %}">
                 <div class="logout">
                     <button id="logout">Log Out</button>
+                </div>
             </a>
-        </div>
     </div>
 </body>
 </html>
