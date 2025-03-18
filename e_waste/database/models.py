@@ -167,6 +167,27 @@ class CustomerRedemption(models.Model):
     def __str__(self):
         return f"{self.redemptionID} {self.customer} {self.voucher} {self.date}"
 
+class Reason(models.Model):
+    reasonID = models.CharField(primary_key=True, max_length=255)
+    reason = models.CharField(max_length=255)
+
+    def save(self, *args, **kwargs):
+        if not self.reasonID:
+            last_reason = Reason.objects.order_by('-reasonID').first()
+
+            if last_reason:
+                last_number = int(last_reason.reasonID[2:])
+                new_number = last_number + 1
+            else:
+                new_number = 1
+
+            self.reasonID = f"RE{new_number:04d}"
+
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.reasonID} Reason:{self.reason}"
+
 class PickupRequest(models.Model):
     requestID = models.CharField(primary_key=True, max_length=200)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
@@ -177,7 +198,7 @@ class PickupRequest(models.Model):
     time = models.TimeField()
     address = models.TextField()
     status = models.CharField(max_length=50, default="Pending")
-    rejectedReason = models.TextField(blank=True, null=True, max_length=200)
+    rejectedReason = models.ForeignKey(Reason, on_delete=models.CASCADE, null=True, blank=True)
     driver = models.ForeignKey(Driver, on_delete=models.CASCADE, null=True, blank=True)
     operator = models.ForeignKey(Operator, on_delete=models.CASCADE, null=True, blank=True)
     trackingnumber = models.CharField(max_length=200, unique=True)
