@@ -85,7 +85,7 @@ class Driver(models.Model):
             else:
                 new_number = 1
 
-            self.driverID = f"C{new_number:04d}"
+            self.driverID = f"D{new_number:04d}"
 
         super().save(*args, **kwargs)
 
