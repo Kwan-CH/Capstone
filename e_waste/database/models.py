@@ -14,7 +14,7 @@ class Customer (models.Model):
     phoneNumber = models.IntegerField()
     address = models.TextField()
     state = models.CharField(max_length=50)
-    points = models.IntegerField(blank = True, null = True)
+    points = models.IntegerField(blank = True, null = True, default=0)
 
     def save(self, *args, **kwargs):
         # if not self.pk or Customer.objects.get(pk=self.pk).password != self.password:
