@@ -9,11 +9,11 @@ from django.http import JsonResponse
 
 
 def homepage_operator(request):
-    return render(request, 'e_waste_operator/operator-homepage.html')
+    return render(request, 'operator/operator-homepage.html')
 
 def manageReq(request):
     requests = PickupRequest.objects.all()
-    return render(request, 'e_waste_operator/operator-manageReq.html',{'requests': requests})
+    return render(request, 'operator/operator-manageReq.html',{'requests': requests})
 
 def update_request_status(request):
     if request.method == "POST":
@@ -31,36 +31,49 @@ def update_request_status(request):
             return JsonResponse({"success": False, "error": "Request not found."})
 
 
-def operator_createacc(request):
+def operator_create_acc_page(request):
+    states = ["Johor", "Kedah", "Kelantan", "Melaka", "Negeri Sembilan",
+              "Pahang", "Perak", "Perlis", "Pulau Pinang", "Sabah", "Sarawak",
+              "Selangor", "Terengganu", "Kuala Lumpur", "Labuan", "Putrajaya"]
+    return render(request, 'operator/operator-create_acc.html', {"states":states})
 
-    if request.method =='POST':
-        full_name = request.POST['full_name']
+def save_driver_account(request):
+    states = ["Johor", "Kedah", "Kelantan", "Melaka", "Negeri Sembilan",
+              "Pahang", "Perak", "Perlis", "Pulau Pinang", "Sabah", "Sarawak",
+              "Selangor", "Terengganu", "Kuala Lumpur", "Labuan", "Putrajaya"]
+
+    if request.method == 'POST':
+        name = request.POST['full_name']
         email = request.POST['email']
         password = request.POST['password']
-        phone_number = request.POST['phone_number']
-        state_covered = request.POST.get('state_covered')
-        car_plate = request.POST['car_plate']
-        print(f"🔹 Received Data: Name={full_name}, Email={email}, Phone={phone_number}, State={state_covered}, Plate={car_plate}")
+        contact = request.POST['phone_number']
+        state = request.POST.get('state_covered')
+        carPlate = request.POST['car_plate']
 
         # Check if email already exists
         if Driver.objects.filter(email=email).exists():
-            messages.error(request, 'Email address already exists.')
-            return redirect('createacc')
+            messages.error(request, "Email existed in the database already, please try a new one")
+            return render(request, 'operator/operator-create_acc.html',{"formData": request.POST, "states":states})
 
-    
         if len(password) < 8:
-            return render(request, "e_waste_operator/operator-createacc.html", {"error": "Password is too short!"})
+            messages.error(request, "Password is too short, minimum length is 8")
+            return render(request, 'operator/operator-create_acc.html',{"formData": request.POST, "states":states})
 
-        if not phone_number.isdigit():
-            return render(request, "e_waste_operator/operator-createacc.html", {"error": "Invalid contact number!"})
-        
-        if not state_covered:
-            messages.error(request, "Please select your state.")
-            return redirect('createacc')
+        if not contact.isdigit():
+            messages.error(request, "Contact number should not have alphabet")
+            return render(request, 'operator/operator-create_acc.html',{"formData": request.POST, "states":states})
 
-        new_user = Driver(name=full_name, email=email, password=password,phoneNumber=phone_number, plateNumber=car_plate, stateCovered=state_covered)
+        if not state:
+            messages.error(request, "PLease select a state before proceeding")
+            return render(request, 'operator/operator-create_acc.html',{"formData": request.POST, "states":states})
+
+        new_user = Driver(name=name, email=email, password=password,phoneNumber=contact, plateNumber=carPlate, stateCovered=state)
         new_user.save()
 
-        
-        return redirect('e_waste_operator:operator-homepage')
-    return render(request, 'e_waste_operator/operator-createacc.html')
+        return render(request, 'operator/operator-create_acc.html', {"Success":True, "states":states})
+
+    return render(request, 'operator/operator-create_acc.html', {"states":states})
+
+
+def assign_driver(request):
+    return render(request, 'operator/assign-driver.html')

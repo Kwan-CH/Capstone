@@ -100,6 +100,18 @@ tr{
   align-items: center;
 }
 
+.popup-close {
+  position: absolute;
+  top: 6px;
+  right: 16px;
+  margin: 0;
+  padding: 0;
+  background: none;
+  border: none;
+  font-size: 36px;
+  cursor: pointer;
+}
+
 /* ------------------Popup Box ----------------------------*/
 .popup-content {
   background: #F5F8EE;
@@ -108,6 +120,7 @@ tr{
   width: 700px; 
   text-align: center;
   box-shadow: 2px 2px 15px rgba(0, 0, 0, 0.3);
+  position: relative;
 }
 
 .popup-content h2 {

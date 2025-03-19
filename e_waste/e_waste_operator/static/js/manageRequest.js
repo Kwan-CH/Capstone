@@ -15,70 +15,63 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-document.addEventListener("DOMContentLoaded", function () {
-    document.querySelector(".submit").addEventListener("click", function (event) {
-        event.preventDefault();
-        showConfirmationPopup(); // Show confirmation popup first
-    });
-  });
+//document.addEventListener("DOMContentLoaded", function () {
+//    document.querySelector(".submit").addEventListener("click", function (event) {
+//        event.preventDefault();
+//        showConfirmationPopup(); // Show confirmation popup first
+//    });
+//  });
   
   // Show Confirmation Popup
-  function showConfirmationPopup() {
-    document.getElementById("confirmation-popup").style.display = "flex";
-  }
-  
-  // Close Confirmation Popup
-  function closeConfirmationPopup() {
-    console.log("show confirmation")
-    document.getElementById("confirmation-popup").style.display = "none";
-  }
-  
-  // Show Sucessful Popup 
-  function showSucessfulPopup() {
-    closeConfirmationPopup(); 
-    document.getElementById("sucessful-popup").style.display = "flex";
-  }
-  
-  // Close Sucessful Popup
-  function closeTrackingPopup() {
-    document.getElementById("sucessful-popup").style.display = "none";
-  }
+function showConfirmationPopup() {
+  document.getElementById("confirmation-popup").style.display = "flex";
+}
 
-  // Show Rejected Popup
-  function showRejectReqPopup(){
-    console.log("show rejected popup") 
-    document.getElementById("rejectReq-popup").style.display = "flex";
-  }
-  
+// Close Confirmation Popup
+function closeConfirmationPopup() {
+  document.getElementById("confirmation-popup").style.display = "none";
+}
 
-  
-// document.addEventListener("DOMContentLoaded", function () {
-//   const updateButtons = document.querySelectorAll(".update-btn");
-//   const popup = document.getElementById("confirmation-popup");
+// Show Sucessful Popup
+function showSuccessfulPopup() {
+  closeConfirmationPopup();
+  document.getElementById("sucessful-popup").style.display = "flex";
+}
 
-//   // Modal input fields
-//   const modalName = document.getElementById("modal-name");
-//   const modalCategory = document.getElementById("modal-category");
-//   const modalAddress = document.getElementById("modal-address");
+// Close Sucessful Popup
+function closeTrackingPopup() {
+  document.getElementById("sucessful-popup").style.display = "none";
+}
 
-//   let selectedRequestID = null; // Store request ID
+//Show Reject Request Popup
+function showRejectReqPopup(){
+  closeConfirmationPopup();
+  document.getElementById("rejectReq-popup").style.display = "flex";
+}
 
+//Close Reject Request Popup
+function closeRejectReqPopup(){
+  document.getElementById("rejectReq-popup").style.display = "none";
+}
 
+//Show Confirmation Popup2
+function showConfirmationPopup2(){
+  closeRejectReqPopup();
+  document.getElementById("confirmation-popup").style.display = "flex";
+}
 
-//   // Handle "Update" button click
-//   updateButtons.forEach(button => {
-//       button.addEventListener("click", function () {
-//           selectedRequestID = this.dataset.requestId;  // Get request ID
+function closeConfirmationPopup2(){
+  closeRejectReqPopup();
+  document.getElementById("confirmation-popup").style.display = "none";
+}
 
-//           // Set modal values dynamically
-//           modalName.value = this.dataset.name;
-//           modalCategory.value = this.dataset.category;
-//           modalAddress.value = this.dataset.address;
+//Rejected Popup
+function rejectedPopup(){
+  closeRejectReqPopup();
+  document.getElementById("rejected-popup").style.display = "flex";
+}
 
-//           // Show the popup
-//           popup.style.display = "block";
-
-
-//       });
-//   });
-// });
+//Close Rejected Popup
+function closeRejectedPopup(){
+  document.getElementById("rejected-popup").style.display = "none";
+}

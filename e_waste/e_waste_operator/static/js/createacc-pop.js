@@ -1,55 +1,44 @@
 document.addEventListener("DOMContentLoaded", function () {
-  document.querySelector(".submit").addEventListener("click", function (event) {
+  document.querySelector(".btn submit").addEventListener("click", function (event) {
       event.preventDefault();
-      showConfirmationPopup(); // Show confirmation popup first
+      verifyForm(); // Show confirmation popup first
   });
 });
 
 // Show Confirmation Popup
-function showConfirmationPopup() {
-  document.getElementById("confirmation-popup").style.display = "flex";
+function verifyForm() {
+    const form = document.getElementById("driverForm");
+
+    if (form.checkValidity()){
+        showConfirmationPopUp();
+    }else{
+        form.reportValidity();
+    }
+  }
+
+function showConfirmationPopUp(){
+    document.getElementById("confirmation-popup").style.display = "flex";
+}
+
+// Proceed button in the confirmation pop up
+function proceedAction(){
+    console.log("Entering driver saving action");
+    document.getElementById("hidden-submit").click();
 }
 
 // Close Confirmation Popup
 function closeConfirmationPopup() {
-  document.getElementById("confirmation-popup").style.display = "none";
+    document.getElementById("confirmation-popup").style.display = "none";
 }
 
-// Show Sucessful Popup 
-function showSucessfulPopup() {
-  closeConfirmationPopup(); 
-  document.getElementById("sucessful-popup").style.display = "flex";
+// Show Successful Popup
+function showSuccessfulPopup() {
+    closeConfirmationPopup();
+    document.getElementById("successful-popup").style.display = "flex";
 }
 
-// Close Sucessful Popup
-function closeTrackingPopup() {
-  document.getElementById("sucessful-popup").style.display = "none";
+// Close Successful Popup
+function closeSuccessfulPopup() {
+    document.getElementById("successful-popup").style.display = "none";
 }
 
-//Show Reject Request Popup
-function showRejectReqPopup(){
-  closeConfirmationPopup();
-  document.getElementById("rejectReq-popup").style.display = "flex";
-}
-
-//Close Reject Request Popup
-function closeRejectReqPopup(){
-  document.getElementById("rejectReq-popup").style.display = "none";
-}
-
-//Show Confirmation Popup2
-function showConfirmationPopup2(){
-  closeRejectReqPopup();
-  document.getElementById("confirmation-popup").style.display = "flex";
-}
-
-//Rejected Popup
-function rejectedPopup(){
-  closeRejectReqPopup();
-  document.getElementById("rejected-popup").style.display = "flex";
-}
-
-//Close Rejected Popup
-function closeRejectedPopup(){
-  document.getElementById("rejected-popup").style.display = "none";
-}

@@ -1,4 +1,4 @@
-{% extends 'e_waste_operator/base_operator.html' %}
+{% extends 'operator/base_operator.html' %}
 {% load static %}
 
 {% block extra_css %}
@@ -41,71 +41,20 @@
               <td><button class="update-btn">Update</button></td>
             </tr>
           {% endfor %}
-        </tbody> 
-
-        {% comment %} <tbody>
-          {% for request in requests %}
-          <tr data-request-id="{{ request.requestID }}">
-              <td class="name">{{ request.customer.name }}</td>  <!-- Customer Name -->
-              <td class="date">{{ request.date }}</td>
-              <td class="time">{{ request.time }}</td>
-              <td class="address">{{ request.address }}</td>
-              <td class="category">{{ request.category.name }}</td>  <!-- Waste Type (Category Name) -->
-              <td class="status">{{ request.status }}</td>
-              <td>
-                  <button class="update-btn" 
-                      data-name="{{ request.customer.name }}" 
-                      data-date="{{ request.date }}" 
-                      data-time="{{ request.time }}" 
-                      data-address="{{ request.address }}" 
-                      data-category="{{ request.category.name }}" 
-                      data-status="{{ request.status }}" 
-                      data-request-id="{{ request.requestID }}">
-                      Update
-                  </button>
-              </td>
-          </tr>
-          {% endfor %}
-      </tbody>
-      <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">       {% endcomment %}
+        </tbody>
       </table>
     </div>
 
   <!-- Confirmation Popup -->
   <div id="confirmation-popup" class="popup-container" style="display: none;">
     <div class="popup-content">
+        <button class="popup-close" onclick="closeConfirmationPopup()">×</button>
         <h2><i>Update Request Status</i></h2>
         <img src="{% static 'images/update-req.png' %}" class="popup-logo">
-        {% comment %} <form>
-          <!-- Name Field -->
-          <div class="form-group">
-              <label for="name">Name:</label>
-              <div class="input-container">
-                  <input id="modal-name" type="text" value="  Akau" disabled required>
-              </div>
-          </div>
-
-          <!-- Item Category Field -->
-          <div class="form-group">
-              <label for="category">Item's category:</label>
-              <div class="input-container">
-                  <input id="modal-category" type="text" value="Large household appliance" disabled required>
-              </div>
-          </div>
-
-          <!-- Address Field -->
-          <div class="form-group">
-              <label for="address">Address:</label>
-              <div class="input-container">
-                  <input id="modal-address" type="text" value="No.19, Jalan Bunga Mawar, Cheras, Kuala Lumpur" disabled required>
-              </div>
-          </div>
-        </form> {% endcomment %}
-
         <!-- Buttons -->
         <div class="btn-container">
           <div class="button1">
-            <button onclick="showSucessfulPopup()" class="btn-save">Approve</button>
+            <button onclick="showSuccessfulPopup()" class="btn-save">Approve</button>
           </div>
         
           <div class="button2">
@@ -125,7 +74,7 @@
             <!-- Buttons -->
             <div class="btn-container">
               <div class="button1">
-                <a href="assign-driver.html">
+                <a href="{% url 'operator:assign_driver' %}">
                   <button class="btn-save">Proceed</button>
                 </a>
               </div>
@@ -164,7 +113,7 @@
             </div>
           
             <div class="button2">
-              <button class="btn-cancel" onclick="showConfirmationPopup2()">Back</button>
+              <button class="btn-cancel" onclick="closeConfirmationPopup2()">Back</button>
             </div>
           </div>
           
@@ -183,35 +132,35 @@
         </div> 
       </div>
 
-  {% comment %} <script src="createacc-pop.js"></script>  {% endcomment %}
-           
-    <div id="embedded-footer"></div>
+<!--  {% comment %} <script src="createacc-pop.js"></script>  {% endcomment %}-->
+<!--           -->
+<!--    <div id="embedded-footer"></div>-->
 
-    {% comment %} <script src="manageRequest.js"></script> {% endcomment %}
+<!--    {% comment %} <script src="manageRequest.js"></script> {% endcomment %}-->
 
-    {% comment %} <script>
-        fetch('operator-header.html')
-        .then(response => response.text())
-        .then(html => {
-            document.getElementById('embedded-header').innerHTML = html;
-        });
-    </script>
+<!--    {% comment %} <script>-->
+<!--        fetch('operator-header.html')-->
+<!--        .then(response => response.text())-->
+<!--        .then(html => {-->
+<!--            document.getElementById('embedded-header').innerHTML = html;-->
+<!--        });-->
+<!--    </script>-->
 
-    <script>
-        fetch('operator-navbar.html')
-        .then(response => response.text())
-        .then(html => {
-            document.getElementById('embedded-navbar').innerHTML = html;
-        });
-    </script>
+<!--    <script>-->
+<!--        fetch('operator-navbar.html')-->
+<!--        .then(response => response.text())-->
+<!--        .then(html => {-->
+<!--            document.getElementById('embedded-navbar').innerHTML = html;-->
+<!--        });-->
+<!--    </script>-->
 
-    <script>
-        fetch('footer.html')
-        .then(response => response.text())
-        .then(html => {
-            document.getElementById('embedded-footer').innerHTML = html;
-        });
-    </script> {% endcomment %}
+<!--    <script>-->
+<!--        fetch('footer.html')-->
+<!--        .then(response => response.text())-->
+<!--        .then(html => {-->
+<!--            document.getElementById('embedded-footer').innerHTML = html;-->
+<!--        });-->
+<!--    </script> {% endcomment %}-->
 {% block extra_js %}
     <script src="{% static 'js/manageRequest.js' %}"></script>
 {% endblock %}
