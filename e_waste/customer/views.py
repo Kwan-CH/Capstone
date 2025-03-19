@@ -120,7 +120,9 @@ def edit_profile(request):
         return render(request, "customer/userprofile-customer.html", {"profile": userInfo, "update_success": True})
 
     # reason to create a list at here, is to populate the option field while being able to set selected category
-    states = ['Johor', 'Kedah', 'Kelantan', 'Kuala Lumpur', 'Labuan', 'Melaka', 'Negeri Sembilan', 'Pahang', 'Perak', 'Perlis', 'Pulau Pinang', 'Sabah', 'Sarawak', 'Selangor', 'Terengganu', 'Putrajaya']
+    states = ['Johor', 'Kedah', 'Kelantan', 'Kuala Lumpur', 'Labuan', 'Melaka',
+              'Negeri Sembilan', 'Pahang', 'Perak', 'Perlis', 'Pulau Pinang', 'Sabah', 'Sarawak',
+              'Selangor', 'Terengganu', 'Putrajaya']
     return render(request, "customer/edituserprofile-customer.html", {"profile": userInfo, "states": states})
 
 def edit_password(request):
@@ -210,9 +212,7 @@ def redeem_rewards_page(request): # need to add paginator in the future to consi
     return render(request, 'customer/redeemRewards.html', {'vouchers':vouchers, 'points':customerPoint})
 
 def redeem_voucher(request):
-    print('OUTSIDE IF BLOCK')
     if request.method == 'POST':
-        print("IN THE FUNCTION")
         try:
             data = json.loads(request.body)
             voucherID = data.get("reward")
@@ -239,4 +239,5 @@ def redeem_voucher(request):
 
         except Exception as e:
             return JsonResponse({"success": False, "message": str(e)}, status=500)
+
     return JsonResponse({"success": False, "message": "Invalid request method."}, status=405)
