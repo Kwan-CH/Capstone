@@ -2,4 +2,15 @@ function switchPage(page) {
     window.location.href = page;
 }
 
-// unused
+document.getElementById('show-qr').addEventListener('click', function (event) {
+    event.preventDefault();
+    showQrPopup();
+});
+
+function showQrPopup() {
+    document.getElementById('qr-popup').style.display = 'flex';
+}
+
+function closeSuccessfulPopup() {
+    document.getElementById('qr-popup').style.display = 'none';
+}

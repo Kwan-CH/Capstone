@@ -24,16 +24,18 @@
     <p>Total Points: {{points}}</p>
 </div>
 
-{% for voucher in vouchers %}
 <div class="container">
+    {% for voucher in vouchers %}
     <div class="reward-box" data-rewardID="{{voucher.voucherID}}" data-points="{{voucher.pointsRequired}}">
         <p>{{voucher.name}}</p>
         <p class="points">{{voucher.pointsRequired}} points</p>
     </div>
-<!--    <div class="reward-box" data-reward="15% Discount Orange Juice" data-points="200">-->
-<!--        <p>15% Discount Orange Juice</p>-->
-<!--        <p class="points">200 points</p>-->
-<!--    </div>-->
+    {% endfor %}
+
+    {% comment %} <div class="reward-box" data-reward="15% Discount Orange Juice" data-points="200">-->
+       <p>15% Discount Orange Juice</p>-->
+    <p class="points">200 points</p>-->
+   </div>--> {% endcomment %}
 <!--    <div class="reward-box" data-reward="One FREE Coffee" data-points="250">-->
 <!--        <p>One FREE Coffee</p>-->
 <!--        <p class="points">250 points</p>-->
@@ -51,7 +53,6 @@
 <!--        <p class="points">999 points</p>-->
 <!--    </div>-->
 </div>
-{% endfor %}
 <button type="submit" class="redeem" disabled>Redeem</button>
 
 <div>

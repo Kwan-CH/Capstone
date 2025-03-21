@@ -79,45 +79,65 @@ def reward_system(request):
     vouchers = Voucher.objects.all()
     return render(request, 'operator/operator-rewardSystem.html', {"vouchers":vouchers})
 
+# def add_reward(request):
+#     if request.method == 'POST':
+#         name = request.POST.get('name')
+#         pointsRequired = request.POST.get('pointsRequired')
+#         quantity = request.POST.get('quantity')
+
+#         # Save the new voucher
+#         voucher = Voucher(name=name, pointsRequired=int(pointsRequired), quantity=int(quantity))
+#         voucher.save()
+
+#         return render(request, 'operator/operator-addReward.html')
+
+#     return render(request, 'operator/operator-addReward.html')
+
 def add_reward(request):
-    return render(request, 'operator/operator-addReward.html')
-
-def edit_reward(request, voucherID):
-    voucher = get_object_or_404(Voucher, voucherID=voucherID)
-
     if request.method == 'POST':
         name = request.POST.get('name')
         pointsRequired = request.POST.get('pointsRequired')
         quantity = request.POST.get('quantity')
 
-        # print(f"Received data , {name}, {pointsRequired}, quantity")
-        # Validate that all fields are filled
-        if not (name and pointsRequired and quantity):
-            messages.error(request, 'Please fill in all fields')
-            return render(request, 'operator/operator-editReward.html', {"voucher": voucher})
+        if Voucher.objects.filter(name=name).exists():
+            return JsonResponse({'status': 'error', 'message': 'A voucher with this name already exists.'})
+
+        voucher = Voucher(name=name, pointsRequired=int(pointsRequired), quantity=int(quantity))
+        voucher.save()
+
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({'status': 'success', 'message': 'Reward updated successfully!'})
+
+        messages.success(request, 'Reward updated successfully!')
+        return render(request, 'operator/operator-addReward.html')
+
+    return render(request, 'operator/operator-addReward.html')
+
+
+from django.core.exceptions import ValidationError
+
+def edit_reward(request, voucherID):
+    voucher = get_object_or_404(Voucher, voucherID=voucherID)
+
+    if request.method == 'POST':
+        name = request.POST.get('name', '').strip()
+        pointsRequired = request.POST.get('pointsRequired', '').strip()
+        quantity = request.POST.get('quantity', '').strip()
 
         # Update the voucher fields
-        try:
-            # Update the voucher fields
-            voucher.name = name
-            voucher.pointsRequired = int(pointsRequired)  # Ensure pointsRequired is an integer
-            voucher.quantity = int(quantity)  # Ensure quantity is an integer
-            voucher.save()
+        voucher.name = name
+        voucher.pointsRequired = int(pointsRequired)
+        voucher.quantity = int(quantity)
+        voucher.save()
 
-            # Return a JSON response for AJAX requests
-            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-                return JsonResponse({'status': 'success', 'message': 'Reward updated successfully!'})
-            else:
-                # For non-AJAX requests, re-render the page with a success message
-                messages.success(request, 'Reward updated successfully!')
-                return render(request, 'operator/operator-editReward.html', {"voucher": voucher})
+        # Handle AJAX requests separately
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({'status': 'success', 'message': 'Reward updated successfully!'})
 
-        except Exception as e:
-            print(f"Error updating voucher: {e}")
-            messages.error(request, 'An error occurred while updating the reward.')
-            return render(request, 'operator/operator-editReward.html', {"voucher": voucher})
+        messages.success(request, 'Reward updated successfully!')
+        return render(request, 'operator/operator-editReward.html', {"voucher": voucher})
 
-    return render(request, 'operator/operator-editReward.html', {"voucher":voucher})
+    return render(request, 'operator/operator-editReward.html', {"voucher": voucher})
 
 def assign_driver(request):
     return render(request, 'operator/assign-driver.html')

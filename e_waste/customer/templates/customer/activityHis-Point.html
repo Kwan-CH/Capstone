@@ -1,27 +1,14 @@
 {% extends 'customer/base_customer.html' %}
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Device Recycle - JAS E-Waste</title>
+{% block title %}Activity History{% endblock %}
 
-    {% block extra_css %}
-        <link rel="stylesheet" href="{% static 'css/activityHis-Point.css' %}">
-        <link href="https://fonts.googleapis.com/css2?family=Sansita+Swashed:wght@300;400;700&display=swap" rel="stylesheet">
-    {% endblock %}
-
-    <!--    <script defer src="activityHis-Point.js"></script>-->
-
-</head>
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/activityHis-Point.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Sansita+Swashed:wght@300;400;700&display=swap" rel="stylesheet">
+{% endblock %}
 
 {% block content %}
-<body>
-<!--    <div id="embedded-header"></div>-->
-<!--    <div id="embedded-navbar"></div>-->
-
     <h1 class="title">Activity History</h1>
 
     <!-- Navigation Buttons -->
@@ -48,39 +35,21 @@
                     </tr>
                 </table>
                 <div class="points-deducted">Points Deducted: {{voucher.voucher__pointsRequired}} points</div>
+                <div class="show-qr">
+                    <button id="show-qr">🎁 Click here to redeem</button>
+                </div>
+            </div>
+        </div>
+
+        <!---------- QR Code Popup ------------>
+        <div id="qr-popup" class="popup-container" style="display: none;">
+            <div class="popup-content">
+                <h2>Please scan the code below to redeem the reward</h2>
+                <img src="{% static 'images/QRCode.png'%}" alt="QR Code" class="popup-logo">
+                <button class="btn return" onclick="closeSuccessfulPopup()">Return</button>
             </div>
         </div>
     {% endfor %}
-
-
-
-<!--    <div id="embedded-footer"></div>-->
-
-
-
-<!--    <script>-->
-<!--        fetch('header-customer.html')-->
-<!--        .then(response => response.text())-->
-<!--        .then(html => {-->
-<!--            document.getElementById('embedded-header').innerHTML = html;-->
-<!--        });-->
-<!--    </script>-->
-
-<!--    <script>-->
-<!--        fetch('navbar-customer.html')-->
-<!--        .then(response => response.text())-->
-<!--        .then(html => {-->
-<!--            document.getElementById('embedded-navbar').innerHTML = html;-->
-<!--        });-->
-<!--    </script>-->
-
-<!--    <script>-->
-<!--        fetch('footer.html')-->
-<!--        .then(response => response.text())-->
-<!--        .then(html => {-->
-<!--            document.getElementById('embedded-footer').innerHTML = html;-->
-<!--        });-->
-<!--    </script>-->
 
     <div>
         {% if not Empty %}
@@ -98,7 +67,9 @@
         {% endif %}
     </div>
 
-</body>
 {% endblock %}
 
-</html>
+{% block extra_js %}
+    <script src="{% static 'js/activityHis-Point.js' %}"></script>
+{% endblock %}
+

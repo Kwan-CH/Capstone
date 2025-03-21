@@ -134,7 +134,7 @@ class Voucher(models.Model):
             else:
                 new_number = 1
 
-            self.voucherID = f"C{new_number:04d}"
+            self.voucherID = f"V{new_number:04d}"
 
         super().save(*args, **kwargs)
 
