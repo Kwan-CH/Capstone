@@ -1,0 +1,17 @@
+# Ignore virtual environment folder
+Capstone/
+
+# Ignore compiled Python files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore IDE settings (for PyCharm, VS Code, etc.)
+.vscode/
+.idea/
+*.swp
+
+# Ignore environment files (for API keys, secrets, etc.)
+.env
+*.env
