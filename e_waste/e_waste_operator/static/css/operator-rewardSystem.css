@@ -14,19 +14,28 @@ body{
 }
 
 .addNew{
-  display:block;
-  align-items: normal;
-  margin-left:16px;
+  display:flex;
   margin-top:20px;
   margin-bottom:20px;
-}
-
-.addNew-text, .addNew-button{
-  display:inline-block;
+  justify-content: center; 
+  align-items: center; 
+  width:100%;
 }
 
 .addNew-button{
-  margin-left:8px;
+  width:90%;
+  max-width:500px;
+}
+
+.addButton{
+  width:100%;
+  padding: 10px;
+  border: 1px solid white;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 16px;
+  color:white;
+  background-color:#61b763
 }
 
 p {
@@ -37,16 +46,6 @@ p {
 
 .text{
   font-weight: 450;
-}
-
-.addButton{
-  padding: 8px 24px;
-  border: 1px solid white;
-  border-radius: 25px;
-  cursor: pointer;
-  font-size: 16px;
-  color:white;
-  background-color:#61b763
 }
 
 table {

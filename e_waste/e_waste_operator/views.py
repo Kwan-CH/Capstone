@@ -1,7 +1,7 @@
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from database.models import Driver, PickupRequest, Reason
+from database.models import Driver, PickupRequest, Reason, Voucher
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.http import JsonResponse
@@ -74,6 +74,50 @@ def save_driver_account(request):
 
     return render(request, 'operator/operator-create_acc.html', {"states":states})
 
+
+def reward_system(request):
+    vouchers = Voucher.objects.all()
+    return render(request, 'operator/operator-rewardSystem.html', {"vouchers":vouchers})
+
+def add_reward(request):
+    return render(request, 'operator/operator-addReward.html')
+
+def edit_reward(request, voucherID):
+    voucher = get_object_or_404(Voucher, voucherID=voucherID)
+
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        pointsRequired = request.POST.get('pointsRequired')
+        quantity = request.POST.get('quantity')
+
+        # print(f"Received data , {name}, {pointsRequired}, quantity")
+        # Validate that all fields are filled
+        if not (name and pointsRequired and quantity):
+            messages.error(request, 'Please fill in all fields')
+            return render(request, 'operator/operator-editReward.html', {"voucher": voucher})
+
+        # Update the voucher fields
+        try:
+            # Update the voucher fields
+            voucher.name = name
+            voucher.pointsRequired = int(pointsRequired)  # Ensure pointsRequired is an integer
+            voucher.quantity = int(quantity)  # Ensure quantity is an integer
+            voucher.save()
+
+            # Return a JSON response for AJAX requests
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({'status': 'success', 'message': 'Reward updated successfully!'})
+            else:
+                # For non-AJAX requests, re-render the page with a success message
+                messages.success(request, 'Reward updated successfully!')
+                return render(request, 'operator/operator-editReward.html', {"voucher": voucher})
+
+        except Exception as e:
+            print(f"Error updating voucher: {e}")
+            messages.error(request, 'An error occurred while updating the reward.')
+            return render(request, 'operator/operator-editReward.html', {"voucher": voucher})
+
+    return render(request, 'operator/operator-editReward.html', {"voucher":voucher})
 
 def assign_driver(request):
     return render(request, 'operator/assign-driver.html')
