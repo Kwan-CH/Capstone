@@ -8,12 +8,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
       if (status === "Pending") {
         showConfirmationPopup();
-      } else if (status === "Approved") {
-        window.location.href = "assign-driver.html";
       }
     });
   });
 });
+
+let requestID = null;
+function storeRequestID(button){
+  requestID = button.dataset.id;
+}
 
 //document.addEventListener("DOMContentLoaded", function () {
 //    document.querySelector(".submit").addEventListener("click", function (event) {
@@ -66,12 +69,62 @@ function closeConfirmationPopup2() {
 }
 
 //Rejected Popup
-function rejectedPopup() {
+function rejectRequest() {
+  const resonDropdown = document.getElementById('reason');
+  const selectedReason = resonDropdown.value;
+  console.log(selectedReason)
+
+  fetch("reject_request/", {
+    method: "POST",
+    headers: {
+    "Content-Type": "application/json",
+  "X-CSRFToken": getCookie("csrftoken"),  // CSRF token for security
+  },
+  body: JSON.stringify({ selectedRequest: requestID, selectedReason:selectedReason}),
+  })
+  .then(response => response.json())
+  .then(data => {
+      if (data.success) {
+            document.getElementById("successful-popup").style.display = "flex"; // Show success popup
+          } else {
+            alert("⚠️ " + data.message);
+          }
+    })
+  .catch(error => console.error("Error:", error));
+
   closeRejectReqPopup();
   document.getElementById("rejected-popup").style.display = "flex";
+}
+
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+          const cookies = document.cookie.split(';');
+          for (let i = 0; i < cookies.length; i++) {
+              const cookie = cookies[i].trim();
+              if (cookie.startsWith(name + '=')) {
+                  cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                  break;
+                }
+            }
+        }
+  return cookieValue;
 }
 
 //Close Rejected Popup
 function closeRejectedPopup() {
   document.getElementById("rejected-popup").style.display = "none";
+  window.location.reload();
+}
+
+
+
+function assignDriverPage(){
+  if (!requestID){
+    alert("Something went wrong")
+  }else{
+    const url = `assign_driver_page?requestID=${requestID}`;
+    console.log(url)
+    window.location.href = url;
+  }
 }

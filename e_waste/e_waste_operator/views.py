@@ -1,3 +1,4 @@
+from idlelib.run import Executive
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
@@ -13,23 +14,58 @@ def homepage_operator(request):
 
 def manageReq(request):
     requests = PickupRequest.objects.all()
-    return render(request, 'operator/operator-manageReq.html',{'requests': requests})
+    reasons = Reason.objects.all()
+    return render(request, 'operator/operator-manageReq.html',{'requests': requests, 'reasons':reasons})
 
-def update_request_status(request):
-    if request.method == "POST":
-        import json
-        data = json.loads(request.body)
-        name = data.get("name")
-        status = data.get("status")
+def update_request_status(requestID):
+    pickUpRequest = PickupRequest.objects.filter(requestID=requestID).first()
+    pickUpRequest.status = "Approved"
+    pickUpRequest.save()
 
+def assign_driver_page(request):
+    requestID = request.GET.get('requestID')
+    requestInfo = PickupRequest.objects.filter(requestID= requestID).first()
+    update_request_status(requestID)
+    drivers = Driver.objects.all()
+    return render(request, 'operator/assign-driver.html', {'drivers': drivers, 'request':requestInfo})
+
+def assign_driver(request):
+    if request.method == 'POST':
         try:
-            request_obj = PickupRequest.objects.get(customer__name=name)
-            request_obj.status = status
-            request_obj.save()
-            return JsonResponse({"success": True})
-        except PickupRequest.DoesNotExist:
-            return JsonResponse({"success": False, "error": "Request not found."})
+            data = json.loads(request.body)
+            requestID = data.get('requestID')
+            driverID = data.get('driverID')
+            if requestID and driverID:
+                selectedRequest = PickupRequest.objects.filter(requestID=requestID).first()
+                driver = Driver.objects.filter(driverID=driverID).first()
+                selectedRequest.driver = driver
+                selectedRequest.save()
+                return JsonResponse({'success': True, 'message': 'Driver assigned successfully'})
+            else:
+                return JsonResponse({'success': False, 'message': 'Something went wrong'}, status=400)
+        except Exception as e:
+            return JsonResponse({'success':False, 'message':f'{str(e)}'}, status=400)
+    return JsonResponse({"success": False, "message": "Invalid request method."}, status=405)
 
+def reject_request(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            requestID = data.get('selectedRequest')
+            reasonID = data.get('selectedReason')
+            if requestID and reasonID:
+                selectedRequest = PickupRequest.objects.filter(requestID=requestID).first()
+                reason = Reason.objects.filter(reasonID=reasonID).first()
+                selectedRequest.rejectedReason = reason
+                selectedRequest.status = 'Rejected'
+                selectedRequest.save()
+                return JsonResponse({'success': True})
+                # return redirect('operator:manageReq')
+            else:
+                return JsonResponse({'success': False, 'message': 'Something went wrong'}, status=400)
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': f'{str(e)}'}, status=400)
+    return JsonResponse({"success": False, "message": "Invalid request method."}, status=405)
 
 def operator_create_acc_page(request):
     states = ["Johor", "Kedah", "Kelantan", "Melaka", "Negeri Sembilan",
@@ -74,24 +110,9 @@ def save_driver_account(request):
 
     return render(request, 'operator/operator-create_acc.html', {"states":states})
 
-
 def reward_system(request):
     vouchers = Voucher.objects.all()
     return render(request, 'operator/operator-rewardSystem.html', {"vouchers":vouchers})
-
-# def add_reward(request):
-#     if request.method == 'POST':
-#         name = request.POST.get('name')
-#         pointsRequired = request.POST.get('pointsRequired')
-#         quantity = request.POST.get('quantity')
-
-#         # Save the new voucher
-#         voucher = Voucher(name=name, pointsRequired=int(pointsRequired), quantity=int(quantity))
-#         voucher.save()
-
-#         return render(request, 'operator/operator-addReward.html')
-
-#     return render(request, 'operator/operator-addReward.html')
 
 def add_reward(request):
     if request.method == 'POST':
@@ -112,9 +133,6 @@ def add_reward(request):
         return render(request, 'operator/operator-addReward.html')
 
     return render(request, 'operator/operator-addReward.html')
-
-
-from django.core.exceptions import ValidationError
 
 def edit_reward(request, voucherID):
     voucher = get_object_or_404(Voucher, voucherID=voucherID)
@@ -139,5 +157,5 @@ def edit_reward(request, voucherID):
 
     return render(request, 'operator/operator-editReward.html', {"voucher": voucher})
 
-def assign_driver(request):
-    return render(request, 'operator/assign-driver.html')
+def completed_request(request):
+    return render(request, 'operator/operator-completedReq.html')

@@ -20,25 +20,39 @@
       <table>
         <thead>
             <tr>
-                <th>Name</th>
                 <th>Date</th>
                 <th>Time</th>
                 <th>Address</th>
                 <th>Category</th>
+                <th>Quantity</th>
+                <th>Assigned Driver</th>
                 <th>Status</th>
                 <th>Action</th>
             </tr>
         </thead>
          <tbody>
           {% for request in requests %}
-            <tr>
-              <td class="name">{{ request.customer.name }}</td>  <!-- Customer Name -->
-              <td class="date">{{ request.date }}</td>
-              <td class="time">{{ request.time }}</td>
-              <td class="address">{{ request.address }}</td>
-              <td class="category">{{ request.category.name }}</td>  <!-- Waste Type (Category Name) -->
-              <td class="status">{{ request.status }}</td>
-              <td><button class="update-btn">Update</button></td>
+            <tr><!-- Customer Name -->
+                <td class="date">{{ request.date }}</td>
+                <td class="time">{{ request.time }}</td>
+                <td class="address">{{ request.address }}</td>
+                <td class="itemCategory">{{request.category.itemType}}</td>
+                <td class="category">{{ request.quantity }}</td>  <!-- Waste Type (Category Name) -->
+                {% if request.driver.name %}
+                    <td class="driver">{{request.driver.name}}</td>
+                {% else %}
+                    <td>-</td>
+                {% endif %}
+                {% if request.status == 'Rejected' %}
+                    <td class="status">{{ request.status }} <br>({{request.rejectedReason.reason}})</td>
+                {% else %}
+                    <td class="status">{{ request.status }}</td>
+                {% endif %}
+                {% if request.status == 'Pending' %}
+                    <td><button class="update-btn" data-id="{{request.requestID}}" onclick="storeRequestID(this)">Update</button></td>
+                {% else %}
+                    <td><button class="update-btn" disabled>Update</button></td>
+                {% endif %}
             </tr>
           {% endfor %}
         </tbody>
@@ -74,9 +88,7 @@
             <!-- Buttons -->
             <div class="btn-container">
               <div class="button1">
-                <a href="{% url 'operator:assign_driver' %}">
-                  <button class="btn-save">Proceed</button>
-                </a>
+                  <button class="btn-save" onclick="assignDriverPage()">Proceed</button>
               </div>
             
               <div class="button2">
@@ -96,27 +108,22 @@
                 Please specify why the pickup request was denied:
             </label>
             <select id="reason" class="reject-dropdown">
-                <option value="">Select Reason</option>
-                <option value="Invalid address">Invalid address</option>
-                <option value="Item not acceptable">Item not acceptable</option>
-                <option value="Duplicate request">Duplicate request</option>
-                <option value="Other">Other</option>
+                <option value="" selected disabled>Select Reason</option>
+                {% for reason in reasons %}
+                    <option value="{{reason.reasonID}}">{{reason.reason}}</option>
+                {% endfor %}
             </select>
-            
-        </form>
-        
-
           <!-- Buttons -->
           <div class="btn-container">
             <div class="button1">
-              <button onclick="rejectedPopup()" class="btn-save">Proceed</button>
+              <button type="button" onclick="rejectRequest()" class="btn-save">Proceed</button>
             </div>
           
             <div class="button2">
-              <button class="btn-cancel" onclick="closeConfirmationPopup2()">Back</button>
+                <button class="btn-cancel">Back</button>
             </div>
           </div>
-          
+         </form>
         </div>
       </div>
 

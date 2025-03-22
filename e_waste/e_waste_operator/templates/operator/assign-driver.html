@@ -26,13 +26,13 @@
 
         <form>
             <label for="name">Name:</label>
-            <input id="name" type="text" value="Akau" disabled required>
+            <input id="name" type="text" value="{{request.customer.name}}" disabled required>
  
             <label for="phoneNumber">Phone number:</label>
-            <input id="phoneNumber" type="text" value="0123456789" disabled required>
+            <input id="phoneNumber" type="text" value="{{request.customer.phoneNumber}}" disabled required>
 
             <label for="address">Address:</label>
-            <input id="address" type="text" value="No.19, Jalan Bunga Mawar, Cheras, Kuala Lumpur" disabled required>
+            <input id="address" type="text" value="{{request.address}}" disabled required>
         </form>
     </div>
 
@@ -48,34 +48,15 @@
               </tr>
           </thead>
           <tbody>
+            {% for driver in drivers %}
               <tr>
-                  <td>Ali</td>
-                  <td>ABC0123</td>
-                  <td>Selangor</td>
-                  <td>0123456789</td>
-                  <td><button class="assign-btn">Assign</button></td>
+                  <td>{{driver.name}}</td>
+                  <td>{{driver.plateNumber}}</td>
+                  <td>{{driver.stateCovered}}</td>
+                  <td>{{driver.phoneNumber}}</td>
+                  <td><button class="assign-btn" data-id="{{driver.driverID}}" onclick="storeDriverID(this)">Assign</button></td>
               </tr>
-              <tr>
-                  <td>Abu</td>
-                  <td>ABC1234</td>
-                  <td>Kuala Lumpur</td>
-                  <td>0123456788</td>
-                  <td><button class="assign-btn">Assign</button></td>
-              </tr>
-              <tr>
-                  <td>Akau</td>
-                  <td>ABC2345</td>
-                  <td>Perak</td>
-                  <td>0123456888</td>
-                  <td><button class="assign-btn">Assign</button></td>
-              </tr>
-              <tr>
-                  <td>Mutu</td>
-                  <td>ABC3456</td>
-                  <td>Pahang</td>
-                  <td>0123458888</td>
-                  <td><button class="assign-btn">Assign</button></td>
-              </tr>
+          {% endfor %}
           </tbody>
       </table>
     </div>
@@ -86,17 +67,17 @@
             <h2><i>Confirmation</i></h2>
             <p>To avoid errors, double-check the chosen driver is the right choice for this pickup.</p>
             <button class="btn cancel" onclick="closeConfirmationPopup()">Cancel</button>
-            <button class="btn proceed" onclick="showSucessfulPopup()">Proceed</button>
+            <button class="btn proceed" onclick="processTheRequests()">Proceed</button>
         </div>
     </div>
 
     <!---------- Assigned Successfully Popup ------------>
-        <div id="sucessful-popup" class="popup-container" style="display: none;">
+        <div id="successful-popup" class="popup-container" style="display: none;">
             <div class="popup-content">
-                <img src="images/Picture1.png" alt="JAS Logo" class="popup-logo">
+                <img src="{% static 'images/Picture1.png' %}" alt="JAS Logo" class="popup-logo">
                 <h2>Congratulation!</h2>
                 <p class="popup-text">Pickup assigned! The customer’s items will be collected shortly.</p>
-                <a href="assign-driver.html">
+                <a href="{% url 'operator:manageReq' %}">
                   <button>Back</button>
                 </a>
             </div>
