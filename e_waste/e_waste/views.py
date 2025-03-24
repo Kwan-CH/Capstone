@@ -46,7 +46,6 @@ def signup(request):
         return redirect('customer:homepage-customer')
     return render(request, 'e_waste/signup.html')
 
-
 def user_login(request):
 
     if request.method == 'POST':

@@ -143,9 +143,6 @@ def edit_password(request):
 
     return render(request, 'customer/editpassword-customer.html')
 
-def recent_activity(request):
-    return render(request, 'customer/xxx.html')
-
 def waste_category(request):
     return render(request, 'customer/wasteCategory.html')
 
