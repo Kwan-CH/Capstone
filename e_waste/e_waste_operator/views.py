@@ -2,7 +2,7 @@ from idlelib.run import Executive
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from database.models import Driver, PickupRequest, Reason, Voucher
+from database.models import Driver, PickupRequest, Reason, Voucher, Operator
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.http import JsonResponse
@@ -17,15 +17,18 @@ def manageReq(request):
     reasons = Reason.objects.all()
     return render(request, 'operator/operator-manageReq.html',{'requests': requests, 'reasons':reasons})
 
-def update_request_status(requestID):
+def update_request_status(requestID, operatorID):
     pickUpRequest = PickupRequest.objects.filter(requestID=requestID).first()
     pickUpRequest.status = "Approved"
+    operator = Operator.objects.filter(operatorID=operatorID).first()
+    pickUpRequest.operator = operator
     pickUpRequest.save()
 
 def assign_driver_page(request):
     requestID = request.GET.get('requestID')
+    operatorID = request.session.get('user_id')
     requestInfo = PickupRequest.objects.filter(requestID= requestID).first()
-    update_request_status(requestID)
+    update_request_status(requestID, operatorID)
     drivers = Driver.objects.all()
     return render(request, 'operator/assign-driver.html', {'drivers': drivers, 'request':requestInfo})
 
@@ -56,8 +59,10 @@ def reject_request(request):
             if requestID and reasonID:
                 selectedRequest = PickupRequest.objects.filter(requestID=requestID).first()
                 reason = Reason.objects.filter(reasonID=reasonID).first()
+                operator = Operator.objects.filter(operatorID=request.session.get('user_id')).first()
                 selectedRequest.rejectedReason = reason
                 selectedRequest.status = 'Rejected'
+                selectedRequest.operator = operator
                 selectedRequest.save()
                 return JsonResponse({'success': True})
                 # return redirect('operator:manageReq')
