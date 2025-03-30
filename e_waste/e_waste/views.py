@@ -5,10 +5,55 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from database.models import Customer, Driver, Operator
 from .utils import authenticate_user
+from django.http import JsonResponse
+
+# ori version
+# def signup(request):
+#     # return render(request, 'e_waste/signup.html')
+#     if request.method =='POST':
+#         email = request.POST['email']
+#         fullname = request.POST['fullname']
+#         password = request.POST['password']
+#         confirm_password = request.POST['confirm_password']
+#         contact_number = request.POST['contact_number']
+#         address = request.POST['address']
+#         state = request.POST.get('state')
+
+#         # Check if email already exists
+#         if Customer.objects.filter(email=email).exists():
+#             messages.error(request, 'Email address already exists.')
+#             return redirect('signup')
+
+#         if not state:
+#             messages.error(request, "Please select your state.")
+#             return redirect('e_waste/signup')
+
+#         if password != confirm_password:
+#             return render(request, "e_waste/signup.html", {"error": "Password do not match!"})
+
+#         if len(password) < 8:
+#             return render(request, "e_waste/signup.html", {"error": "Password is too short!"})
+
+#         if not contact_number.isdigit():
+#             return render(request, "e_waste/signup.html", {"error": "Invalid contact number!"})
+
+#         new_user = Customer(email=email, name=fullname, password=password,phoneNumber=contact_number, address=address, state=state)
+#         new_user.save()
+
+#          #Store user in session
+#         request.session['user_id'] = new_user.customerID
+#         request.session['user_email'] = new_user.email
+#         request.session['user_role'] = 'customer'
+
+#         # if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+#         #     return JsonResponse({'success': True})
+#         # else:
+#         #     return redirect('customer:homepage-customer')
+#         # return redirect('customer:homepage-customer')
+#     return render(request, 'e_waste/signup.html')
 
 def signup(request):
-    # return render(request, 'e_waste/signup.html')
-    if request.method =='POST':
+    if request.method == 'POST':
         email = request.POST['email']
         fullname = request.POST['fullname']
         password = request.POST['password']
@@ -17,33 +62,30 @@ def signup(request):
         address = request.POST['address']
         state = request.POST.get('state')
 
-        # Check if email already exists
         if Customer.objects.filter(email=email).exists():
-            messages.error(request, 'Email address already exists.')
-            return redirect('signup')
+            return JsonResponse({'success': False, 'error': 'Email address already exists.'}, status=400)
 
         if not state:
-            messages.error(request, "Please select your state.")
-            return redirect('e_waste/signup')
+            return JsonResponse({'success': False, 'error': 'Please select your state.'}, status=400)
 
         if password != confirm_password:
-            return render(request, "e_waste/signup.html", {"error": "Password do not match!"})
+            return JsonResponse({'success': False, 'error': 'Passwords do not match.'}, status=400)
 
         if len(password) < 8:
-            return render(request, "e_waste/signup.html", {"error": "Password is too short!"})
+            return JsonResponse({'success': False, 'error': 'Password is too short!'}, status=400)
 
         if not contact_number.isdigit():
-            return render(request, "e_waste/signup.html", {"error": "Invalid contact number!"})
+            return JsonResponse({'success': False, 'error': 'Invalid contact number!'}, status=400)
 
-        new_user = Customer(email=email, name=fullname, password=password,phoneNumber=contact_number, address=address, state=state)
+        new_user = Customer(email=email, name=fullname, password=password, phoneNumber=contact_number, address=address, state=state)
         new_user.save()
 
-         #Store user in session
         request.session['user_id'] = new_user.customerID
         request.session['user_email'] = new_user.email
         request.session['user_role'] = 'customer'
 
-        return redirect('customer:homepage-customer')
+        return JsonResponse({'success': True})
+
     return render(request, 'e_waste/signup.html')
 
 def user_login(request):
@@ -92,6 +134,9 @@ def user_login(request):
             return render(request, 'e_waste/login.html', {"Invalid":True})  # Redirect to login page
 
     return render(request, 'e_waste/login.html')  # Ensure GET requests return login page
+
+def resetPassword(request):
+    return render(request, 'e_waste/resetpassword.html')
 
 def landing(request):
     return render(request, 'e_waste/landing.html')

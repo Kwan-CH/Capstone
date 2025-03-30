@@ -1,0 +1,109 @@
+{% extends 'driver/base_driver.html' %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        {% block extra_css %}
+            <link rel="stylesheet" href="{% static 'css/edituserprofile-driver.css' %}">
+        {% endblock %}
+        <title>Edit User Profile</title>
+  
+    </head>
+
+{% block content %}
+<body>
+    <div class="container">
+        <div class="container-top">
+            <img id="user" src="{% static 'images/userprofilelogonobg.png' %}" width="200" height="200" alt="user profile logo">
+            <h1>Edit Your User Profile</h1>
+        </div>
+
+        <div class="container-bottom">
+            <form  method="post" 
+                action="{% url 'driver:edit_profile' %}">
+                {% csrf_token %}
+
+                <label>Email</label>
+                <div class="input-container">
+                    <input type="email" name="email" placeholder="Enter your email address" value="{{profile.email}}" required>
+                </div>
+
+                <label>Name</label>
+                <div class="input-container">
+                    <input type="text" name="fullname" placeholder="Enter your full name" value="{{profile.name}}" required>
+                </div>
+
+                <label>Contact Number</label>
+                <div class="input-container">
+                    <input type="tel" name="contact_number" placeholder="Enter your contact number" value="{{profile.phoneNumber}}" required>
+                </div>
+
+                <label>Car Plate Number</label>
+                <div class="input-container">
+                    <input type="text" name="carplatenumber" placeholder="Enter your car plate number" value="{{profile.plateNumber}}" required>
+                </div>  
+
+
+                {% comment %} <label>State</label>
+                <div class="input-container">
+                    <select id="state" name="state" required>
+                        <option disabled selected>Select your state</option>
+                        {% for state in states %}
+                            {% if profile.state == state %}
+                                <option value="{{state}}" selected>{{state}}</option>
+                            {% else %}
+                                <option value="{{state}}">{{state}}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div> {% endcomment %}
+                <label>State</label>
+                <div class="input-container">
+                    <select id="state" name="state" required>
+                        <option disabled>Select your state</option>
+                        {% for state in states %}
+                            <option value="{{ state }}" {% if profile.state == state %}selected{% endif %}>
+                                {{ state }}
+                         </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+
+
+                <button type="submit" id="savechanges">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+    {% comment %} <div id="embedded-footer"></div> {% endcomment %}
+
+    {% comment %} <script>
+        fetch('header-driver.html')
+          .then(response => response.text())
+          .then(html => {
+            document.getElementById('embedded-header').innerHTML = html;
+        });
+    </script> {% endcomment %}
+
+    {% comment %} <script>
+        fetch('navbar-driver.html')
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('embedded-navbar').innerHTML = html;
+        });
+    </script>
+
+    <script>
+        fetch('../footer.html')
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('embedded-footer').innerHTML = html;
+        });
+    </script> {% endcomment %}
+</body>
+{% endblock %}
+
+</html>

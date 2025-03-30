@@ -1,23 +1,15 @@
 {% extends 'operator/base_operator.html' %}
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Assigning Pickup Driver</title>
-    {% block extra_css %}
-        <link rel="stylesheet" href="{% static 'css/assign-driver.css' %}">
-        <link href="https://fonts.googleapis.com/css2?family=Sansita+Swashed:wght@500&display=swap" rel="stylesheet">
-    {% endblock %}
-</head>
+{% block title %} Assigning Pickup Driver {% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/assign-driver.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Sansita+Swashed:wght@500&display=swap" rel="stylesheet">
+{% endblock %}
 
 {% block content %}
 <body>
-<!--    <div id="embedded-header"></div>-->
-<!--    <div id="embedded-navbar"></div>-->
-
     <div class="container">
         <div class="title-container">
             <h1 class="title">Assign Driver</h1>
@@ -27,7 +19,7 @@
         <form>
             <label for="name">Name:</label>
             <input id="name" type="text" value="{{request.customer.name}}" disabled required>
- 
+
             <label for="phoneNumber">Phone number:</label>
             <input id="phoneNumber" type="text" value="{{request.customer.phoneNumber}}" disabled required>
 
@@ -86,32 +78,6 @@
     {% block extra_js %}
         <script src="{% static 'js/assign-driver.js' %}"></script>
     {% endblock %}
-<!--    <div id="embedded-footer"></div>-->
-
-<!--    <script>-->
-<!--        fetch('operator-header.html')-->
-<!--        .then(response => response.text())-->
-<!--        .then(html => {-->
-<!--            document.getElementById('embedded-header').innerHTML = html;-->
-<!--        });-->
-<!--    </script>-->
-
-<!--    <script>-->
-<!--        fetch('operator-navbar.html')-->
-<!--        .then(response => response.text())-->
-<!--        .then(html => {-->
-<!--            document.getElementById('embedded-navbar').innerHTML = html;-->
-<!--        });-->
-<!--    </script>-->
-
-<!--    <script>-->
-<!--        fetch('footer.html')-->
-<!--        .then(response => response.text())-->
-<!--        .then(html => {-->
-<!--            document.getElementById('embedded-footer').innerHTML = html;-->
-<!--        });-->
-<!--    </script>-->
 
 </body>
 {% endblock %}
-</html>

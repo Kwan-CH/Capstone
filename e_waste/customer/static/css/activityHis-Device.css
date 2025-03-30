@@ -1,16 +1,16 @@
-html {
+/* html {
     height: 100%;
-}
+} */
 
 body {
-    font-family: Arial, sans-serif;
+    /* font-family: Arial, sans-serif; */
     background-color: #F5F8EE;
     text-align: center;
     margin: 0;
     padding: 20px;
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+    /* display: flex;
+    flex-direction: column; */
     margin: 0;
 }
 
@@ -25,8 +25,10 @@ body {
 /* ----------------------Navigation Buttons ---------------*/
 .btn-container {
     display: flex;
-    justify-content: center; /* Center the buttons */
-    gap: 30px; /* Add space between buttons */
+    justify-content: center;
+    /* Center the buttons */
+    gap: 30px;
+    /* Add space between buttons */
     margin-bottom: 20px;
 }
 
@@ -39,7 +41,8 @@ body {
     cursor: pointer;
     font-size: 16px;
     font-weight: bold;
-    min-width: 150px; /* Make all buttons equal width */
+    min-width: 150px;
+    /* Make all buttons equal width */
     text-align: center;
 }
 
@@ -81,8 +84,8 @@ body {
 /* --------------------Table------------------- */
 table {
     width: 100%;
-    border-collapse: collapse; 
-    border: 2px solid #134E1A; 
+    border-collapse: collapse;
+    border: 2px solid #134E1A;
     overflow: hidden;
     table-layout: fixed;
 }
@@ -90,8 +93,8 @@ table {
 td {
     padding: 10px;
     text-align: left;
-    border-left: 1px solid #134E1A; 
-    border-right: 1px solid #134E1A; 
+    border-left: 1px solid #134E1A;
+    border-right: 1px solid #134E1A;
     border-radius: 5px;
 }
 
@@ -106,4 +109,3 @@ td {
     border-radius: 5px;
     text-align: center;
 }
-

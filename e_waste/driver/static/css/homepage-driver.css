@@ -1,0 +1,87 @@
+body {
+    /* font-family: Arial, sans-serif; */
+    margin: 0;
+    padding: 0;
+    background-color: #F5F8EE;
+    text-align: center;
+}
+
+.header-section {
+    background: url('../Images/greenleaf.png') no-repeat center center/cover;
+    padding: 90px 20px;
+    color: white;
+}
+
+.welcome {
+    font-family: 'Sansita Swashed', cursive;
+    font-size: 60px;
+    font-weight: bold;
+}
+
+.title {
+    font-family: 'Sansita Swashed', cursive;
+    font-size: 50px;
+    font-weight: bold;
+}
+
+.short-title {
+    font-family: 'Sansita Swashed', cursive;
+    font-size: 55px;
+    color: #22d437;
+    font-weight: bold;
+}
+
+.container {
+    display: flex;
+    margin-top: 60px;
+    gap: 60px;
+    /* Adjust the gap between divs */
+    justify-content: center;
+    /* Centering horizontally */
+}
+
+.info-box {
+    width: 300px;
+    /* Adjust as needed */
+    height: 300px;
+    /* Adjust as needed */
+    background-color: #97B07A;
+    /* Example color */
+    border-radius: 10px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    font-size: 20px;
+    padding: 13px;
+    font-family: 'Arial', sans-serif;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 40px;
+}
+
+.info-box h2 {
+    font-family: 'Sansita Swashed', cursive;
+    color: white;
+    padding-bottom: 20px;
+}
+
+.info-box p {
+    color: #426719;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: justify;
+}
+
+.info-box a {
+    display: block;
+    margin-top: 10px;
+    color: white;
+    text-decoration: underline;
+    text-align: right;
+    padding-top: 10px;
+}
+
+a:hover {
+    color: #c9dab5;
+}

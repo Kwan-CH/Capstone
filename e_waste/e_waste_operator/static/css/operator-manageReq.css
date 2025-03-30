@@ -1,18 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Meddon&display=swap');
 
-body{
-  background-color:#f5f8ee;
-  margin:0px;
+body {
+  background-color: #f5f8ee;
+  margin: 0px;
 }
-  
 
-.title{
+
+.title {
   font-family: 'Sansita Swashed', cursive;
   font-size: 32px;
-  color: #487319;  
+  color: #487319;
   padding: 10px;
   text-align: center;
-  margin-top:15px;
+  margin-top: 15px;
   margin-bottom: 20px;
 
 }
@@ -23,34 +23,36 @@ p {
   font-size: 17px;
 }
 
-.text{
+.text {
   font-weight: 450;
 }
 
-.manageTable{
+.manageTable {
   display: flex;
-  justify-content: center; 
-  align-items: center; 
+  justify-content: center;
+  align-items: center;
   /* height: 30vh; */
-  width: 100%; 
-  margin-bottom:320px;
+  width: 100%;
+  margin-bottom: 320px;
 }
 
 table {
   width: 90%;
   border-collapse: collapse;
-  margin-top:20px;
+  margin-top: 20px;
 }
 
-th, td {
+th,
+td {
   border: 1px solid #ccc;
   padding: 10px;
-  text-align:center;
+  text-align: center;
   table-layout: fixed;
 }
 
 th {
-  background-color: #8a9b68; /* Greenish Header */
+  background-color: #8a9b68;
+  /* Greenish Header */
   color: black;
   font-weight: bold;
 }
@@ -59,8 +61,8 @@ td {
   background-color: #fff;
 }
 
-tr{
-  height:70px;
+tr {
+  height: 70px;
 }
 
 .update-btn {
@@ -70,7 +72,7 @@ tr{
   padding: 8px 14px;
   cursor: pointer;
   border-radius: 25px;
-  font-size:medium;
+  font-size: medium;
   transition: background-color 0.15s;
   transition: color 0.15s;
   transition: opacity 0.15s;
@@ -78,24 +80,48 @@ tr{
 }
 
 .update-btn:hover {
-  background-color:white;
-  color:#61b763;
+  background-color: white;
+  color: #61b763;
   border: 1px solid #61b763;
 }
 
-.update-btn:active{
-  opacity:0.4;
+.update-btn:active {
+  opacity: 0.4;
+}
+
+.disabled-btn {
+  background-color: #929b92;
+  color: white;
+  border: 1px solid white;
+  padding: 8px 14px;
+  cursor: pointer;
+  border-radius: 25px;
+  font-size: medium;
+  transition: background-color 0.15s;
+  transition: color 0.15s;
+  transition: opacity 0.15s;
+  transition: border 0.15s;
+}
+
+.disabled-btn:hover {
+  background-color: #6d736d;
+  color: #ffffff;
+  border: 1px solid #929b92;
+}
+
+.disabled-btn:active {
+  opacity: 0.4;
 }
 
 /* -----------------Popups (Confirmation & Tracking)---------- */
 .popup-container {
   width: 100%;
   height: 100%;
-  display: none; 
+  display: none;
   position: fixed;
   top: 0;
   left: 0;
-  background: rgba(0, 0, 0, 0.5); 
+  background: rgba(0, 0, 0, 0.5);
   justify-content: center;
   align-items: center;
 }
@@ -109,7 +135,7 @@ tr{
   background: none;
   border: none;
   font-size: 36px;
-  cursor: pointer;
+  cursor: pointer;
 }
 
 /* ------------------Popup Box ----------------------------*/
@@ -117,7 +143,7 @@ tr{
   background: #F5F8EE;
   padding: 30px;
   border-radius: 10px;
-  width: 700px; 
+  width: 700px;
   text-align: center;
   box-shadow: 2px 2px 15px rgba(0, 0, 0, 0.3);
   position: relative;
@@ -126,85 +152,87 @@ tr{
 .popup-content h2 {
   font-family: 'Sansita Swashed', cursive;
   font-size: 32px;
-  color: #487319;  
+  color: #487319;
   padding: 10px;
-  margin-bottom:30px;
+  margin-bottom: 30px;
 }
 
 .popup-content h1 {
   font-size: 32px;
-  color: #134E1A;  
+  color: #134E1A;
   padding: 10px;
 }
 
-.popup-text{
-font-weight:400;
+.popup-text {
+  font-weight: 400;
 }
 
-.popup-logo{
-  height:200px;
-  width:200px;
+.popup-logo {
+  height: 200px;
+  width: 200px;
 }
 
 
 /* -------------------------Popup Buttons----------------------------- */
 .btn-container {
-  display:flex;
+  display: flex;
   justify-content: center;
-  gap:15px;
-  margin-top:25px;
+  gap: 15px;
+  margin-top: 25px;
 }
 
-.button1, .button2{
-display:inline-block;
+.button1,
+.button2 {
+  display: inline-block;
 }
 
-.btn-save, .btn-cancel {
-padding: 10px 20px;
-border: none;
-border-radius: 25px;
-cursor: pointer;
-font-size: 16px;
-width:150px;
-margin-top:20px;
+.btn-save,
+.btn-cancel {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 16px;
+  width: 150px;
+  margin-top: 20px;
 }
 
-.btn-save{
-color:white;
-background-color:#3f6f40;
-transition: all 0.15s;
+.btn-save {
+  color: white;
+  background-color: #3f6f40;
+  transition: all 0.15s;
 }
 
-.btn-save:hover{
-background-color:white;
-color:#61b763;
-border: 1px solid #61b763;
+.btn-save:hover {
+  background-color: white;
+  color: #61b763;
+  border: 1px solid #61b763;
 }
 
-.btn-save:active{
-opacity:0.5;
+.btn-save:active {
+  opacity: 0.5;
 }
 
-.btn-cancel{
-color:black;
-background-color:#D9DFCE;
-transition: all 0.15s;
+.btn-cancel {
+  color: black;
+  background-color: #D9DFCE;
+  transition: all 0.15s;
 }
 
-.btn-cancel:hover{
-opacity:0.7;
+.btn-cancel:hover {
+  opacity: 0.7;
 }
 
-.btn-cancel:active{
-opacity:0.4;
+.btn-cancel:active {
+  opacity: 0.4;
 }
 
-.btn-return{
+.btn-return {
   background: #134E1A;
   color: white;
   border: none;
-  padding: 15px 40px; 
-  font-size: 18px; 
+  padding: 15px 40px;
+  font-size: 18px;
   border-radius: 8px;
   cursor: pointer;
   margin-top: 15px;
@@ -214,7 +242,7 @@ opacity:0.4;
 .form-group {
   margin-bottom: 15px;
   text-align: left;
-  display:block;
+  display: block;
 }
 
 label {
@@ -225,32 +253,35 @@ label {
 
 /* Input Container */
 .input-container {
-  display:flex;
-  align-items: center; /* Ensures vertical alignment */
-  gap:4px;
+  display: flex;
+  align-items: center;
+  /* Ensures vertical alignment */
+  gap: 4px;
 }
 
 /* Input Field */
 input {
   padding: 8px;
-  height: 38px; /* Set fixed height */
+  height: 38px;
+  /* Set fixed height */
   border: 1px solid #ccc;
   border-radius: 5px;
   background-color: #eaeaea;
   outline: none;
-  display:inline-block;
-  margin-bottom:0;
+  display: inline-block;
+  margin-bottom: 0;
   width: 100%;
-  color:black;
+  color: black;
 }
 
-#rejectedPopup{
-  height:200px;
+#rejectedPopup {
+  height: 200px;
 }
 
 /* -------------------------Tracking Details----------------------------- */
 .reject-form {
-  text-align: center;  /* Centers everything */
+  text-align: center;
+  /* Centers everything */
   background: #f8f8f0;
   padding: 30px;
   border-radius: 12px;
@@ -293,12 +324,12 @@ input {
 }
 
 .popup-logo {
-  width: auto; /* Maintain aspect ratio */
-  height: 150px; /* Reduce height */
-  display: block; /* Center it */
-  margin: 0 auto; /* Adjust space */
+  width: auto;
+  /* Maintain aspect ratio */
+  height: 150px;
+  /* Reduce height */
+  display: block;
+  /* Center it */
+  margin: 0 auto;
+  /* Adjust space */
 }
-
-
-
-

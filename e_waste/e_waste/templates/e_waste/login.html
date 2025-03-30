@@ -15,7 +15,7 @@
 
 {% block content %}
     <div class="container">
-        <a href="landing.html"><img src="{% static 'images/companylogonobg.png' %}" id="logo" width="400" height="150" alt="company logo"></a>
+        <a href="{% url 'landing' %}"><img src="{% static 'images/companylogonobg.png' %}" id="logo" width="400" height="150" alt="company logo"></a>
             <form class="form" action= {% url 'login' %} method="POST"> {% csrf_token %}
                 <p class="form-title">Sign in to your account</p>
                 <div class="input-container">
@@ -24,9 +24,14 @@
             <div class="input-container">
                 <input placeholder="Enter your password" type="password" name="password" required>
                 </div>
-                <button class="submit" type="submit">Sign in</button>
+            <button class="submit" type="submit">Sign in</button>
+            <br>
 
-            <p class="signup-link">
+            <p class="link">
+                <a id="forgot-password" href="{% url 'resetPassword'%}">Forgot password?</a>
+            </p>
+
+            <p class="link">
                 New user?
                 <a id="signup" href="{% url 'signup' %}">Sign up here!</a>
             </p>

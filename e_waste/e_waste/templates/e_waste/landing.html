@@ -85,26 +85,6 @@
 
 {% block extra_js %}
     <script>
-        {% comment %} fetch('header.html')
-            .then(response => response.text())
-            .then(html => {
-                document.getElementById('embedded-header').innerHTML = html;
-            }); {% endcomment %}
-
-        // fetch('navbar.html')
-        // .then(response => response.text())
-        // .then(html => {
-        //     document.getElementById('embedded-navbar').innerHTML = html;
-        // });
-{% comment %} 
-        fetch('footer.html')
-            .then(response => response.text())
-            .then(html => {
-                document.getElementById('embedded-footer').innerHTML = html;
-            }); {% endcomment %}
-
-
-            ////
         let slideIndex = 1; // Start at first slide
         showSlides(slideIndex);
 

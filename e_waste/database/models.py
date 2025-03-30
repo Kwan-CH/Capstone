@@ -188,7 +188,7 @@ class Reason(models.Model):
     def __str__(self):
         return f"{self.reasonID} Reason:{self.reason}"
 
-class PickupRequest(models.Model):
+class ScheduleRequest(models.Model):
     requestID = models.CharField(primary_key=True, max_length=200)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     category = models.ForeignKey(ItemCategory, on_delete=models.CASCADE)
@@ -206,7 +206,7 @@ class PickupRequest(models.Model):
     def generate_tracking_number(self):
         current_year = timezone.now().year
         prefix = f"#JAS{current_year}-"
-        last_request = PickupRequest.objects.filter(trackingnumber__startswith=prefix).order_by('trackingnumber').last()
+        last_request = ScheduleRequest.objects.filter(trackingnumber__startswith=prefix).order_by('trackingnumber').last()
         if last_request:
             last_number = int(last_request.trackingnumber.split('-')[-1])
             new_number = last_number + 1
@@ -217,7 +217,7 @@ class PickupRequest(models.Model):
     def save(self, *args, **kwargs):
         if not self.requestID:
             #get the last customer
-            last_pickup = PickupRequest.objects.order_by('-requestID').first()
+            last_pickup = ScheduleRequest.objects.order_by('-requestID').first()
 
             if last_pickup:
                 last_number = int(last_pickup.requestID[1:])
@@ -231,3 +231,19 @@ class PickupRequest(models.Model):
 
     def __str__(self):
         return f"{self.requestID} {self.customer} {self.date} {self.time} {self.trackingnumber}"
+
+class CompletedRequest(models.Model):
+    requestID = models.OneToOneField(ScheduleRequest, on_delete=models.CASCADE, related_name="completed_requests")
+    completed_date = models.DateField(auto_now_add=True)
+    completed_time = models.TimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.requestID} {self.completed_date} {self.completed_time}"
+
+class PickedUpRequest(models.Model):
+    requestID =  models.OneToOneField(ScheduleRequest, on_delete=models.CASCADE,  related_name="pickedup_requests")
+    pickedUp_date = models.DateField(auto_now_add=True)
+    pickedUp_time = models.TimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"{self.requestID} {self.pickedUp_date} {self.pickedUp_date}"

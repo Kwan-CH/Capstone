@@ -24,12 +24,15 @@ app_name = 'e_waste'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('customer/', include('customer.urls')),
+
     path('customer/', include('customer.urls', namespace='customer')),
-    path('driver/', include('driver.urls')),
+    path('driver/', include('driver.urls', namespace='driver')),
     path('operator/', include('e_waste_operator.urls')),
+
     path('signup/', views.signup, name='signup'),
     path('login/', views.user_login, name='login'),
-    # path('', include('customer.urls')),  # Set customer app as the root URL
+
+    path('resetPassword/', views.resetPassword, name='resetPassword'),
+
     path('', views.landing, name='landing'),
 ]

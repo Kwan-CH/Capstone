@@ -11,11 +11,8 @@
 {% block content %}
 
 <body>
-    {% comment %} <div id="embedded-header"></div>
-    <div id="embedded-navbar"></div> {% endcomment %}
-
     <h1 class="title">Manage Request</h1>
-    
+
     <div class="manageTable">
       <table>
         <thead>
@@ -51,7 +48,7 @@
                 {% if request.status == 'Pending' %}
                     <td><button class="update-btn" data-id="{{request.requestID}}" onclick="storeRequestID(this)">Update</button></td>
                 {% else %}
-                    <td><button class="update-btn" disabled>Update</button></td>
+                    <td><button class="disabled-btn" disabled>Update</button></td>
                 {% endif %}
             </tr>
           {% endfor %}
@@ -70,12 +67,12 @@
           <div class="button1">
             <button onclick="showSuccessfulPopup()" class="btn-save">Approve</button>
           </div>
-        
+
           <div class="button2">
             <button class="btn-cancel" onclick="showRejectReqPopup()">Reject</button>
           </div>
         </div>
-        
+
       </div>
     </div>
 
@@ -90,7 +87,7 @@
               <div class="button1">
                   <button class="btn-save" onclick="assignDriverPage()">Proceed</button>
               </div>
-            
+
               <div class="button2">
                 <button class="btn-cancel" onclick="closeTrackingPopup()">Back</button>
               </div>
@@ -103,7 +100,7 @@
       <div class="popup-content">
           <h2><i>Reject Request</i></h2>
           <form class="reject-form">
-           
+
             <label for="reason" class="reject-label">
                 Please specify why the pickup request was denied:
             </label>
@@ -118,7 +115,7 @@
             <div class="button1">
               <button type="button" onclick="rejectRequest()" class="btn-save">Proceed</button>
             </div>
-          
+
             <div class="button2">
                 <button class="btn-cancel">Back</button>
             </div>
@@ -136,42 +133,12 @@
             <div class="button2">
               <button class="btn-cancel" onclick="closeRejectedPopup()">Back</button>
             </div>
-        </div> 
+        </div>
       </div>
 
-<!--  {% comment %} <script src="createacc-pop.js"></script>  {% endcomment %}-->
-<!--           -->
-<!--    <div id="embedded-footer"></div>-->
-
-<!--    {% comment %} <script src="manageRequest.js"></script> {% endcomment %}-->
-
-<!--    {% comment %} <script>-->
-<!--        fetch('operator-header.html')-->
-<!--        .then(response => response.text())-->
-<!--        .then(html => {-->
-<!--            document.getElementById('embedded-header').innerHTML = html;-->
-<!--        });-->
-<!--    </script>-->
-
-<!--    <script>-->
-<!--        fetch('operator-navbar.html')-->
-<!--        .then(response => response.text())-->
-<!--        .then(html => {-->
-<!--            document.getElementById('embedded-navbar').innerHTML = html;-->
-<!--        });-->
-<!--    </script>-->
-
-<!--    <script>-->
-<!--        fetch('footer.html')-->
-<!--        .then(response => response.text())-->
-<!--        .then(html => {-->
-<!--            document.getElementById('embedded-footer').innerHTML = html;-->
-<!--        });-->
-<!--    </script> {% endcomment %}-->
 {% block extra_js %}
     <script src="{% static 'js/manageRequest.js' %}"></script>
 {% endblock %}
 
 </body>
 {% endblock %}
-</html>

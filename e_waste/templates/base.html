@@ -12,18 +12,19 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Sansita+Swashed:wght@300..900&display=swap" rel="stylesheet">
 
-    <div id="embedded-header"></div>
-    <div id="embedded-navbar"></div>
-
     {% block extra_css %}{% endblock %}
 </head>
 
 <body>
     <!-- Include Header -->
-    {% include 'header.html' %}
+    <div id="embedded-header">
+        {% include 'header.html' %}
+    </div>
 
     <!-- Include Navbar -->
-    {% include 'navbar.html' %}
+    <div id="embedded-navbar">
+        {% include 'navbar.html' %}
+    </div>
 
      <!-- Flex Container -->
     <div class="flex-container">
@@ -33,6 +34,7 @@
         </main>
 
     </div>
+
     <!-- Include Footer -->
     <div id="embedded-footer">
         {% include 'footer.html' %}

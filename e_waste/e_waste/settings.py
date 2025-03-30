@@ -54,6 +54,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1', 'http://localhost']
+
+
 ROOT_URLCONF = 'e_waste.urls'
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -139,6 +142,7 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'e_waste', 'static'),
+    os.path.join(BASE_DIR, 'static'),
 ]
 
 # Default primary key field type

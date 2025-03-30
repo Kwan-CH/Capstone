@@ -1,23 +1,18 @@
 {% extends 'operator/base_operator.html' %}
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Completed Request</title>
-    {% block extra_css %}
-        <link rel="stylesheet" href="{% static 'css/operator-completedReq.css' %}">
-        <link href="https://fonts.googleapis.com/css2?family=Sansita+Swashed:wght@500&display=swap" rel="stylesheet">
-    {% endblock %}
-</head>
+{% block title %} Completed Request {% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/operator-completedReq.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Sansita+Swashed:wght@500&display=swap" rel="stylesheet">
+{% endblock %}
 
 {% block content %}
 <body>
 
-    <h1 class="title">Completed Request</h1>
-    
+    <h1 class="title">Completed Request</h1> </br></br>
+
     <div class="completedTable">
       <table>
         <thead>
@@ -66,9 +61,5 @@
         </tbody>
       </table>
    </div>
-           
-
-
 </body>
 {% endblock %}
-</html>

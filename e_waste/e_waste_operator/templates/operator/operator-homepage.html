@@ -9,8 +9,6 @@
 {% block title %}Home Page{% endblock %}
 
 {% block content %}
-
-
 <header class="header-section">
     <h1><span class="welcome">Welcome to</span> <br> <aspan class="title">Jabatan Alam Sekitar</span> <br> <span class="short-title">JAS</span></h1>
 </header>
@@ -19,25 +17,25 @@
     <div class="info-box">
         <h2>Manage Request</h2>
         <p>View and manage all requests, including approving or rejecting them. Assign drivers to approved requests for efficient handling.</p>
-        <a href="operator-manageReq.html">View Details</a>
+        <a href="{% url 'operator:manageReq'%}">View Details</a>
     </div>
 
     <div class="info-box">
         <h2>Completed Request</h2>
         <p>Click here to access the full details of all completed requests. View records of completed requests from the past five years.</p>
-        <a href="operator-completedReq.html">View History</a>
+        <a href="{% url 'operator:completed_request'%}">View History</a>
     </div>
 
     <div class="info-box">
         <h2>Reward System</h2>
         <p>Explore the complete list of rewards, with the capability to introduce new incentives or adjust existing ones.</p>
-        <a href="operator-rewardSystem.html">View Details</a>
+        <a href="{% url 'operator:reward_system'%}">View Details</a>
     </div>
 
     <div class="info-box">
         <h2>Create Account</h2>
         <p>Create new accounts for pickup drivers, enabling them to access the system and manage their pickup tasks effectively.</p>
-        <a href="operator-createacc.html">Create Driver Account</a>
+        <a href="{% url 'operator:create_acc'%}">Create Driver Account</a>
     </div>
 </div>
 {% endblock %}

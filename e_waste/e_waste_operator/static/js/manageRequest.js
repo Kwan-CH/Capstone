@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 let requestID = null;
-function storeRequestID(button){
+function storeRequestID(button) {
   requestID = button.dataset.id;
 }
 
@@ -77,20 +77,20 @@ function rejectRequest() {
   fetch("reject_request/", {
     method: "POST",
     headers: {
-    "Content-Type": "application/json",
-  "X-CSRFToken": getCookie("csrftoken"),  // CSRF token for security
-  },
-  body: JSON.stringify({ selectedRequest: requestID, selectedReason:selectedReason}),
+      "Content-Type": "application/json",
+      "X-CSRFToken": getCookie("csrftoken"),  // CSRF token for security
+    },
+    body: JSON.stringify({ selectedRequest: requestID, selectedReason: selectedReason }),
   })
-  .then(response => response.json())
-  .then(data => {
+    .then(response => response.json())
+    .then(data => {
       if (data.success) {
-            document.getElementById("successful-popup").style.display = "flex"; // Show success popup
-          } else {
-            alert("⚠️ " + data.message);
-          }
+        document.getElementById("successful-popup").style.display = "flex"; // Show success popup
+      } else {
+        alert("⚠️ " + data.message);
+      }
     })
-  .catch(error => console.error("Error:", error));
+    .catch(error => console.error("Error:", error));
 
   closeRejectReqPopup();
   document.getElementById("rejected-popup").style.display = "flex";
@@ -99,15 +99,15 @@ function rejectRequest() {
 function getCookie(name) {
   let cookieValue = null;
   if (document.cookie && document.cookie !== '') {
-          const cookies = document.cookie.split(';');
-          for (let i = 0; i < cookies.length; i++) {
-              const cookie = cookies[i].trim();
-              if (cookie.startsWith(name + '=')) {
-                  cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                  break;
-                }
-            }
-        }
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.startsWith(name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
   return cookieValue;
 }
 
@@ -118,11 +118,10 @@ function closeRejectedPopup() {
 }
 
 
-
-function assignDriverPage(){
-  if (!requestID){
+function assignDriverPage() {
+  if (!requestID) {
     alert("Something went wrong")
-  }else{
+  } else {
     const url = `assign_driver_page?requestID=${requestID}`;
     console.log(url)
     window.location.href = url;

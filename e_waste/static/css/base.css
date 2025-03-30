@@ -1,30 +1,16 @@
-.footer {
-    background-color: #487319;
-}
-
-.header {
+html,
+body {
+    height: 100%;
+    margin: 0;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    background-color: black;
+    flex-direction: column;
 }
 
-#logout {
-    padding: 10px 20px;
-    background-color: #ff4d4d;
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-    border-radius: 5px;
+.flex-container {
+    flex: 1;
 }
 
-#logout:hover {
-    background-color: #487319;
-}
-
-#navbar {
-    position: relative;
-    top: -52px;
+.embedded-footer {
+    bottom: 0;
+    /* background-color: black; */
 }

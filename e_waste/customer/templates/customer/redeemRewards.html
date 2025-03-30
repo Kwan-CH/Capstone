@@ -1,102 +1,69 @@
 {% extends 'customer/base_customer.html' %}
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    {% block extra_css %}
+{% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/redeemRewards.css' %}">
-    {% endblock %}
-    <title>E-Waste Category</title>
-    <!--    <div id="embedded-header"></div>-->
-    <!--    <div id="embedded-navbar"></div>-->
-</head>
+{% endblock %}
 
-{%block content%}
-<body>
-<h1>Reward Points</h1>
-<div class="small-box">
-    <p>Redeem your gifts using your points below
-    <p>
-</div>
-<div class="points-box">
-    <p>Total Points: {{points}}</p>
-</div>
+{% block title %} E-Waste Category {% endblock %}
 
-<div class="container">
-    {% for voucher in vouchers %}
-    <div class="reward-box" data-rewardID="{{voucher.voucherID}}" data-points="{{voucher.pointsRequired}}">
-        <p>{{voucher.name}}</p>
-        <p class="points">{{voucher.pointsRequired}} points</p>
+{% block content %}
+    <h1>Reward Points</h1>
+    <div class="small-box">
+        <p>Redeem your gifts using your points below
+        <p>
     </div>
-    {% endfor %}
+    <div class="points-box">
+        <p>Total Points: {{points}}</p>
+    </div>
 
-    {% comment %} <div class="reward-box" data-reward="15% Discount Orange Juice" data-points="200">-->
-       <p>15% Discount Orange Juice</p>-->
-    <p class="points">200 points</p>-->
-   </div>--> {% endcomment %}
-<!--    <div class="reward-box" data-reward="One FREE Coffee" data-points="250">-->
-<!--        <p>One FREE Coffee</p>-->
-<!--        <p class="points">250 points</p>-->
-<!--    </div>-->
-<!--    <div class="reward-box" data-reward="One FREE Orange Juice" data-points="350">-->
-<!--        <p>One FREE Orange Juice</p>-->
-<!--        <p class="points">350 points</p>-->
-<!--    </div>-->
-<!--    <div class="reward-box" data-reward="One FREE iPhone XR" data-points="888">-->
-<!--        <p>One FREE iPhone XR</p>-->
-<!--        <p class="points">888 points</p>-->
-<!--    </div>-->
-<!--    <div class="reward-box" data-reward="One FREE iPhone XS" data-points="999">-->
-<!--        <p>One FREE iPhone XS</p>-->
-<!--        <p class="points">999 points</p>-->
-<!--    </div>-->
-</div>
-<button type="submit" class="redeem" disabled>Redeem</button>
+    <div class="container">
+        {% for voucher in vouchers %}
+        <div class="reward-box" data-rewardID="{{voucher.voucherID}}" data-points="{{voucher.pointsRequired}}">
+            <p>{{voucher.name}}</p>
+            <p class="points">{{voucher.pointsRequired}} points</p>
+        </div>
+        {% endfor %}
 
-<div>
-    {% if not Empty %}
-        {% if vouchers.has_previous %}
-            <a href="?page={{ vouchers.previous_page_number }}" style="text-decoration:none;"> &larr; Previous</a>
+    </div>
+    <button type="submit" class="redeem" disabled>Redeem</button>
+
+    <div>
+        {% if not Empty %}
+            {% if vouchers.has_previous %}
+                <a href="?page={{ vouchers.previous_page_number }}" style="text-decoration:none;"> &larr; Previous</a>
+            {% endif %}
+
+            <span>Page {{ vouchers.number }} of {{ vouchers.paginator.num_pages }}</span>
+
+            {% if vouchers.has_next %}
+                <a href="?page={{ vouchers.next_page_number }}" style="text-decoration:none;">Next &rarr; </a>
+            {% endif %}
+        {% else %}
+            <p>No Vouchers Available</p>
         {% endif %}
-
-        <span>Page {{ vouchers.number }} of {{ vouchers.paginator.num_pages }}</span>
-
-        {% if vouchers.has_next %}
-            <a href="?page={{ vouchers.next_page_number }}" style="text-decoration:none;">Next &rarr; </a>
-        {% endif %}
-    {% else %}
-        <p>No Vouchers Available</p>
-    {% endif %}
-</div>
-
-<!-- Confirmation Popup -->
-<div id="confirmation-popup" class="popup-container" style="display: none;">
-    <div class="popup-content">
-        <h2><i>Confirmation</i></h2>
-        <p>Please verify that you have chosen the correct reward before proceeding.</p>
-        <button class="btn cancel" onclick="closeConfirmationPopup()">Cancel</button>
-        <button class="btn proceed" onclick="confirmRedemption()">Proceed</button>
     </div>
-</div>
 
-<!---------- Redemption Successful Popup ------------>
-<div id="successful-popup" class="popup-container" style="display: none;">
-    <div class="popup-content">
-        <img src="{% static 'images/companylogo.jpg' %}" alt="JAS Logo" class="popup-logo">
-        <h2>Your Reward Has Been Successfully Redeemed!</h2>
-        <button class="btn return" onclick="closeSuccessfulPopup()">Return</button>
+    <!-- Confirmation Popup -->
+    <div id="confirmation-popup" class="popup-container" style="display: none;">
+        <div class="popup-content">
+            <h2><i>Confirmation</i></h2>
+            <p>Please verify that you have chosen the correct reward before proceeding.</p>
+            <button class="btn cancel" onclick="closeConfirmationPopup()">Cancel</button>
+            <button class="btn proceed" onclick="confirmRedemption()">Proceed</button>
+        </div>
     </div>
-</div>
 
+    <!---------- Redemption Successful Popup ------------>
+    <div id="successful-popup" class="popup-container" style="display: none;">
+        <div class="popup-content">
+            <img src="{% static 'images/companylogo.jpg' %}" alt="JAS Logo" class="popup-logo">
+            <h2>Your Reward Has Been Successfully Redeemed!</h2>
+            <button class="btn return" onclick="closeSuccessfulPopup()">Return</button>
+        </div>
+    </div>
+{% endblock %}
 
-<!--    <div id="embedded-footer"></div>-->
 {% block extra_js %}
     <script src="{% static 'js/redeemVoucher.js' %}"></script>
 {% endblock %}
-
-</body>
-{% endblock %}
-
-</html>

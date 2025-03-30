@@ -13,18 +13,22 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Sansita+Swashed:wght@300..900&display=swap" rel="stylesheet">
 
-    <div id="embedded-header">
-        {% include 'operator/operator-header.html' %}
-    </div>
 
-    <div id="embedded-navbar">
-        {% include 'operator/operator-navbar.html' %}
-    </div>
 
     {% block extra_css %}{% endblock %}
 </head>
 
 <body>
+    <!-- Include Header -->
+    <div id="embedded-header">
+        {% include 'operator/operator-header.html' %}
+    </div>
+
+    <!-- Include Navbar -->
+    <div id="embedded-navbar">
+        {% include 'operator/operator-navbar.html' %}
+    </div>
+
      <!-- Flex Container -->
     <div class="flex-container">
         <!-- Main Content Block -->

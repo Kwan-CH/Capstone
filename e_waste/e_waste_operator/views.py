@@ -2,7 +2,7 @@ from idlelib.run import Executive
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from database.models import Driver, PickupRequest, Reason, Voucher, Operator
+from database.models import Driver, ScheduleRequest, Reason, Voucher
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.http import JsonResponse
@@ -13,22 +13,19 @@ def homepage_operator(request):
     return render(request, 'operator/operator-homepage.html')
 
 def manageReq(request):
-    requests = PickupRequest.objects.all()
+    requests = ScheduleRequest.objects.all().order_by('-requestID')
     reasons = Reason.objects.all()
     return render(request, 'operator/operator-manageReq.html',{'requests': requests, 'reasons':reasons})
 
-def update_request_status(requestID, operatorID):
-    pickUpRequest = PickupRequest.objects.filter(requestID=requestID).first()
+def update_request_status(requestID):
+    pickUpRequest = ScheduleRequest.objects.filter(requestID=requestID).first()
     pickUpRequest.status = "Approved"
-    operator = Operator.objects.filter(operatorID=operatorID).first()
-    pickUpRequest.operator = operator
     pickUpRequest.save()
 
 def assign_driver_page(request):
     requestID = request.GET.get('requestID')
-    operatorID = request.session.get('user_id')
-    requestInfo = PickupRequest.objects.filter(requestID= requestID).first()
-    update_request_status(requestID, operatorID)
+    requestInfo = ScheduleRequest.objects.filter(requestID= requestID).first()
+    update_request_status(requestID)
     drivers = Driver.objects.all()
     return render(request, 'operator/assign-driver.html', {'drivers': drivers, 'request':requestInfo})
 
@@ -39,7 +36,7 @@ def assign_driver(request):
             requestID = data.get('requestID')
             driverID = data.get('driverID')
             if requestID and driverID:
-                selectedRequest = PickupRequest.objects.filter(requestID=requestID).first()
+                selectedRequest = ScheduleRequest.objects.filter(requestID=requestID).first()
                 driver = Driver.objects.filter(driverID=driverID).first()
                 selectedRequest.driver = driver
                 selectedRequest.save()
@@ -57,12 +54,10 @@ def reject_request(request):
             requestID = data.get('selectedRequest')
             reasonID = data.get('selectedReason')
             if requestID and reasonID:
-                selectedRequest = PickupRequest.objects.filter(requestID=requestID).first()
+                selectedRequest = ScheduleRequest.objects.filter(requestID=requestID).first()
                 reason = Reason.objects.filter(reasonID=reasonID).first()
-                operator = Operator.objects.filter(operatorID=request.session.get('user_id')).first()
                 selectedRequest.rejectedReason = reason
                 selectedRequest.status = 'Rejected'
-                selectedRequest.operator = operator
                 selectedRequest.save()
                 return JsonResponse({'success': True})
                 # return redirect('operator:manageReq')
