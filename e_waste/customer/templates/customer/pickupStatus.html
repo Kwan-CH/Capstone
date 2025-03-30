@@ -8,9 +8,6 @@
 
 {% block title %}Pickup Status{% endblock %}
 
-    {% comment %} <div id="embedded-header"></div>
-    <div id="embedded-navbar"></div> {% endcomment %}
-
 {% block content %}
     <div class="container">
         <div class="title-container">
@@ -22,13 +19,14 @@
         <table class="table">
             <thead>
                 <tr class="pickup-list-view">
-                    <th colspan="4">Pickup List View</th>
+                    <th colspan="5">Pickup List View</th>
                 </tr>
 
                 <tr>
                     <th>Tracking Code</th>
                     <th>Scheduled</th>
                     <th>Vehicle No</th>
+                    <th>Driver Information</th>
                     <th>Status</th>
                 </tr>
             </thead>
@@ -39,12 +37,13 @@
                     <td>{{ delivery.date }} {{ delivery.time|date:"h:i A" }}</td>
                     {% comment %} <td>{{ delivery.driver.plateNumber }}</td> {% endcomment %}
                     <td>{% if delivery.driver %}{{ delivery.driver.plateNumber }}{% else %}-{% endif %}</td>
+                    <td>{% if delivery.driver %}{{ delivery.driver.name }}{% else %}-{% endif %} </td>
                     <td>{{ delivery.status }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
-        
+
         <div>
             {% if not Empty %}
                 {% if deliveries.has_previous %}
@@ -77,10 +76,10 @@
                 case 'Pending':
                     cell.classList.add('status-pending');
                     break;
-                case 'Assigned':
+                case 'Approved':
                     cell.classList.add('status-assigned');
                     break;
-                case 'Picked up':
+                case 'Picked Up':
                     cell.classList.add('status-picked-up');
                     break;
                 case 'Completed':
@@ -91,27 +90,3 @@
     });
 </script>
 {% endblock %}
-    {% comment %} <div id="embedded-footer"></div> {% endcomment %}
-    {% comment %} <script>
-        fetch('header-customer.html')
-          .then(response => response.text())
-          .then(html => {
-            document.getElementById('embedded-header').innerHTML = html;
-        });
-    </script>
-
-    <script>
-        fetch('navbar-customer.html')
-        .then(response => response.text())
-        .then(html => {
-            document.getElementById('embedded-navbar').innerHTML = html;
-        });
-    </script>
-
-    <script>
-        fetch('footer.html')
-        .then(response => response.text())
-        .then(html => {
-            document.getElementById('embedded-footer').innerHTML = html;
-        });
-    </script> {% endcomment %}

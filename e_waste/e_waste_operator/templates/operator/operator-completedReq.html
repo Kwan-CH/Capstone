@@ -1,6 +1,7 @@
 {% extends 'operator/base_operator.html' %}
 {% load static %}
 
+<<<<<<< Updated upstream
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,12 +13,25 @@
         <link href="https://fonts.googleapis.com/css2?family=Sansita+Swashed:wght@500&display=swap" rel="stylesheet">
     {% endblock %}
 </head>
+=======
+{% block title %} Completed Request {% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/operator-completedReq.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Sansita+Swashed:wght@500&display=swap" rel="stylesheet">
+{% endblock %}
+>>>>>>> Stashed changes
 
 {% block content %}
 <body>
 
+<<<<<<< Updated upstream
     <h1 class="title">Completed Request</h1>
     
+=======
+    <h1 class="title">Completed Request</h1> </br></br>
+
+>>>>>>> Stashed changes
     <div class="completedTable">
       <table>
         <thead>
@@ -66,9 +80,14 @@
         </tbody>
       </table>
    </div>
+<<<<<<< Updated upstream
            
 
 
 </body>
 {% endblock %}
 </html>
+=======
+</body>
+{% endblock %}
+>>>>>>> Stashed changes

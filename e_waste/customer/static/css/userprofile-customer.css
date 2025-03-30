@@ -1,11 +1,19 @@
 body {
+    /* font-family: 'Sansita Swashed', cursive; */
     background-color: #f7f8ed;
     text-align: center;
     padding: 40px;
     margin-top: 20;
 }
 
-.profile-form, label{
+h1 {
+    font-family: 'Sansita Swashed', cursive;
+    font-size: 32px;
+    color: #2d621a;
+}
+
+.profile-form,
+label {
     font-family: 'Inter', sans-serif;
     font-weight: bold;
     font-size: 20px;

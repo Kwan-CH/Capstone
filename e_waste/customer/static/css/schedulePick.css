@@ -219,3 +219,29 @@ select {
 .popup-content button.proceed:hover {
     background: #298a35;
 }
+
+.address-container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.address-btn {
+    background-color: #487319;
+    color: white;
+    padding: 6px 10px;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.address-btn:hover {
+    background-color: #2d621a;
+}
+
+textarea[placeholder] {
+    padding-top: 15px;
+    padding-left: 10px;
+    font-size: 14px;
+}

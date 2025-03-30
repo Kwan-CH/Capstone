@@ -1,0 +1,30 @@
+.footer {
+    background-color: #487319;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: black;
+}
+
+#logout {
+    padding: 10px 20px;
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+#logout:hover {
+    background-color: #487319;
+}
+
+#navbar {
+    position: relative;
+    top: -52px;
+}

@@ -48,8 +48,15 @@
             </select>
 
             <!-- Address -->
-            <label for="address">C. Address:</label>
-            <input type="text" id="address" name="address" placeholder="Pickup Address" required>
+            {% comment %} <label for="address">C. Address:</label>
+            <input type="text" id="address" name="address" placeholder="Pickup Address" required> {% endcomment %}
+
+            <!-- Address -->
+           <label for="address">C. Address:</label>
+           <div class="address-container">
+               <textarea name="address" id="address" rows="2" cols="50" style="width:850px;" placeholder="Pickup Address" required></textarea>
+               <button class="address-btn" id="use-current-location">Use My Address</button>
+            </div>
 
             <!-- Date & Time  -->
             <label for="pickup-date">D. Preferred Pickup Date/Time:</label>
@@ -138,6 +145,24 @@
         function submitForm() {
             document.getElementById('schedule-pickup-form').submit();
         }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("use-current-location").addEventListener("click", function(event) {
+                event.preventDefault();  // Prevent unnecessary form submission
+
+                fetch("/customer/get_user_address/")  // Make sure this matches your URL
+                .then(response => response.json())
+                .then(data => {
+                    if (data.address) {
+                        document.getElementById("address").value = data.address;  // Autofill address field
+                    } else {
+                        alert("Error: " + (data.error || "Could not fetch address"));
+                    }
+                })
+                .catch(error => console.error("Error fetching address:", error));
+            });
+        });
+
 
     </script>
 

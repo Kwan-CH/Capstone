@@ -1,4 +1,9 @@
+<<<<<<< Updated upstream
 html, body {
+=======
+html,
+body {
+>>>>>>> Stashed changes
     height: 100%;
     margin: 0;
     display: flex;
@@ -26,8 +31,10 @@ body {
 /* ------------------------Navigation Buttons -----------------*/
 .btn-container {
     display: flex;
-    justify-content: center; /* Center the buttons */
-    gap: 30px; /* Add space between buttons */
+    justify-content: center;
+    /* Center the buttons */
+    gap: 30px;
+    /* Add space between buttons */
     margin-bottom: 20px;
 }
 
@@ -40,7 +47,8 @@ body {
     cursor: pointer;
     font-size: 16px;
     font-weight: bold;
-    min-width: 150px; /* Make all buttons equal width */
+    min-width: 150px;
+    /* Make all buttons equal width */
     text-align: center;
 }
 
@@ -70,19 +78,23 @@ body {
 
 /*------------------------ Table Layout------------------------ */
 table {
-    width: 100%;  /* Keep table inside the card */
-    max-width: 100%;  /* Prevent overflow */
-    border-collapse: collapse; 
-    border: 2px solid #134E1A; 
-    table-layout: fixed; /* Prevent column expansion */
+    width: 100%;
+    /* Keep table inside the card */
+    max-width: 100%;
+    /* Prevent overflow */
+    border-collapse: collapse;
+    border: 2px solid #134E1A;
+    table-layout: fixed;
+    /* Prevent column expansion */
 }
 
 /* ----------------------Table cells----------------------------- */
-th, td {
+th,
+td {
     padding: 10px;
     text-align: left;
-    border-left: 1px solid #134E1A; 
-    border-right: 1px solid #134E1A; 
+    border-left: 1px solid #134E1A;
+    border-right: 1px solid #134E1A;
     border-radius: 5px;
 }
 
@@ -101,13 +113,35 @@ tr:last-child {
 }
 
 /* ---------------------Points Display-------------------------- */
+<<<<<<< Updated upstream
 #show-qr {
     background-color: #134E1A;
     color: white;  
+=======
+/* #show-qr {
+    background-color: #134E1A;
+    color: white;
+>>>>>>> Stashed changes
     padding: 10px;
     border-radius: 20px;
     font-size: 15px;
     text-decoration: none;
+<<<<<<< Updated upstream
+=======
+} */
+
+.qr-code {
+    background-color: #134E1A;
+    color: white;
+    padding: 10px;
+    border-radius: 20px;
+    font-size: 15px;
+    text-decoration: none;
+}
+
+.qr-code:hover {
+    background-color: #0d6936;
+>>>>>>> Stashed changes
 }
 
 .show-qr {
@@ -121,19 +155,33 @@ tr:last-child {
     text-align: center;
 }
 
+<<<<<<< Updated upstream
 #show-qr:hover {
     background-color: #0d6936;
 }
+=======
+/* #show-qr:hover {
+    background-color: #0d6936;
+} */
+>>>>>>> Stashed changes
 
 /* -----------------Popups (QR Code)---------- */
 .popup-container {
     width: 100%;
     height: 100%;
+<<<<<<< Updated upstream
     display: none; 
     position: fixed;
     top: 0;
     left: 0;
     background: rgba(0, 0, 0, 0.5); 
+=======
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.5);
+>>>>>>> Stashed changes
     justify-content: center;
     align-items: center;
 }
@@ -143,7 +191,11 @@ tr:last-child {
     background: #F5F8EE;
     padding: 30px;
     border-radius: 10px;
+<<<<<<< Updated upstream
     width: 700px; 
+=======
+    width: 700px;
+>>>>>>> Stashed changes
     text-align: center;
     box-shadow: 2px 2px 15px rgba(0, 0, 0, 0.3);
 }
@@ -151,13 +203,21 @@ tr:last-child {
 .popup-content h2 {
     font-family: 'Sansita Swashed', cursive;
     font-size: 32px;
+<<<<<<< Updated upstream
     color: #487319;  
+=======
+    color: #487319;
+>>>>>>> Stashed changes
     padding: 10px;
 }
 
 .popup-content h1 {
     font-size: 32px;
+<<<<<<< Updated upstream
     color: #134E1A;  
+=======
+    color: #134E1A;
+>>>>>>> Stashed changes
     padding: 10px;
 }
 
@@ -166,8 +226,13 @@ tr:last-child {
     background: #134E1A;
     color: white;
     border: none;
+<<<<<<< Updated upstream
     padding: 15px 40px; 
     font-size: 18px; 
+=======
+    padding: 15px 40px;
+    font-size: 18px;
+>>>>>>> Stashed changes
     border-radius: 8px;
     cursor: pointer;
     margin-top: 20px;

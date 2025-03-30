@@ -10,10 +10,10 @@
     padding-bottom: 20px;
     align-items: center;
     text-align: center;
-    margin-top: 70px;
+    margin-top: 50px;
     border-radius: 20px;
     backdrop-filter: blur(10px);
-    max-height: 600px;
+    max-height: 650px;
 }
 
 body {
@@ -92,16 +92,17 @@ body {
 
 .submit:hover {
     background-color: #3b39cc;
+    cursor: pointer;
 }
 
-.signup-link {
+.link {
     color: #6B7280;
     font-size: 1.05rem;
     line-height: 1.25rem;
     text-align: center;
 }
 
-.signup-link a {
+.link a {
     text-decoration: underline;
 }
 
@@ -112,15 +113,22 @@ body {
 
 #signup {
     text-decoration: none;
+    color: #4F46E5;
+    font-weight: bold;
 }
 
 #logo:hover {
     cursor: pointer;
 }
 
-/* footer */
 #embedded-footer {
     position: absolute;
     bottom: 0;
     width: 100%;
+}
+
+#forgot-password {
+    text-decoration: none;
+    color: #4F46E5;
+    font-weight: bold;
 }

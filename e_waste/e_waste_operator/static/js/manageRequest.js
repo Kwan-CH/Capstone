@@ -14,7 +14,11 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 let requestID = null;
+<<<<<<< Updated upstream
 function storeRequestID(button){
+=======
+function storeRequestID(button) {
+>>>>>>> Stashed changes
   requestID = button.dataset.id;
 }
 
@@ -77,6 +81,7 @@ function rejectRequest() {
   fetch("reject_request/", {
     method: "POST",
     headers: {
+<<<<<<< Updated upstream
     "Content-Type": "application/json",
   "X-CSRFToken": getCookie("csrftoken"),  // CSRF token for security
   },
@@ -91,6 +96,22 @@ function rejectRequest() {
           }
     })
   .catch(error => console.error("Error:", error));
+=======
+      "Content-Type": "application/json",
+      "X-CSRFToken": getCookie("csrftoken"),  // CSRF token for security
+    },
+    body: JSON.stringify({ selectedRequest: requestID, selectedReason: selectedReason }),
+  })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        document.getElementById("successful-popup").style.display = "flex"; // Show success popup
+      } else {
+        alert("⚠️ " + data.message);
+      }
+    })
+    .catch(error => console.error("Error:", error));
+>>>>>>> Stashed changes
 
   closeRejectReqPopup();
   document.getElementById("rejected-popup").style.display = "flex";
@@ -99,6 +120,7 @@ function rejectRequest() {
 function getCookie(name) {
   let cookieValue = null;
   if (document.cookie && document.cookie !== '') {
+<<<<<<< Updated upstream
           const cookies = document.cookie.split(';');
           for (let i = 0; i < cookies.length; i++) {
               const cookie = cookies[i].trim();
@@ -108,6 +130,17 @@ function getCookie(name) {
                 }
             }
         }
+=======
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.startsWith(name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+>>>>>>> Stashed changes
   return cookieValue;
 }
 
@@ -118,11 +151,18 @@ function closeRejectedPopup() {
 }
 
 
+<<<<<<< Updated upstream
 
 function assignDriverPage(){
   if (!requestID){
     alert("Something went wrong")
   }else{
+=======
+function assignDriverPage() {
+  if (!requestID) {
+    alert("Something went wrong")
+  } else {
+>>>>>>> Stashed changes
     const url = `assign_driver_page?requestID=${requestID}`;
     console.log(url)
     window.location.href = url;

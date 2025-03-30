@@ -1,0 +1,57 @@
+{% extends 'driver/base_driver.html' %}
+{% load static %}
+
+{% block title %} Complete Pickup {% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/completePick.css'%}">
+{% endblock %}
+
+{% block content %}
+<body>
+    <div class="main-content">
+        <div class="title-container">
+            <h1 class="status-title">Complete Pickup</h1>
+            <p class="info-text">Please click on the 'Completed' button below after you have delivered the item to the recycling center. This will mark the pickup as completed</p>
+        </div>
+
+        <div class="container">
+            {% for pickup in pickups %}
+            <div class="pickup-box">
+                <p><strong>Name:</strong> {{ pickup.customer.name }}</p>
+                <p><strong>Address:</strong> {{ pickup.address }}</p>
+                <p><strong>Waste:</strong> {{ pickup.category.itemType }}</p>
+                <p><strong>Picked up on:</strong> 12:00, 1/3/2025</p>
+                <div class="completed-button">Completed</div>
+            </div>
+            {% empty %}
+                <p>No pickup requests found.</p>
+            {% endfor %}
+        </div>
+
+        {% comment %} <!------- Proceed Action Popup -----------> {% endcomment %}
+        <div id="proceed-popup" class="popup-container" style="display: none;">
+            <div class="popup-content">
+                <img src="{% static 'images/companylogo.jpg'%}" alt="JAS Logo" class="popup-logo">
+                <h2><i>This action will mark the task as done</i></h2>
+                <p>Do you wish to proceed?</p>
+                <button class="btn cancel" onclick="closeConfirmationPopup()">Cancel</button>
+                <button class="btn yes" onclick="showTrackingPopup()">Yes</button>
+            </div>
+        </div>
+
+        <!---------- Great Job Popup ------------>
+        <div id="greatjob-popup" class="popup-container" style="display: none;">
+            <div class="popup-content">
+                <img src="{% static 'images/companylogonobg.png'%}" alt="welldone Logo" class="welldone-logo">
+                <h2>Pickup marked as completed! Great Job!</h2>
+                <button class="btn return" onclick="closeTrackingPopup()">Return</button>
+            </div>
+        </div>
+    </div>
+</body>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'js/completePick.js' %}"></script>
+{% endblock %}

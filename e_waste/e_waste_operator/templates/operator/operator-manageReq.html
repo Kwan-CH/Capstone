@@ -11,11 +11,16 @@
 {% block content %}
 
 <body>
+<<<<<<< Updated upstream
     {% comment %} <div id="embedded-header"></div>
     <div id="embedded-navbar"></div> {% endcomment %}
 
     <h1 class="title">Manage Request</h1>
     
+=======
+    <h1 class="title">Manage Request</h1>
+
+>>>>>>> Stashed changes
     <div class="manageTable">
       <table>
         <thead>
@@ -51,7 +56,11 @@
                 {% if request.status == 'Pending' %}
                     <td><button class="update-btn" data-id="{{request.requestID}}" onclick="storeRequestID(this)">Update</button></td>
                 {% else %}
+<<<<<<< Updated upstream
                     <td><button class="update-btn" disabled>Update</button></td>
+=======
+                    <td><button class="disabled-btn" disabled>Update</button></td>
+>>>>>>> Stashed changes
                 {% endif %}
             </tr>
           {% endfor %}
@@ -70,12 +79,20 @@
           <div class="button1">
             <button onclick="showSuccessfulPopup()" class="btn-save">Approve</button>
           </div>
+<<<<<<< Updated upstream
         
+=======
+
+>>>>>>> Stashed changes
           <div class="button2">
             <button class="btn-cancel" onclick="showRejectReqPopup()">Reject</button>
           </div>
         </div>
+<<<<<<< Updated upstream
         
+=======
+
+>>>>>>> Stashed changes
       </div>
     </div>
 
@@ -90,7 +107,11 @@
               <div class="button1">
                   <button class="btn-save" onclick="assignDriverPage()">Proceed</button>
               </div>
+<<<<<<< Updated upstream
             
+=======
+
+>>>>>>> Stashed changes
               <div class="button2">
                 <button class="btn-cancel" onclick="closeTrackingPopup()">Back</button>
               </div>
@@ -103,7 +124,11 @@
       <div class="popup-content">
           <h2><i>Reject Request</i></h2>
           <form class="reject-form">
+<<<<<<< Updated upstream
            
+=======
+
+>>>>>>> Stashed changes
             <label for="reason" class="reject-label">
                 Please specify why the pickup request was denied:
             </label>
@@ -118,7 +143,11 @@
             <div class="button1">
               <button type="button" onclick="rejectRequest()" class="btn-save">Proceed</button>
             </div>
+<<<<<<< Updated upstream
           
+=======
+
+>>>>>>> Stashed changes
             <div class="button2">
                 <button class="btn-cancel">Back</button>
             </div>
@@ -136,6 +165,7 @@
             <div class="button2">
               <button class="btn-cancel" onclick="closeRejectedPopup()">Back</button>
             </div>
+<<<<<<< Updated upstream
         </div> 
       </div>
 
@@ -168,10 +198,19 @@
 <!--            document.getElementById('embedded-footer').innerHTML = html;-->
 <!--        });-->
 <!--    </script> {% endcomment %}-->
+=======
+        </div>
+      </div>
+
+>>>>>>> Stashed changes
 {% block extra_js %}
     <script src="{% static 'js/manageRequest.js' %}"></script>
 {% endblock %}
 
 </body>
+<<<<<<< Updated upstream
 {% endblock %}
 </html>
+=======
+{% endblock %}
+>>>>>>> Stashed changes

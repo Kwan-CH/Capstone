@@ -1,99 +1,15 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="userprofile-customer.css">
-    <title>User Profile</title> -->
-    <!-- <div id="embedded-header"></div>
-    <div id="embedded-navbar"></div> -->
-<!-- </head>
-
-<body>
-    <div class="container">
-        <div class="container-top">
-            <img id="user" src="Images/userprofilelogonobg.png" width="200"; height="200"; alt="user profile logo">
-            <h1> Your User Profile</h1>
-        </div>
-
-        <div class="container-bottom">
-            <p>Name:</p>
-            <div class="empty-box"></div>
-        
-            <p>Email:</p>
-            <div class="empty-box"></div>
-        
-            <p>Contact Number:</p>
-            <div class="empty-box"></div>
-        
-            <p>Address:</p>
-            <div class="empty-box"></div>
-        
-            <p>Password:</p>
-            <div class="empty-box password"></div>
-            <a href="editpassword-customer.html" id="editpassword">Edit Password</a>
-        
-            <p>State:</p>
-            <div class="empty-box"></div>
-        
-            <a id="edit" href="edituserprofile-customer.html">Edit</a>
-        </div>
-        
-        
-    </div> -->
-
-
-    <!-- <div id="embedded-footer"></div>
-
-    <script>
-        fetch('header-customer.html')
-          .then(response => response.text())
-          .then(html => {
-            document.getElementById('embedded-header').innerHTML = html;
-        });
-    </script>
-
-    <script>
-        fetch('navbar-customer.html')
-        .then(response => response.text())
-        .then(html => {
-            document.getElementById('embedded-navbar').innerHTML = html;
-        });
-    </script>
-
-    <script>
-        fetch('footer.html')
-        .then(response => response.text())
-        .then(html => {
-            document.getElementById('embedded-footer').innerHTML = html;
-        });
-    </script> -->
-<!-- </body>
-
-</html> -->
-
-
-
 {% extends 'customer/base_customer.html' %}
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>User Profile</title>
-    {% block extra_css %}
-        <link rel="stylesheet" href="{% static 'css/userprofile-customer.css' %}">
-        <link href="https://fonts.googleapis.com/css2?family=Sansita+Swashed:wght@500&display=swap" rel="stylesheet">
-    {% endblock %}
-</head>
-<!--    <div id="embedded-header"></div>-->
-<!--    <div id="embedded-navbar"></div>-->
-</head>
+{% block title%}User Profile{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/userprofile-customer.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Sansita+Swashed:wght@500&display=swap" rel="stylesheet">
+{% endblock %}
+
 
 {% block content %}
-<body>
     <div class="container-top">
         <img id="user" src="{% static 'images/userprofilelogonobg.png' %}" width="200"; height="200"; alt="user profile logo">
         <h1> Your User Profile</h1>
@@ -126,42 +42,10 @@
         </div>
     </div>
 
-
-
-<!--    <div id="embedded-footer"></div>-->
-
-<!--    <script>-->
-<!--        fetch('header-customer.html')-->
-<!--          .then(response => response.text())-->
-<!--          .then(html => {-->
-<!--            document.getElementById('embedded-header').innerHTML = html;-->
-<!--        });-->
-<!--    </script>-->
-
-<!--    <script>-->
-<!--        fetch('navbar-customer.html')-->
-<!--        .then(response => response.text())-->
-<!--        .then(html => {-->
-<!--            document.getElementById('embedded-navbar').innerHTML = html;-->
-<!--        });-->
-<!--    </script>-->
-
-<!--    <script>-->
-<!--        fetch('footer.html')-->
-<!--        .then(response => response.text())-->
-<!--        .then(html => {-->
-<!--            document.getElementById('embedded-footer').innerHTML = html;-->
-<!--        });-->
-<!--    </script>-->
-    {% if update_success %}
+    {% comment %} {% if update_success %}
         <script>
             alert('Profile has been updated');
         </script>
-    {% endif %}
-
-</body>
+    {% endif %} {% endcomment %}
 
 {% endblock %}
-
-</html>
-

@@ -1,32 +1,28 @@
 {% extends 'customer/base_customer.html' %}
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Device Recycle - JAS E-Waste</title>
-    {% block extra_css %}
-        <link rel="stylesheet" href="{% static 'css/activityHis-Device.css' %}">
-        <link href="https://fonts.googleapis.com/css2?family=Sansita+Swashed:wght@300;400;700&display=swap" rel="stylesheet">
-    {% endblock %}
+{% block title %}Device Recycle - JAS E-Waste{% endblock %}
 
-    {% block extra_js %}
-        <script defer src="{% static 'js/activityHis-Device.js' %}"></script>
-    {% endblock %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/activityHis-Device.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Sansita+Swashed:wght@300;400;700&display=swap" rel="stylesheet">
+{% endblock %}
 
-</head>
+{% block extra_js %}
+    <script defer src="{% static 'js/activityHis-Device.js' %}"></script>
+{% endblock %}
+
 
 {% block content %}
 <body>
-<!--    <div id="embedded-header"></div>-->
-<!--    <div id="embedded-navbar"></div>-->
 
     <h1 class="title">Activity History</h1>
 
     <!-- Navigation Buttons -->
     <div class="btn-container">
+        <a href="{% url 'customer:history_all' %}">
+            <button class="tab-btn">All</button>
+        </a>
         <a href="{% url 'customer:device_recycled' %}">
             <button class="tab-btn active">Device Recycle</button>
         </a>
@@ -73,38 +69,5 @@
         {% endif %}
     </div>
 
-
-
-    
-<!--    <div id="embedded-footer"></div>-->
-
-
-
-<!--    <script>-->
-<!--        fetch('header-customer.html')-->
-<!--        .then(response => response.text())-->
-<!--        .then(html => {-->
-<!--            document.getElementById('embedded-header').innerHTML = html;-->
-<!--        });-->
-<!--    </script>-->
-
-<!--    <script>-->
-<!--        fetch('navbar-customer.html')-->
-<!--        .then(response => response.text())-->
-<!--        .then(html => {-->
-<!--            document.getElementById('embedded-navbar').innerHTML = html;-->
-<!--        });-->
-<!--    </script>-->
-
-<!--    <script>-->
-<!--        fetch('footer.html')-->
-<!--        .then(response => response.text())-->
-<!--        .then(html => {-->
-<!--            document.getElementById('embedded-footer').innerHTML = html;-->
-<!--        });-->
-<!--    </script>-->
-
 </body>
 {% endblock %}
-
-</html>

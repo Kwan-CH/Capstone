@@ -1,0 +1,48 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Sign in{% endblock %}</title>
+    {% block extra_css %}
+        <link rel="stylesheet" href="{% static 'e_waste/css/login.css' %}">
+    {% endblock %}
+
+</head>
+<body>
+
+{% block content %}
+    <div class="container">
+        <a href="landing.html"><img src="{% static 'images/companylogonobg.png' %}" id="logo" width="400" height="150" alt="company logo"></a>
+            <form class="form" action= {% url 'login' %} method="POST"> {% csrf_token %}
+                <p class="form-title">Sign in to your account</p>
+                <div class="input-container">
+                <input placeholder="Enter your email" type="email" name="email_input" required>
+            </div>
+            <div class="input-container">
+                <input placeholder="Enter your password" type="password" name="password" required>
+                </div>
+                <button class="submit" type="submit">Sign in</button>
+
+            <p class="signup-link">
+                New user?
+                <a id="signup" href="{% url 'signup' %}">Sign up here!</a>
+            </p>
+            </form>
+        </div>
+    </div>
+    <div id="embedded-footer">
+        {% include 'footer.html' %}
+    </div>
+
+    {% if Invalid %}
+    <script>
+        alert('Email or Pasword Invalid!');
+    </script>
+    {% endif %}
+    </body>
+</html>
+
+{% endblock %}
