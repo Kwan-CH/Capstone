@@ -13,7 +13,7 @@
     </head>
 
 {% block content %}
-<body>
+
     <div class="container">
         <div class="container-top">
             <img id="user" src="{% static 'images/userprofilelogonobg.png' %}" width="200" height="200" alt="user profile logo">
@@ -22,7 +22,7 @@
 
         <div class="container-bottom">
             <form  method="post" 
-                action="{% url 'driver:edit_profile' %}">
+                action="{% url 'driver:edit_profile' %}" id="editProfileForm" method="post">
                 {% csrf_token %}
 
                 <label>Email</label>
@@ -72,38 +72,61 @@
                 </div>
 
 
+                <p>DEBUG: Update Success: {{ update_success }}</p>  <!-- ✅ ADD THIS -->
 
-                <button type="submit" id="savechanges">Save Changes</button>
+                {% comment %} <button type="submit" id="savechanges">Save Changes</button> {% endcomment %}
             </form>
         </div>
     </div>
 
-    {% comment %} <div id="embedded-footer"></div> {% endcomment %}
+    <!-- Buttons -->
+    <div class="driver-editProfile-btn-container">
+        <div class="driver-editProfile-SaveBtn">
+            <button onclick="driver_editProfile_ConfirmationPopup()" id="savechanges">Save Changes</button>
+        </div>
+    </div>
 
-    {% comment %} <script>
-        fetch('header-driver.html')
-          .then(response => response.text())
-          .then(html => {
-            document.getElementById('embedded-header').innerHTML = html;
-        });
-    </script> {% endcomment %}
+    <!-- Confirmation Popup -->
+    <div id="driver-editProfile-confirmation-popup" class="driver-editProfile-popup-container" style="display: none;">
+        <div class="driver-editProfile-popup-content">
+            <h2><i>Confirmation</i></h2>
+            <p>Are you sure you want to save your changes?</p>
+            <button class="btn cancel" onclick="driver_editProfile_close_ConfirmationPopup()">Cancel</button>
+            <button class="btn proceed" onclick="driver_editProfile_submitForm()">Proceed</button>
+        </div>
+    </div>
 
-    {% comment %} <script>
-        fetch('navbar-driver.html')
-        .then(response => response.text())
-        .then(html => {
-            document.getElementById('embedded-navbar').innerHTML = html;
+    <!---------- Changes Saved Successfully Popup ------------>
+        <div id="driver-editProfile-sucessful-popup" class="driver-editProfile-popup-container" style="display: none;">
+            <div class="driver-editProfile-popup-content">
+                <img src="{% static 'images/Picture1.png'%}" alt="JAS Logo" class="popup-logo">
+                <h2>Congratulations!</h2>
+                <p class="driver-editProfile-popup-text">Your profile has been successfully updated! Thanks for keeping your info current.</p>
+                <a href="{% url 'driver:user_profile'%}">
+                  <button>Back</button>
+                </a>
+            </div>
+        </div>
+
+    {% if Invalid %}
+        <script>
+            var errorMessage = "{{ error_message|escapejs }}";
+            alert(errorMessage);
+        </script>
+    {% endif %}
+
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'js/edituserprofile-driver.js'%}"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var updateSuccess = "{{ update_success|default:'False' }}";
+            if (updateSuccess === "True") {
+                driver_editProfile_show_SucessfulPopup();
+            }
         });
     </script>
-
-    <script>
-        fetch('../footer.html')
-        .then(response => response.text())
-        .then(html => {
-            document.getElementById('embedded-footer').innerHTML = html;
-        });
-    </script> {% endcomment %}
-</body>
 {% endblock %}
 
 </html>

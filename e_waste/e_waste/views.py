@@ -1,11 +1,14 @@
-from django.contrib.auth import login as auth_login
 from django.shortcuts import redirect, render
 from django.contrib import messages
-from django.contrib.auth import login
-from django.contrib.auth.decorators import login_required
 from database.models import Customer, Driver, Operator
 from .utils import authenticate_user
 from django.http import JsonResponse
+from . import emailAutomation
+
+# random password generation
+import secrets
+import string
+import random
 
 # ori version
 # def signup(request):
@@ -135,8 +138,36 @@ def user_login(request):
 
     return render(request, 'e_waste/login.html')  # Ensure GET requests return login page
 
+def generatePassword():
+    letters = string.ascii_letters
+
+    digits = string.digits
+
+    special_chars = string.punctuation
+
+    selection_list = letters + digits + special_chars
+
+    password_len = 10
+
+    password = ''
+    for i in range(password_len):
+        password += ''.join(secrets.choice(selection_list))
+
+    return password
+
 def resetPassword(request):
-    return render(request, 'e_waste/resetpassword.html')
+    if request.method == 'POST':
+        email = request.POST['email']
+        customer = Customer.objects.filter(email=email).first()
+        if customer:
+            password = generatePassword()
+            customer.password = password
+            customer.save()
+            emailAutomation.sendEmail(password, email)
+            return render(request, 'e_waste/resetpassword.html', {'Permission':True})
+        else:
+            return render(request, 'e_waste/resetpassword.html', {'Permission':False})
+    return render(request, 'e_waste/resetpassword.html', {'Permission': None})
 
 def landing(request):
     return render(request, 'e_waste/landing.html')

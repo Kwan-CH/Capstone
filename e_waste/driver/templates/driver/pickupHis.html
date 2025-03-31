@@ -26,39 +26,12 @@
                     {% for pickup in pickups %}
                     <tr>
                         <td>{{ pickup.customer.name }}</td>
-                        {% comment %} <td>hi </td> {% endcomment %}
                         <td>{{ pickup.completed_requests.completed_date|date:"j/n/Y" }}</td>
                         <td>{{ pickup.completed_requests.completed_time|time:"g:iA" }}</td>
                         <td>{{ pickup.address }}</td>
-                        {% comment %} <td>Car battery</td> {% endcomment %}
                         <td>{{ pickup.category.itemType }}</td>
                     </tr>
-                    {% comment %} {% empty %} {% endcomment %}
                     {% endfor %}
-                    {% comment %} <tr>
-                        <td>Alex</td>
-                        <td>15/01/2025</td>
-                        <td>12:00</td>
-                        <td>Petaling Jaya, Selangor</td>
-                        <td>Gaming console</td>
-                        <td>Electronic toys</td>
-                    </tr>
-                    <tr>
-                        <td>Benny</td>
-                        <td>28/01/2025</td>
-                        <td>16:00</td>
-                        <td>Cheras, Kuala Lumpur</td>
-                        <td>Microwave</td>
-                        <td>Small household appliance</td>
-                    </tr>
-                    <tr>
-                        <td>Danny</td>
-                        <td>08/02/2025</td>
-                        <td>13:00</td>
-                        <td>Ipoh, Perak</td>
-                        <td>Washing machine</td>
-                        <td>Large household appliance</td>
-                    </tr> {% endcomment %}
                 </tbody>
             </table>
 

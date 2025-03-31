@@ -8,7 +8,6 @@
 {% endblock %}
 
 {% block content %}
-<body>
     <div class="main-content">
         <div class="container-top">
             <img id="user" src="{% static 'images/userprofilelogonobg.png' %}" width="200"; height="200"; alt="user profile logo">
@@ -42,11 +41,11 @@
         </div>
     </div>
 
-    {% if update_success %}
+    {% comment %} {% if update_success %}
         <script>
             alert('Profile has been updated');
         </script>
-    {% endif %}
-</body>
+    {% endif %} {% endcomment %}
+
 
 {% endblock %}

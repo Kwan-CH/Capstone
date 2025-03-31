@@ -14,8 +14,8 @@
     <!-- Navigation Buttons -->
     <div class="btn-container">
         <a href="{% url 'customer:history_all' %}">
-            {% comment %} <button class="tab-btn active" onclick="location.href={% url 'customer:history_all' %}">All</button> {% endcomment %}
-            <button class="tab-btn active">All</button>
+            {% comment %} <button class="tab-btn" onclick="location.href={% url 'customer:history_all' %}">All</button> {% endcomment %}
+            <button class="tab-btn">All</button>
         </a>
         <a href="{% url 'customer:device_recycled' %}">
             {% comment %} <button class="tab-btn" onclick="location.href={% url 'customer:device_recycled' %}">Device Recycle</button> {% endcomment %}
@@ -42,8 +42,8 @@
                 </table>
                 <div class="points-deducted">Points Deducted: {{voucher.voucher__pointsRequired}} points</div>
                 <div class="show-qr">
-                    {% comment %} <button id="show-qr">🎁 Click here to redeem</button> {% endcomment %}
-                    <button class="show-qr qr-code">🎁 Click here to redeem</button>
+                    {% comment %} <button id="show-qr">🎁 Click here to view QR</button> {% endcomment %}
+                    <button class="show-qr qr-code">🎁 Click here to view QR</button>
                 </div>
             </div>
         </div>

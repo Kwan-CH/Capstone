@@ -1,11 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from database.models import Driver, ScheduleRequest, PickedUpRequest, CompletedRequest
+from database.models import Driver, ScheduleRequest, PickedUpRequest, CompletedRequest, Customer
 from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.utils.timezone import now
 import json
+import re
+
+
 
 def homepage_driver(request):
     return render(request, 'driver/homepage-driver.html')
@@ -21,6 +24,10 @@ def update_pickup_status(request, requestID):
         pickUpRequest = ScheduleRequest.objects.get(requestID=requestID)
         pickUpRequest.status = "Picked Up"
         pickUpRequest.save()
+
+        customer = Customer.objects.get(customerID=pickUpRequest.customer.customerID)
+        customer.points += (pickUpRequest.category.pointsGiven * pickUpRequest.quantity)
+        customer.save()
 
         PickedUpRequest.objects.create(requestID=pickUpRequest)
 
@@ -65,40 +72,87 @@ def pickup_history(request):
     return render(request, 'driver/pickupHis.html', {"pickups": pickups})
 
 def user_profile(request):
-    # get logged in customer id
+    # get logged in driver id
     driverID = request.session.get("user_id")
     userInfo = Driver.objects.get(driverID=driverID)
     return render(request, "driver/userprofile-driver.html", {"profile": userInfo})
 
 def edit_profile(request):
     driverID = request.session.get("user_id")
-    # userInfo = Driver.objects.get(driverID=driverID)
-
-    try:
-        userInfo = Driver.objects.get(driverID=driverID)
-        print(f"DEBUG: Retrieved user - Name: {userInfo.name}, Email: {userInfo.email}")
-    except Driver.DoesNotExist:
-        print("DEBUG: No driver found for this ID.")
-        return HttpResponse("Driver not found", status=404)
+    userInfo = Driver.objects.get(driverID=driverID)
 
     if request.method == 'POST':
-        userInfo.name = request.POST.get('fullname')
-        userInfo.email = request.POST.get('email')
-        userInfo.phoneNumber = request.POST.get('contact_number')
-        userInfo.address = request.POST.get('address')
-        userInfo.stateCovered = request.POST.get('state')
+        new_name = request.POST.get('fullname')
+        new_email = request.POST.get('email')
+        new_phoneNumber = request.POST.get('contact_number')
+        new_address = request.POST.get('address')
+        new_state = request.POST.get('state')
+
+        # Check if any field is empty
+        if not new_name or not new_email or not new_phoneNumber or not new_address or not new_state :
+            return render(request, 'driver/edituserprofile-driver.html', {
+                'Invalid': True,
+                'error_message': "All fields must be filled",
+                'profile': userInfo,  # Pass back the profile details and state selection
+                'states': ['Johor', 'Kedah', 'Kelantan', 'Kuala Lumpur', 'Labuan', 'Melaka',
+                           'Negeri Sembilan', 'Pahang', 'Perak', 'Perlis', 'Pulau Pinang', 'Sabah', 'Sarawak',
+                           'Selangor', 'Terengganu', 'Putrajaya']
+            })
+
+        # Validate email
+        if not re.match(r"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+$", new_email):
+             return render(request, "driver/edituserprofile-driver.html", {
+                "profile": userInfo,
+                "Invalid": True,
+                "error_message": "Invalid email format. Please enter a valid email.",
+            })
+
+        # Validate Phone Number
+        if not new_phoneNumber.isdigit():
+            return render(request, "driver/edituserprofile-driver.html", {
+                "profile": userInfo,
+                "phone_error": True,
+                "states" : ['Johor', 'Kedah', 'Kelantan', 'Kuala Lumpur', 'Labuan', 'Melaka',
+                            'Negeri Sembilan', 'Pahang', 'Perak', 'Perlis', 'Pulau Pinang', 'Sabah', 'Sarawak',
+                            'Selangor', 'Terengganu', 'Putrajaya']
+            })
+
+        # if Validate passes only update userinfo
+        userInfo.name = new_name
+        userInfo.email = new_email
+        userInfo.phoneNumber = new_phoneNumber
+        userInfo.addressr = new_address
+        userInfo.state = new_state
 
         # update the corresponding data
         userInfo.save()
-
-        return render(request, "driver/userprofile-driver.html", {"profile": userInfo, "update_success": True})
+        return render(request, "driver/edituserprofile-driver.html", {
+            "profile": userInfo,
+            "update_success": True
+        })
 
     # reason to create a list at here, is to populate the option field while being able to set selected category
     states = ['Johor', 'Kedah', 'Kelantan', 'Kuala Lumpur', 'Labuan', 'Melaka',
               'Negeri Sembilan', 'Pahang', 'Perak', 'Perlis', 'Pulau Pinang', 'Sabah', 'Sarawak',
               'Selangor', 'Terengganu', 'Putrajaya']
-
     return render(request, "driver/edituserprofile-driver.html", {"profile": userInfo, "states": states})
+
+#function for getting user address
+def get_user_address(request):
+    # Get the user_id from session
+    user_id = request.session.get("user_id")
+
+    if not user_id:
+        return JsonResponse({"error": "User not authenticated"}, status=401)
+
+    try:
+        # Fetch driver using session user_id
+        driver = Driver.objects.get(driverID=user_id)
+        return JsonResponse({"address": driver.address})
+    except Driver.DoesNotExist:
+        return JsonResponse({"error": "Address not found"}, status=404)
+
+
 
 def edit_password(request):
     driverID = request.session.get("user_id")
@@ -108,19 +162,46 @@ def edit_password(request):
         new_password = request.POST['newPassword']
         confirm_password = request.POST['confirmPassword']
 
-        if len(new_password) < 8:
-            return render(request, 'driver/editpassword-driver.html', {'Invalid':True})
+        #Check if all field is entered
+        if not current_password_input or not new_password or not confirm_password:
+            return render(request, 'driver/editpassword-driver.html', {
+                'Invalid': True,
+                'error_message': "All fields must be filled"
+            })
 
+         # Check if the current password matches
         if driver.password != current_password_input:
-            messages.error(request, "Incorrect current password.")
-            return render(request, "driver/editpassword-driver.html")
+            return render(request, 'driver/editpassword-driver.html', {
+                'Invalid': True,
+                'error_message': "Current password is incorrect"
+            })
 
-        if driver.password == current_password_input and new_password == confirm_password:
-            Driver.objects.filter(driverID=driverID).update(password=new_password)
-            messages.success(request, "Password has been changed successfully")
-            return render(request, "driver/userprofile-driver.html", {"profile": driver, "update_success": True})
+         # Check if new password matches confirm password
+        if new_password != confirm_password:
+            return render(request, 'driver/editpassword-driver.html', {
+                'Invalid': True,
+                'error_message': "New password and confirm password do not match"
+            })
+
+       
+        # Then check if the password length is atleast 8 char
+        if len(new_password) < 8:
+            # messages.error(request, "Password must be at least 8 characters long")
+            return render(request, 'driver/editpassword-driver.html',  {'Invalid': True, 'error_message': "Password must be at least 8 characters long"})
+
+
+  # If all checks pass, update the password
+        Driver.objects.filter(driverID=driverID).update(password=new_password)
+        messages.success(request, "Password has been changed successfully")
+        return render(request, "driver/editpassword-driver.html", {
+            "profile": driver,
+            "update_success": True
+        })
+
+       
 
     return render(request, 'driver/editpassword-driver.html')
+
 
 
 def logout(request):

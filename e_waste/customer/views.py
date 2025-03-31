@@ -5,6 +5,7 @@ from django.contrib import messages
 from database.models import Customer, ScheduleRequest, ItemCategory, CustomerRedemption, Voucher
 from django.core.paginator import Paginator
 from django.db.models import F
+from django.db.models import Q
 from itertools import chain
 from django.core.paginator import Paginator
 import json, re
@@ -243,7 +244,7 @@ def waste_category(request):
 def history_all(request):
     customerID = request.session.get('user_id')
       # Get device recycling history
-    device_history = (ScheduleRequest.objects.filter(customer__customerID=customerID, status="Complete")
+    device_history = (ScheduleRequest.objects.filter(~Q(status='Pending'), customer__customerID=customerID)
                       .select_related('category')
                       .values('trackingnumber', 'address', 'category__itemType', 'date', 'quantity', 'status')
                       .annotate(total=F('quantity') * F('category__pointsGiven'))
@@ -280,7 +281,8 @@ def device_recycled(request):
     # select the pickup request that the customer made, while retrieve the item type based on categoryID
     # reason using small 'c' in customer is because it is not referring to the table but refer to the field itself
     # same goes to the select_relate(), it refers to the field not table
-    pickup_requests = (ScheduleRequest.objects.filter(customer__customerID=customerID, status="Complete")
+    pickup_requests = (ScheduleRequest.objects.filter(~Q(status='Pending'), customer__customerID=customerID)
+                        # ~Q functions to exclude condition specified
                        .select_related('category')
                        .values('trackingnumber', 'address', 'category__itemType', 'date', 'quantity', 'status')
                        .annotate(total=F('quantity') * F('category__pointsGiven')) #this here is to calculate the total points using F()

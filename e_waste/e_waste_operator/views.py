@@ -2,7 +2,9 @@ from idlelib.run import Executive
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from database.models import Driver, ScheduleRequest, Reason, Voucher
+from database.models import Driver, ScheduleRequest, Reason, Voucher, Operator, CompletedRequest
+from django.db.models import Q
+from django.core.paginator import Paginator
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.http import JsonResponse
@@ -13,7 +15,7 @@ def homepage_operator(request):
     return render(request, 'operator/operator-homepage.html')
 
 def manageReq(request):
-    requests = ScheduleRequest.objects.all().order_by('-requestID')
+    requests = ScheduleRequest.objects.filter(~Q(status='Completed')).order_by('-requestID')
     reasons = Reason.objects.all()
     return render(request, 'operator/operator-manageReq.html',{'requests': requests, 'reasons':reasons})
 
@@ -25,7 +27,6 @@ def update_request_status(requestID):
 def assign_driver_page(request):
     requestID = request.GET.get('requestID')
     requestInfo = ScheduleRequest.objects.filter(requestID= requestID).first()
-    update_request_status(requestID)
     drivers = Driver.objects.all()
     return render(request, 'operator/assign-driver.html', {'drivers': drivers, 'request':requestInfo})
 
@@ -38,8 +39,11 @@ def assign_driver(request):
             if requestID and driverID:
                 selectedRequest = ScheduleRequest.objects.filter(requestID=requestID).first()
                 driver = Driver.objects.filter(driverID=driverID).first()
+                operator = Operator.objects.filter(operatorID = request.session.get('user_id')).first()
                 selectedRequest.driver = driver
+                selectedRequest.operator = operator
                 selectedRequest.save()
+                update_request_status(requestID)
                 return JsonResponse({'success': True, 'message': 'Driver assigned successfully'})
             else:
                 return JsonResponse({'success': False, 'message': 'Something went wrong'}, status=400)
@@ -56,8 +60,10 @@ def reject_request(request):
             if requestID and reasonID:
                 selectedRequest = ScheduleRequest.objects.filter(requestID=requestID).first()
                 reason = Reason.objects.filter(reasonID=reasonID).first()
+                operator = Operator.objects.filter(operatorID=request.session.get('user_id')).first()
                 selectedRequest.rejectedReason = reason
                 selectedRequest.status = 'Rejected'
+                selectedRequest.operator = operator
                 selectedRequest.save()
                 return JsonResponse({'success': True})
                 # return redirect('operator:manageReq')
@@ -158,4 +164,13 @@ def edit_reward(request, voucherID):
     return render(request, 'operator/operator-editReward.html', {"voucher": voucher})
 
 def completed_request(request):
-    return render(request, 'operator/operator-completedReq.html')
+    operatorID = request.session.get('user_id')
+    completedRequests = (CompletedRequest.objects.filter(requestID__operator__operatorID=operatorID).select_related('ScheduleRequest', 'ItemCategory')
+                         .values('requestID__customer__name', 'completed_date', 'completed_time',
+                                 'requestID__customer__address','requestID__category__itemType')
+                         )
+
+    paginator = Paginator(completedRequests, 5)
+    page = request.GET.get('page')
+    completedRequests = paginator.get_page(page)
+    return render(request, 'operator/operator-completedReq.html', {'completedRequests':completedRequests})

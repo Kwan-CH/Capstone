@@ -9,15 +9,8 @@ body {
 .main-content {
     flex: 1;
 } */
-
-h1 {
-    font-family: 'Sansita Swashed', cursive;
-    font-size: 32px;
-    color: #2d621a;
-}
-
 body {
-    /* font-family: 'Sansita Swashed', cursive; */
+    font-family: 'Sansita Swashed', cursive;
     background-color: #F5F8EE;
     color: #3e5f13;
     text-align: center;
@@ -25,8 +18,7 @@ body {
     margin-top: 20;
 }
 
-.profile-form,
-label {
+.profile-form, label{
     font-family: 'Inter', sans-serif;
     font-weight: bold;
     font-size: 20px;
