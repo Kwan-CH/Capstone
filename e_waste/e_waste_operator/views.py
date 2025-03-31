@@ -1,11 +1,9 @@
-from idlelib.run import Executive
-
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.contrib import messages
 from database.models import Driver, ScheduleRequest, Reason, Voucher, Operator, CompletedRequest
 from django.db.models import Q
+from Email import emailAutomation
 from django.core.paginator import Paginator
-from django.views.decorators.csrf import csrf_exempt
 import json
 from django.http import JsonResponse
 
@@ -44,6 +42,11 @@ def assign_driver(request):
                 selectedRequest.operator = operator
                 selectedRequest.save()
                 update_request_status(requestID)
+                emailAutomation.sendEmail('driver_assignment', selectedRequest.customer.email,
+                                         context={
+                                             'driver':driver,
+                                             'request':selectedRequest
+                                         })
                 return JsonResponse({'success': True, 'message': 'Driver assigned successfully'})
             else:
                 return JsonResponse({'success': False, 'message': 'Something went wrong'}, status=400)

@@ -3,12 +3,12 @@ from django.contrib import messages
 from database.models import Customer, Driver, Operator
 from .utils import authenticate_user
 from django.http import JsonResponse
-from . import emailAutomation
+from Email import emailAutomation
 
 # random password generation
 import secrets
 import string
-import random
+
 
 # ori version
 # def signup(request):
@@ -157,13 +157,15 @@ def generatePassword():
 
 def resetPassword(request):
     if request.method == 'POST':
-        email = request.POST['email']
-        customer = Customer.objects.filter(email=email).first()
+        target = request.POST['email']
+        customer = Customer.objects.filter(email=target).first()
         if customer:
             password = generatePassword()
             customer.password = password
             customer.save()
-            emailAutomation.sendEmail(password, email)
+            # subject = 'Reset Password Request'
+            # content = f'Your request to reset password has been received \nThis is your new password: {password}'
+            emailAutomation.sendEmail('password_reset', target, context={'temp_password':password})
             return render(request, 'e_waste/resetpassword.html', {'Permission':True})
         else:
             return render(request, 'e_waste/resetpassword.html', {'Permission':False})

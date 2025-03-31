@@ -27,11 +27,6 @@
                     <option value="{{ cat.categoryID }}">{{ cat.itemType }}</option>
                 {% endfor %}
 
-                {% comment %} <option>Batteries</option>
-                <option>Electronics (TV, Radios, etc.)</option>
-                <option>Mobile Phones</option>
-                <option>Computers (Desktops, Laptops)</option>
-                <option>Home Appliances (Fridges, Microwaves, etc.)</option> {% endcomment %}
             </select>
 
             <!-- Quantity (Optional) -->
@@ -59,7 +54,7 @@
             </div>
 
             <!-- Date & Time  -->
-            <label for="pickup-date">D. Preferred Pickup Date/Time:</label>
+            <label for="pickup-date">D. Preferred Pickup Date/Time (MM-DD-YYY):</label>
             <input type="date" id="pickup-date" name="pickup_date" required>
             <input type="time" id="pickup-time" name="pickup_time" required>
             <br><br>
