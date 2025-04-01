@@ -54,14 +54,16 @@
         </div>
     </div>
 
-    <!---------- Redemption Successful Popup ------------>
+        <!---------- Redemption Successful Popup ------------>
     <div id="successful-popup" class="popup-container" style="display: none;">
         <div class="popup-content">
-            <img src="{% static 'images/companylogo.jpg' %}" alt="JAS Logo" class="popup-logo">
-            <h2>Your Reward Has Been Successfully Redeemed!</h2>
+            <img src="{% static 'images/QRCode.png' %}" alt="QR Code" class="popup-logo" style="width:250px; height:250px;">
+            <h2>Your Reward Has Been Successfuly Redeemed!</h2>
+            <h3>Please scan the QR Code to redeem the reward or view it in the Recent Activity Page.</h3>
             <button class="btn return" onclick="closeSuccessfulPopup()">Return</button>
         </div>
     </div>
+
 {% endblock %}
 
 {% block extra_js %}

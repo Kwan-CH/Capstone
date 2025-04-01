@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver & Schedule Details</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f8ee;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: #2f6627;
+            border-radius: 10px;
+            padding: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            border: 1px solid #ddd;
+        }
+        .info-box {
+            background-color: #f8f5ee;
+            padding: 15px;
+            border-radius: 8px 8px 0 0;
+        }
+        .details-section {
+            background: #d4edda;
+            padding: 15px;
+            text-align: left;
+        }
+        .driver-details {
+            border-radius: 0;
+        }
+        .schedule-details {
+            border-radius: 0 0 8px 8px;
+        }
+        h2 {
+            color: #2f6627;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 800;
+        }
+        .detail-container {
+            width: 100%;
+            display: grid;
+            grid-template-columns: max-content 1fr;
+            gap: 10px;
+        }
+        .detail-row {
+            display: contents;
+        }
+        .detail-label {
+            font-weight: bold;
+            color: #333;
+            white-space: nowrap;
+            padding-right: 15px;
+        }
+        .detail-value {
+            color: #333;
+            word-break: break-word;
+        }
+        .section-divider {
+            border: none;
+            height: 1px;
+            background-color: white;
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Outer Container -->
+    <div class="container">
+        
+        <div class="info-box">
+            <img src="https://drive.google.com/uc?export=view&id=1kd2WBNWGvYUboqDS6qcX3Bb6-Ixd9kHr" alt="Company Logo" style="width: 240px; height: 80px;">
+        </div>
+
+        <!-- Driver Details Section -->
+        <div class="details-section driver-details">
+            <h2>Driver Details</h2>
+            
+            <div class="detail-container">
+                <div class="detail-row">
+                    <div class="detail-label">Name:</div>
+                    <div class="detail-value">{{driver.name}}</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Contact:</div>
+                    <div class="detail-value">{{driver.phoneNumber}}</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Email:</div>
+                    <div class="detail-value">{{driver.email}}</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Plate Number:</div>
+                    <div class="detail-value">{{driver.plateNumber}}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Horizontal Divider Line -->
+        <hr class="section-divider">
+
+        <!-- Schedule Request Details Section -->
+        <div class="details-section schedule-details">
+            <h2>Schedule Request Details</h2>
+            
+            <div class="detail-container">
+                <div class="detail-row">
+                    <div class="detail-label">Date:</div>
+                    <div class="detail-value">{{request.date}}</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Time:</div>
+                    <div class="detail-value">{{request.time}}</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Address:</div>
+                    <div class="detail-value">{{request.address}}</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Category:</div>
+                    <div class="detail-value">{{request.category.itemType}}</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Quantity:</div>
+                    <div class="detail-value">{{request.quantity}} items</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

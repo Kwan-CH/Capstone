@@ -198,3 +198,10 @@ h1 {
 .popup-content button.proceed:hover {
     background: #298a35;
 }
+
+.popup-content h2 {
+    font-family: 'Sansita Swashed', cursive;
+    font-size: 32px;
+    color: #487319;
+    padding: 10px;
+}
