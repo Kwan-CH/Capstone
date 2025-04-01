@@ -246,7 +246,7 @@ def history_all(request):
       # Get device recycling history
     device_history = (ScheduleRequest.objects.filter(~Q(status='Pending'), customer__customerID=customerID)
                       .select_related('category')
-                      .values('trackingnumber', 'address', 'category__itemType', 'date', 'quantity', 'status')
+                      .values('trackingnumber', 'address', 'category__itemType', 'date', 'quantity', 'status', 'rejectedReason__reason')
                       .annotate(total=F('quantity') * F('category__pointsGiven'))
                       .order_by('-date')  # Sort by date (latest first)
                       )
@@ -284,7 +284,7 @@ def device_recycled(request):
     pickup_requests = (ScheduleRequest.objects.filter(~Q(status='Pending'), customer__customerID=customerID)
                         # ~Q functions to exclude condition specified
                        .select_related('category')
-                       .values('trackingnumber', 'address', 'category__itemType', 'date', 'quantity', 'status')
+                       .values('trackingnumber', 'address', 'category__itemType', 'date', 'quantity', 'status', 'rejectedReason__reason')
                        .annotate(total=F('quantity') * F('category__pointsGiven')) #this here is to calculate the total points using F()
                        .order_by('-trackingnumber') # order by desc tracking number, later on after the data is finalised, changed back to date
                         )

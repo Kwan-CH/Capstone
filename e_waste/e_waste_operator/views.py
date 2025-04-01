@@ -13,7 +13,7 @@ def homepage_operator(request):
     return render(request, 'operator/operator-homepage.html')
 
 def manageReq(request):
-    requests = ScheduleRequest.objects.filter(~Q(status='Completed')).order_by('-requestID')
+    requests = ScheduleRequest.objects.filter(~Q(status='Completed'), ~Q(status='Rejected')).order_by('-requestID')
     reasons = Reason.objects.all()
     return render(request, 'operator/operator-manageReq.html',{'requests': requests, 'reasons':reasons})
 

@@ -79,6 +79,9 @@ body {
     color: green;
 }
 
+.rejected {
+    color:red;
+}
 
 
 /* --------------------Table------------------- */
@@ -104,6 +107,14 @@ td {
 /*-------------- Points Box--------------- */
 .points-earned {
     background: #487319;
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.reason {
+    background: red;
     color: white;
     padding: 5px;
     border-radius: 5px;

@@ -50,10 +50,18 @@
                         </tr>
                         <tr>
                             <td>🔢 Quantity: {{ item.quantity }} items</td>
-                            <td>🚛 <span class="status completed">Status: {{ item.status }}</span></td>
+                            {% if item.status == 'Completed' %}
+                                    <td>🚛 <span class="status completed">Status: Completed</span></td>
+                            {% else %}
+                                    <td>🚛 <span class="status rejected">Status: Rejected</span></td>
+                            {% endif %}
                         </tr>
                     </table>
-                    <div class="points-earned">Points Earned: +{{ item.total }}</div>
+                    {% if item.status == 'Completed' %}
+                        <div class="points-earned">Points Earned: +{{item.total}} points</div>
+                    {% else %}
+                        <div class="points-rejected">Reason: {{item.rejectedReason__reason}}</div>
+                    {% endif %}
                 </div>
 
             <!-- Voucher Redemption History -->

@@ -45,10 +45,18 @@
                     </tr>
                     <tr>
                         <td>🔢 Quantity: {{request.quantity}} items</td>
-                        <td>🚛 <span class="status completed">Status: {{request.status}}</span></td>
+                        {% if request.status == 'Completed' %}
+                            <td>🚛 <span class="status completed">Status: Completed</span></td>
+                        {% else %}
+                            <td>🚛 <span class="status rejected">Status: Rejected</span></td>
+                        {% endif %}
                     </tr>
                 </table>
-            <div class="points-earned">Points Earned: +{{request.total}} points</div>
+            {% if request.status == 'Completed' %}
+                <div class="points-earned">Points Earned: +{{request.total}} points</div>
+            {% else %}
+                <div class="reason">Reason: {{request.rejectedReason__reason}}</div>
+            {% endif %}
             </div>
         </div>
     {% endfor %}
