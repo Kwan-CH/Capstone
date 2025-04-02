@@ -27,11 +27,11 @@
         <tbody>
               {% for completedRequest in completedRequests %}
             <tr>
-                <td>{{completedRequest.requestID__customer__name}}</td>
-                <td>{{completedRequest.completed_date}}</td>
-                <td>{{completedRequest.completed_time}}</td>
-                <td>{{completedRequest.requestID__customer__address}}</td>
-                <td>{{completedRequest.requestID__category__itemType}}</td>
+                <td>{{ completedRequest.requestID__customer__name }}</td>
+                <td>{{ completedRequest.completed_date|date:"d/m/Y" }}</td>
+                <td>{{ completedRequest.completed_time|time:"h:i A" }}</td>
+                <td>{{ completedRequest.requestID__customer__address }}</td>
+                <td>{{ completedRequest.requestID__category__itemType }}</td>
             </tr>
               {% endfor %}
         </tbody>

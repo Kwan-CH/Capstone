@@ -44,42 +44,13 @@ body {
     color: #000;
 }
 
-.input-container {
-    position: relative;
-}
-
-.input-container input,
 .form button {
     outline: none;
     border: 1px solid #e5e7eb;
     margin: 8px 0;
 }
 
-.input-container input {
-    background-color: #f8f8ff;
-    padding: 1rem;
-    padding-right: 3rem;
-    font-size: 0.875rem;
-    line-height: 1.25rem;
-    width: 300px;
-    border-radius: 0.5rem;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-}
-
 .submit {
-    /* display: block;
-    padding: 0.75rem 1.25rem;
-    background-color: #4F46E5;
-    color: #ffffff;
-    font-size: 0.875rem;
-    line-height: 1.25rem;
-    font-weight: 500;
-    width: 80%;
-    border-radius: 0.5rem;
-    text-transform: uppercase;
-    max-width: 500px;
-    align-items: center;
-    justify-content: center; */
     padding: 0.75rem 1.25rem;
     background-color: #4F46E5;
     color: #ffffff;
@@ -131,4 +102,44 @@ body {
     text-decoration: none;
     color: #4F46E5;
     font-weight: bold;
+}
+
+.inputGroup {
+    font-family: 'Segoe UI', sans-serif;
+    max-width: 310px;
+    position: relative;
+    margin: 0 auto;
+}
+
+.inputGroup input {
+    font-size: 100%;
+    padding: 0.8em;
+    outline: none;
+    border: 2px solid #53748b;
+    background-color: transparent;
+    border-radius: 20px;
+    width: 100%;
+}
+
+.inputGroup label {
+    font-size: 16px;
+    position: absolute;
+    left: 0;
+    padding: 0.8em;
+    margin-left: 0.5em;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    color: rgb(100, 100, 100);
+}
+
+.inputGroup :is(input:focus, input:valid)~label {
+    transform: translateY(-50%) scale(.9);
+    margin: 0em;
+    margin-left: 1.3em;
+    padding: 0.4em;
+    background-color: #f8f8ff;
+}
+
+.inputGroup :is(input:focus, input:valid) {
+    border-color: rgb(150, 150, 200);
 }

@@ -18,7 +18,7 @@
 body {
     text-align: center;
     margin: 0;
-    background-image: url("../Images/greenleaf.png");
+    background-image: url("../images/greenleaf.png");
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -45,43 +45,101 @@ body {
     margin-bottom: 25px;
 }
 
-.input-container {
+
+.inputGroup,
+.input {
+    font-family: 'Segoe UI', sans-serif;
+    max-width: 310px;
     position: relative;
-    margin-bottom: 15px;
-    /* Increased spacing */
+    margin: 0 auto;
 }
 
-.input-container input,
-.input-container textarea,
-.input-container select {
+.inputGroup input,
+.inputGroup textarea {
+    font-size: 100%;
+    padding: 0.8em;
+    outline: none;
+    border: 2px solid #53748b;
+    background-color: transparent;
+    border-radius: 20px;
+    width: 100%;
+}
+
+.inputGroup label {
+    font-size: 16px;
+    position: absolute;
+    left: 0;
+    padding: 0.8em;
+    margin-left: 0.5em;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    color: rgb(100, 100, 100);
+}
+
+.inputGroup :is(input:focus, input:valid, textarea:focus, textarea:valid)~label {
+    transform: translateY(-50%) scale(.9);
+    margin: 0em;
+    margin-left: 1.3em;
+    padding: 0.4em;
     background-color: #f8f8ff;
-    padding: 12px 15px;
-    /* Increased input length */
-    font-size: 0.875rem;
-    line-height: 1.25rem;
-    width: 80%;
-    /* Reduced width */
-    max-width: 320px;
-    /* Limits input width */
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.inputGroup :is(input:focus, input:valid, textarea:focus, textarea:valid) {
+    border-color: rgb(150, 150, 200);
+}
+
+.input select {
+    font-size: 100%;
+    padding: 0.8em;
+    outline: none;
+    border: 2px solid #53748b;
+    background-color: transparent;
+    border-radius: 20px;
+    width: 100%;
+    appearance: none;
+    /* Removes default dropdown arrow */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    cursor: pointer
+}
+
+/* Custom arrow icon */
+.input::after {
+    content: "▼";
+    font-size: 12px;
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgb(100, 100, 100);
+    pointer-events: none;
+}
+
+/* Floating label effect */
+.input select:focus~label,
+.input select:not([value=""])~label {
+    transform: translateY(-50%) scale(.9);
+    margin: 0;
+    margin-left: 1.3em;
+    padding: 0.4em;
+    background-color: #f8f8ff;
+}
+
+/* Change border color on focus */
+.input select:focus {
+    border-color: rgb(150, 150, 200);
+}
+
+/* No dash required css */
+.inputGroup p {
+    color: gray;
+    font-size: 12px;
+    margin-top: 5px;
+    text-align: left;
+    margin-left: 10px
 }
 
 .submit {
-    /* display: block;
-    padding: 0.75rem 1.25rem;
-    background-color: #4F46E5;
-    color: #ffffff;
-    font-size: 0.875rem;
-    line-height: 1.25rem;
-    font-weight: 500;
-    width: 80%;
-    border-radius: 0.5rem;
-    text-transform: uppercase;
-    max-width: 500px;
-    align-items: center;
-    justify-content: center; */
     padding: 0.75rem 1.25rem;
     background-color: #4F46E5;
     color: #ffffff;

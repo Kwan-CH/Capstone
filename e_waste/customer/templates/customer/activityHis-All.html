@@ -46,21 +46,23 @@
                         </tr>
                         <tr>
                             <td>🗑️ Waste: {{ item.category__itemType }}</td>
-                            <td>⏳ Scheduled: {{ item.date }}</td>
+                            <td>⏳ Scheduled: {{ item.date|date:"d/m/Y" }}</td>
                         </tr>
                         <tr>
                             <td>🔢 Quantity: {{ item.quantity }} items</td>
+                            {% comment %} <td>🚛 <span class="status completed">Status: {{ item.status }}</span></td> {% endcomment %}
                             {% if item.status == 'Completed' %}
-                                    <td>🚛 <span class="status completed">Status: Completed</span></td>
-                            {% else %}
-                                    <td>🚛 <span class="status rejected">Status: Rejected</span></td>
+                                <td>🚛 <span class="status completed">Status: Completed</span></td>
+                            {% elif item.status == 'Rejected' %}
+                                <td>🚛 <span class="status rejected">Status: Rejected</span></td>
                             {% endif %}
                         </tr>
                     </table>
+                    {% comment %} <div class="points-earned">Points Earned: +{{ item.total }} points</div> {% endcomment %}
                     {% if item.status == 'Completed' %}
-                        <div class="points-earned">Points Earned: +{{item.total}} points</div>
-                    {% else %}
-                        <div class="points-rejected">Reason: {{item.rejectedReason__reason}}</div>
+                        <div class="points-earned">Points Earned: +{{ item.total }} points</div>
+                    {% elif item.status == 'Rejected' %}
+                        <div class="points-rejected">Reason: {{ item.rejectedReason__reason }}</div>
                     {% endif %}
                 </div>
 
@@ -70,11 +72,11 @@
                    <table>
                        <tr>
                            <td><strong>Item Code: {{ item.voucher__voucherID }}</strong></td>
-                           <td>📅 Date: {{ item.date }}</td>
+                           <td>📅 Date: {{ item.date|date:"d/m/Y" }}</td>
                        </tr>
                        <tr>
                            <td>📱 Item Name: {{ item.voucher__name }}</td>
-                           <td>⏰ Time: {{ item.time }}</td>
+                           <td>⏰ Time: {{ item.time|time:"h:i A" }}</td>
                        </tr>
                    </table>
                    <div class="points-deducted">Points Deducted: -{{ item.voucher__pointsRequired }} points</div>

@@ -170,6 +170,12 @@ select {
     box-shadow: 2px 2px 15px rgba(0, 0, 0, 0.3);
 }
 
+.tracking-popup-container p {
+    font-weight: 500;
+    /* font-size: 15px; */
+    color: red;
+}
+
 .popup-content h2 {
     font-family: 'Sansita Swashed', cursive;
     font-size: 32px;

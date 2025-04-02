@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.utils.timezone import now
+from django.db.models import OuterRef, Subquery
 import json
 import re
 
@@ -40,6 +41,24 @@ def update_pickup_status(request, requestID):
 
 def complete_pickup(request):
     driverID = request.session.get("user_id")
+
+    # DEBUG, date time is not according to completed date time
+    # completed_date_subquery = CompletedRequest.objects.filter(
+    #     requestID=OuterRef('pk')
+    # ).values('completed_date')[:1]
+
+    # completed_time_subquery = CompletedRequest.objects.filter(
+    #     requestID=OuterRef('pk')
+    # ).values('completed_time')[:1]
+
+    # pickups = ScheduleRequest.objects.filter(
+    #     driver_id=driverID, status="Picked Up"
+    # ).annotate(
+    #     completed_date=Subquery(completed_date_subquery),
+    #     completed_time=Subquery(completed_time_subquery)
+    # ).order_by('-completed_date', '-completed_time')
+
+
     pickups = ScheduleRequest.objects.filter(driver_id=driverID, status="Picked Up").order_by('-date', '-time') #Sort by closest date and time
     return render(request, 'driver/completePick.html', {'pickups': pickups})
 
@@ -85,11 +104,11 @@ def edit_profile(request):
         new_name = request.POST.get('fullname')
         new_email = request.POST.get('email')
         new_phoneNumber = request.POST.get('contact_number')
-        new_address = request.POST.get('address')
+        new_carplate = request.POST.get('carplatenumber')
         new_state = request.POST.get('state')
 
         # Check if any field is empty
-        if not new_name or not new_email or not new_phoneNumber or not new_address or not new_state :
+        if not new_name or not new_email or not new_phoneNumber or not new_carplate or not new_state :
             return render(request, 'driver/edituserprofile-driver.html', {
                 'Invalid': True,
                 'error_message': "All fields must be filled",
@@ -121,8 +140,8 @@ def edit_profile(request):
         userInfo.name = new_name
         userInfo.email = new_email
         userInfo.phoneNumber = new_phoneNumber
-        userInfo.addressr = new_address
-        userInfo.state = new_state
+        userInfo.plateNumber = new_carplate
+        userInfo.stateCovered = new_state
 
         # update the corresponding data
         userInfo.save()

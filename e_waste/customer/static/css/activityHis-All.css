@@ -67,6 +67,7 @@ body {
     text-align: left;
 }
 
+
 /*------------------------ Table Layout------------------------ */
 table {
     width: 100%;
@@ -123,6 +124,14 @@ tr:last-child {
 
 .points-rejected {
     background: #FF0000;
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.reason {
+    background: red;
     color: white;
     padding: 5px;
     border-radius: 5px;

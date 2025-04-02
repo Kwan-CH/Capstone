@@ -32,15 +32,15 @@
             <div class="activity-card">
                 <table>
                     <tr>
-                        <td><strong>Item Code: {{voucher.voucher__voucherID}}</strong></td>
-                        <td>📅 Date: {{voucher.date}}</td>
+                        <td><strong>Item Code: {{ voucher.voucher__voucherID }}</strong></td>
+                        <td>📅 Date: {{ voucher.date|date:"d/m/Y" }}</td>
                     </tr>
                     <tr>
-                        <td>📱 Item Name: {{voucher.voucher__name}}</td>
-                        <td>⏰ Time: {{voucher.time}}</td>
+                        <td>📱 Item Name: {{ voucher.voucher__name }}</td>
+                        <td>⏰ Time: {{ voucher.time|time:"h:i A" }}</td>
                     </tr>
                 </table>
-                <div class="points-deducted">Points Deducted: {{voucher.voucher__pointsRequired}} points</div>
+                <div class="points-deducted">Points Deducted: {{ voucher.voucher__pointsRequired }} points</div>
                 <div class="show-qr">
                     {% comment %} <button id="show-qr">🎁 Click here to view QR</button> {% endcomment %}
                     <button class="show-qr qr-code">🎁 Click here to view QR</button>

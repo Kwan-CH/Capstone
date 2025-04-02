@@ -36,15 +36,16 @@
             <div class="activity-box">
                 <table>
                     <tr>
-                        <td>📦 <strong>Pickup {{request.trackingnumber}}</strong></td>
-                        <td>📍 {{request.address}}</td>
+                        <td>📦 <strong>Pickup {{ request.trackingnumber }}</strong></td>
+                        <td>📍 {{ request.address}}</td>
                     </tr>
                     <tr>
-                        <td>🗑️ Waste: {{request.category__itemType}}</td>
-                        <td>⏳ Scheduled: {{request.date}}</td>
+                        <td>🗑️ Waste: {{ request.category__itemType }}</td>
+                        <td>⏳ Scheduled: {{ request.date|date:"d/m/Y" }}</td>
                     </tr>
                     <tr>
-                        <td>🔢 Quantity: {{request.quantity}} items</td>
+                        <td>🔢 Quantity: {{ request.quantity }} items</td>
+                        {% comment %} <td>🚛 <span class="status completed">Status: {{ request.status }}</span></td> {% endcomment %}
                         {% if request.status == 'Completed' %}
                             <td>🚛 <span class="status completed">Status: Completed</span></td>
                         {% else %}
@@ -52,10 +53,11 @@
                         {% endif %}
                     </tr>
                 </table>
+            {% comment %} <div class="points-earned">Points Earned: +{{ request.total }} points</div> {% endcomment %}
             {% if request.status == 'Completed' %}
-                <div class="points-earned">Points Earned: +{{request.total}} points</div>
+                <div class="points-earned">Points Earned: +{{ request.total }} points</div>
             {% else %}
-                <div class="reason">Reason: {{request.rejectedReason__reason}}</div>
+                <div class="reason">Reason: {{ request.rejectedReason__reason }}</div>
             {% endif %}
             </div>
         </div>

@@ -30,13 +30,13 @@
          <tbody>
           {% for request in requests %}
             <tr><!-- Customer Name -->
-                <td class="date">{{ request.date }}</td>
-                <td class="time">{{ request.time }}</td>
+                <td class="date">{{ request.date|date:"d/m/Y" }}</td>
+                <td class="time">{{ request.time|time:"h:i A" }}</td>
                 <td class="address">{{ request.address }}</td>
                 <td class="itemCategory">{{request.category.itemType}}</td>
                 <td class="category">{{ request.quantity }}</td>  <!-- Waste Type (Category Name) -->
                 {% if request.driver.name %}
-                    <td class="driver">{{request.driver.name}}</td>
+                    <td class="driver">{{ request.driver.name }}</td>
                 {% else %}
                     <td>-</td>
                 {% endif %}

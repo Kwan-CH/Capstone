@@ -13,7 +13,7 @@ def homepage_operator(request):
     return render(request, 'operator/operator-homepage.html')
 
 def manageReq(request):
-    requests = ScheduleRequest.objects.filter(~Q(status='Completed'), ~Q(status='Rejected')).order_by('-requestID')
+    requests = ScheduleRequest.objects.filter(~Q(status='Completed'), ~Q(status='Rejected')).order_by('-requestID') ## '-date', '-time'
     reasons = Reason.objects.all()
     return render(request, 'operator/operator-manageReq.html',{'requests': requests, 'reasons':reasons})
 
@@ -100,6 +100,10 @@ def save_driver_account(request):
             messages.error(request, "Email existed in the database already, please try a new one")
             return render(request, 'operator/operator-create_acc.html',{"formData": request.POST, "states":states})
 
+        if '@' not in email:
+            messages.error(request, "Invalid email address")
+            return render(request, 'operator/operator-create_acc.html',{"formData": request.POST, "states":states})
+
         if len(password) < 8:
             messages.error(request, "Password is too short, minimum length is 8")
             return render(request, 'operator/operator-create_acc.html',{"formData": request.POST, "states":states})
@@ -109,7 +113,7 @@ def save_driver_account(request):
             return render(request, 'operator/operator-create_acc.html',{"formData": request.POST, "states":states})
 
         if not state:
-            messages.error(request, "PLease select a state before proceeding")
+            messages.error(request, "Please select a state before proceeding")
             return render(request, 'operator/operator-create_acc.html',{"formData": request.POST, "states":states})
 
         new_user = Driver(name=name, email=email, password=password,phoneNumber=contact, plateNumber=carPlate, stateCovered=state)
@@ -171,6 +175,7 @@ def completed_request(request):
     completedRequests = (CompletedRequest.objects.filter(requestID__operator__operatorID=operatorID).select_related('ScheduleRequest', 'ItemCategory')
                          .values('requestID__customer__name', 'completed_date', 'completed_time',
                                  'requestID__customer__address','requestID__category__itemType')
+                         .order_by('-completed_date', 'completed_time')  # Order by latest date first
                          )
 
     paginator = Paginator(completedRequests, 5)

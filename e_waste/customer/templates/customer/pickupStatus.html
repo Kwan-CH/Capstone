@@ -34,7 +34,7 @@
                 {% for delivery in deliveries %}
                 <tr>
                     <td>{{ delivery.trackingnumber }}</td>
-                    <td>{{ delivery.date }} {{ delivery.time|date:"h:i A" }}</td>
+                    <td>{{ delivery.date|date:"d/m/Y" }} {{ delivery.time|time:"h:i A" }}</td>
                     {% comment %} <td>{{ delivery.driver.plateNumber }}</td> {% endcomment %}
                     <td>{% if delivery.driver %}{{ delivery.driver.plateNumber }}{% else %}-{% endif %}</td>
                     <td>{% if delivery.driver %}{{ delivery.driver.name }}{% else %}-{% endif %} </td>
@@ -84,6 +84,9 @@
                     break;
                 case 'Completed':
                     cell.classList.add('status-completed');
+                    break;
+                case 'Rejected':
+                    cell.classList.add('status-rejected');
                     break;
             }
         });

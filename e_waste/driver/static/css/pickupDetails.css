@@ -34,6 +34,7 @@ body {
     /* Add space between buttons */
     margin-bottom: 10px;
     margin-top: 20px;
+    /* margin-left: 120px; */
 }
 
 .btn {
@@ -51,6 +52,32 @@ body {
 .submit {
     background-color: #134E1A;
     color: white;
+    justify-content: center;
+}
+
+.location {
+    /* background-color: #ffffff; */
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.location-icon {
+    line-height: 1;
+    ;
+}
+
+.location-url {
+    text-decoration: none;
+    color: rgb(37, 37, 180);
+}
+
+.location-url:hover {
+    color: rgb(37, 144, 180);
+}
+
+.location-url:active {
+    color: rgb(34, 181, 230);
 }
 
 /*----------------------- Activity box------------------- */

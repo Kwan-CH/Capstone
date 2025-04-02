@@ -1,16 +1,11 @@
 {% extends 'driver/base_driver.html' %}
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        {% block extra_css %}
-            <link rel="stylesheet" href="{% static 'css/edituserprofile-driver.css' %}">
-        {% endblock %}
-        <title>Edit User Profile</title>
-  
-    </head>
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/edituserprofile-driver.css' %}">
+{% endblock %}
+
+{% block title%} Edit User Profile {% endblock %}
 
 {% block content %}
 
@@ -21,30 +16,20 @@
         </div>
 
         <div class="container-bottom">
-            <form  method="post" 
+            <form  method="post"
                 action="{% url 'driver:edit_profile' %}" id="editProfileForm" method="post">
                 {% csrf_token %}
 
-                <label>Email</label>
-                <div class="input-container">
-                    <input type="email" name="email" placeholder="Enter your email address" value="{{profile.email}}" required>
-                </div>
+                <input type="email" name="email" class="input" placeholder="Email Address" value="{{ profile.email }}" required>
+                <input type="text" name="fullname" class="input" placeholder="Full Name" value="{{ profile.name }}" required>
+                <input type="tel" name="contact_number" class="input" placeholder="Contact Number" value="{{ profile.phoneNumber }}" required>
+                {% if phone_error %}
+                    <div class="error-message">
+                        Invalid phone number. Please enter a valid phone number.
+                    </div>
+                {% endif %}
 
-                <label>Name</label>
-                <div class="input-container">
-                    <input type="text" name="fullname" placeholder="Enter your full name" value="{{profile.name}}" required>
-                </div>
-
-                <label>Contact Number</label>
-                <div class="input-container">
-                    <input type="tel" name="contact_number" placeholder="Enter your contact number" value="{{profile.phoneNumber}}" required>
-                </div>
-
-                <label>Car Plate Number</label>
-                <div class="input-container">
-                    <input type="text" name="carplatenumber" placeholder="Enter your car plate number" value="{{profile.plateNumber}}" required>
-                </div>  
-
+                <input type="text" name="carplatenumber" class="input" placeholder="Car Plate Number" value="{{ profile.plateNumber }}" required>
 
                 {% comment %} <label>State</label>
                 <div class="input-container">
@@ -59,9 +44,8 @@
                         {% endfor %}
                     </select>
                 </div> {% endcomment %}
-                <label>State</label>
-                <div class="input-container">
-                    <select id="state" name="state" required>
+                <div class="select-box">
+                    <select id="state" name="state" class="select" required>
                         <option disabled>Select your state</option>
                         {% for state in states %}
                             <option value="{{ state }}" {% if profile.state == state %}selected{% endif %}>
@@ -72,7 +56,7 @@
                 </div>
 
 
-                <p>DEBUG: Update Success: {{ update_success }}</p>  <!-- ✅ ADD THIS -->
+                {% comment %} <p>DEBUG: Update Success: {{ update_success }}</p>  <!-- ✅ ADD THIS --> {% endcomment %}
 
                 {% comment %} <button type="submit" id="savechanges">Save Changes</button> {% endcomment %}
             </form>
@@ -128,5 +112,3 @@
         });
     </script>
 {% endblock %}
-
-</html>

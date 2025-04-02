@@ -26,8 +26,8 @@
                     {% for pickup in pickups %}
                     <tr>
                         <td>{{ pickup.customer.name }}</td>
-                        <td>{{ pickup.completed_requests.completed_date|date:"j/n/Y" }}</td>
-                        <td>{{ pickup.completed_requests.completed_time|time:"g:iA" }}</td>
+                        <td>{{ pickup.completed_requests.completed_date|date:"d/m/Y" }}</td>
+                        <td>{{ pickup.completed_requests.completed_time|time:"h:i A" }}</td>
                         <td>{{ pickup.address }}</td>
                         <td>{{ pickup.category.itemType }}</td>
                     </tr>

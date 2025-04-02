@@ -75,7 +75,7 @@ def signup(request):
             return JsonResponse({'success': False, 'error': 'Passwords do not match.'}, status=400)
 
         if len(password) < 8:
-            return JsonResponse({'success': False, 'error': 'Password is too short!'}, status=400)
+            return JsonResponse({'success': False, 'error': 'Password is too short! Minimium 8 characters'}, status=400)
 
         if not contact_number.isdigit():
             return JsonResponse({'success': False, 'error': 'Invalid contact number!'}, status=400)

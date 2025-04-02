@@ -21,35 +21,48 @@
             {% csrf_token %}
             <p class="form-title">Create an account</p>
 
-            <div class="input-container">
-                <input type="email" name="email" placeholder="Enter your email address" required>
+            <div class="inputGroup">
+                <input type="email" name="email" required autocomplete="off">
+                <label for="email">Email</label>
             </div>
+            <br>
 
-            <div class="input-container">
-                <input type="text" name="fullname" placeholder="Enter your full name" required>
+            <div class="inputGroup">
+                <input type="text" name="fullname" required autocomplete="off">
+                <label for="name">Full Name</label>
             </div>
+            <br>
 
-            <div class="input-container">
-                <input type="password" name="password" placeholder="Enter your password" required>
+            <div class="inputGroup">
+                <input type="password" name="password" required autocomplete="off">
+                <label for="password">Password</label>
             </div>
+            <br>
 
-            <div class="input-container">
-                <input type="password" name="confirm_password" placeholder="Re-enter your password" required>
+            <div class="inputGroup">
+                <input type="password" name="confirm_password" required autocomplete="off">
+                <label for="password">Re-Enter Password</label>
                 {% if error %}
                     <p style="color: red;">{{ error }}</p>
                 {% endif %}
             </div>
+            <br>
 
-            <div class="input-container">
-                <input type="tel" name="contact_number" placeholder="Enter your contact number" required>
-                <p style="color: gray; font-size: 12px; margin-top: 5px; padding-right: 220px;">*No dash required</p>
+            <div class="inputGroup">
+                <input type="tel" name="contact_number" required autocomplete="off">
+                <label for="contact">Contact Number</label>
+                <p>*No dash required</p>
             </div>
+            <br>
 
-            <div class="input-container">
-                <textarea name="address" rows="4" cols="30" placeholder="Enter your address" required></textarea>
+            <div class="inputGroup">
+                <textarea name="address" rows="4" cols="30" required autocomplete="off"></textarea>
+                <label for="address">Address</label>
             </div>
+            <br>
 
-            <div class="input-container">
+
+            <div class="input select">
                 <select id="state" name="state" required>
                     <option value="" disabled selected>Select your state</option>
                     <option value="Johor">Johor</option>
@@ -70,6 +83,7 @@
                     <option value="Putrajaya">Putrajaya</option>
                 </select>
             </div>
+            <br>
 
             <button class="submit" type="submit">Sign up</button>
 

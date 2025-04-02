@@ -26,11 +26,23 @@
                         {% comment %} <td>🚛 Waste: {{ pickup.category }}</td> {% endcomment %}
                     </tr>
                     <tr>
-                        <td>📍 {{ pickup.address }}</td>
+
+                        <td>
+                            <div class="location">
+                                <div class="location-icon">
+                                    📍
+                                </div>
+                                <div>
+                                    <a class="location-url" href="https://www.google.com/maps?q={{ pickup.address|urlencode }}" target="_blank">
+                                        {{ pickup.address }}
+                                </a>
+                                </div>
+                            </div>
+                        </td>
                         <td>🔢 Quantity: {{ pickup.quantity }}</td>
                     </tr>
                     <tr>
-                        <td>📅 Date & Time: {{ pickup.date|date:"j/n/Y" }}, {{ pickup.time|time:"g:iA" }}</td>
+                        <td>📅 Date & Time: {{ pickup.date|date:"d/m/Y" }}, {{ pickup.time|time:"h:i A" }}</td>
                         <td>📱 Item Weight:
                             {% if pickup.weight == "less1" %} &lt;1 Kilogram
                             {% elif pickup.weight == "less2" %} &lt;2 Kilograms
@@ -47,6 +59,7 @@
                 <div class="btn-container">
                     <button type="submit" class="btn submit" data-picked-id="{{ pickup.requestID }}">Picked Up</button>
                 </div>
+
             </div>
             {% empty %}
                 <p>No pickup requests found.</p>

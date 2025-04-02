@@ -10,6 +10,8 @@ from itertools import chain
 from django.core.paginator import Paginator
 import json, re
 from django.http import JsonResponse
+from datetime import datetime, timedelta
+from django.utils.timezone import now
 
 
 # from .utils import authenticate_user
@@ -25,7 +27,22 @@ def pickup_status(request):
     customer_id = request.session.get('user_id')
     if not customer_id:
         return redirect('login')
-    pickUpRequest = ScheduleRequest.objects.filter(customer__customerID=customer_id).order_by('-trackingnumber')
+
+    # Get yesterday's date (24 hours ago)
+    yesterday = now().date() - timedelta(days=1)
+
+    # Filter requests that are NOT rejected and either:
+    # - Have no completed request
+    # - Have a completed request within the last 24 hours
+    pickUpRequest = ScheduleRequest.objects.filter(
+        customer__customerID=customer_id
+    ).exclude(
+        status="Rejected"
+    ).exclude(
+        completed_requests__completed_date__lt=yesterday  # Exclude if completed > 24 hours ago
+    ).order_by('-trackingnumber')
+
+    # pickUpRequest = ScheduleRequest.objects.filter(customer__customerID=customer_id).exclude(status="Rejected").order_by('-trackingnumber')
 
     pagination = Paginator(pickUpRequest, 5)
     page = request.GET.get('page')
@@ -150,7 +167,7 @@ def edit_profile(request):
         userInfo.name = new_name
         userInfo.email = new_email
         userInfo.phoneNumber = new_phoneNumber
-        userInfo.addressr = new_address
+        userInfo.address = new_address
         userInfo.state = new_state
 
         # update the corresponding data
@@ -244,11 +261,14 @@ def waste_category(request):
 def history_all(request):
     customerID = request.session.get('user_id')
       # Get device recycling history
-    device_history = (ScheduleRequest.objects.filter(~Q(status='Pending'), customer__customerID=customerID)
+    device_history = (ScheduleRequest.objects.filter(
+                        # ~Q(status='Pending'),
+                        Q(status='Completed') | Q(status='Rejected'),
+                        customer__customerID=customerID)
                       .select_related('category')
                       .values('trackingnumber', 'address', 'category__itemType', 'date', 'quantity', 'status', 'rejectedReason__reason')
                       .annotate(total=F('quantity') * F('category__pointsGiven'))
-                      .order_by('-date')  # Sort by date (latest first)
+                      .order_by('-date', '-time')  # Sort by date (latest first)
                       )
 
     # Get voucher redemption history
@@ -281,12 +301,14 @@ def device_recycled(request):
     # select the pickup request that the customer made, while retrieve the item type based on categoryID
     # reason using small 'c' in customer is because it is not referring to the table but refer to the field itself
     # same goes to the select_relate(), it refers to the field not table
-    pickup_requests = (ScheduleRequest.objects.filter(~Q(status='Pending'), customer__customerID=customerID)
-                        # ~Q functions to exclude condition specified
+    pickup_requests = (ScheduleRequest.objects.filter(
+                        # ~Q(status='Pending'), ~Q functions to exclude condition specified
+                        Q(status='Completed') | Q(status='Rejected'),
+                        customer__customerID=customerID)
                        .select_related('category')
                        .values('trackingnumber', 'address', 'category__itemType', 'date', 'quantity', 'status', 'rejectedReason__reason')
                        .annotate(total=F('quantity') * F('category__pointsGiven')) #this here is to calculate the total points using F()
-                       .order_by('-trackingnumber') # order by desc tracking number, later on after the data is finalised, changed back to date
+                       .order_by('-date', '-time') # order by date
                         )
 
 
@@ -306,7 +328,7 @@ def voucher_redeemed(request):
 
     vouchers_redeemed = (CustomerRedemption.objects.filter(customer__customerID=customerID, status=False).select_related('voucher')
                          .values('voucher__voucherID', 'voucher__name', 'date', 'time', 'voucher__pointsRequired')
-                         .order_by('-time')
+                         .order_by('-date', '-time')
                          )
 
     pagination = Paginator(vouchers_redeemed, 4)

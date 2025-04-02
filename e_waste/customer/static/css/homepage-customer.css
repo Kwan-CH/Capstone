@@ -104,7 +104,11 @@ a {
     color: rgb(13, 160, 168);
 }
 
-a:hover {
+/* a:hover {
+    color: red
+} */
+
+.btnlink:hover {
     color: red
 }
 

@@ -7,7 +7,7 @@ body {
 }
 
 .header-section {
-    background: url('../Images/greenleaf.png') no-repeat center center/cover;
+    background: url('../images/greenleaf.png') no-repeat center center/cover;
     padding: 90px 20px;
     color: white;
 }

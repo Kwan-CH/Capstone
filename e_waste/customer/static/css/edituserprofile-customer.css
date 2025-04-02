@@ -79,6 +79,70 @@ select {
     margin-bottom: 20px;
 }
 
+/* -------------------------Select------------------------------- */
+
+.input {
+    border: none;
+    outline: none;
+    border-radius: 15px;
+    padding: 15px;
+    background-color: #ccc;
+    box-shadow: inset 2px 5px 10px rgba(0, 0, 0, 0.3);
+    transition: 300ms ease-in-out;
+    width: 420px;
+    margin-bottom: 30px;
+}
+
+.input:focus {
+    background-color: white;
+    transform: scale(1.05);
+    box-shadow: 13px 13px 100px #969696,
+        -13px -13px 100px #ffffff;
+}
+
+.select {
+    border: none;
+    outline: none;
+    border-radius: 15px;
+    padding: 15px;
+    background-color: #ccc;
+    box-shadow: inset 2px 5px 10px rgba(0, 0, 0, 0.3);
+    transition: 300ms ease-in-out;
+    width: 420px;
+    margin-bottom: 30px;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
+}
+
+.select-box {
+    position: relative;
+    display: inline-block;
+    width: 420px;
+}
+
+.select-box::after {
+    content: "▼";
+    font-size: 14px;
+    position: absolute;
+    right: 20px;
+    top: 34%;
+    transform: translateY(-50%);
+    color: rgb(100, 100, 100);
+    pointer-events: none;
+}
+
+/* Focus effect */
+.select:focus {
+    background-color: white;
+    transform: scale(1.05);
+    box-shadow: 13px 13px 100px #969696,
+        -13px -13px 100px #ffffff;
+}
+
+
+
 /* -------------------------Buttons----------------------------- */
 .customer-editProfile-btn-container {
     display: flex;
@@ -202,4 +266,15 @@ select {
 
 .customer-editProfile-popup-content button.proceed:hover {
     background: #298a35;
+}
+
+/* --------------------- Error Message -----------------------*/
+
+.error-message {
+    color: red;
+    size: 20px;
+    justify-content: center;
+    /* margin-top: -20px; */
+    /* margin-bottom: 20px; */
+    margin: -20px 0px 20px 5px;
 }

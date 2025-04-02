@@ -16,16 +16,25 @@
 {% block content %}
     <div class="container">
         <a href="{% url 'landing' %}"><img src="{% static 'images/companylogonobg.png' %}" id="logo" width="400" height="150" alt="company logo"></a>
+        <div class="login">
             <form class="form" action= {% url 'login' %} method="POST"> {% csrf_token %}
                 <p class="form-title">Sign in to your account</p>
-                <div class="input-container">
-                <input placeholder="Enter your email" type="email" name="email_input" required>
-            </div>
-            <div class="input-container">
-                <input placeholder="Enter your password" type="password" name="password" required>
+                <br>
+
+                <div class="inputGroup">
+                    <input type="email" name="email_input" required autocomplete="off">
+                    <label for="name">Email</label>
                 </div>
-            <button class="submit" type="submit">Sign in</button>
-            <br>
+
+                <br><br>
+                <div class="inputGroup">
+                    <input type="password" name="password" required autocomplete="off">
+                    <label for="name">Password</label>
+                </div>
+                <br>
+
+                <button class="submit" type="submit">Sign in</button>
+                <br>
 
             <p class="link">
                 <a id="forgot-password" href="{% url 'resetPassword'%}">Forgot password?</a>
@@ -38,6 +47,7 @@
             </form>
         </div>
     </div>
+
     <div id="embedded-footer">
         {% include 'footer.html' %}
     </div>
