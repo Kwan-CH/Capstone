@@ -1,0 +1,120 @@
+{% extends 'driver/base_driver.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/edituserprofile-driver.css' %}">
+{% endblock %}
+
+{% block title%} Edit User Profile {% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="container-top">
+        <!-- Display the user's actual profile picture if available -->
+        {% if profile.profile_picture %}
+            <img id="user" src="{{ profile.profile_picture.url }}" width="200" height="200" alt="User Profile Picture">
+        {% else %}
+            <img id="user" src="{% static 'images/userprofilelogonobg.png' %}" width="200" height="200" alt="Default Profile Picture">
+        {% endif %}
+        
+        <h1>Edit Your User Profile</h1>
+    </div>
+</div>
+
+        <div class="container-bottom">
+            <form  method="post"
+                action="{% url 'driver:edit_profile' %}" id="editProfileForm" method="post">
+                {% csrf_token %}
+
+                <input type="email" name="email" class="input" placeholder="Email Address" value="{{ profile.email }}" required>
+                <input type="text" name="fullname" class="input" placeholder="Full Name" value="{{ profile.name }}" required>
+                <input type="tel" name="contact_number" class="input" placeholder="Contact Number" value="{{ profile.phoneNumber }}" required>
+                {% if phone_error %}
+                    <div class="error-message">
+                        Invalid phone number. Please enter a valid phone number.
+                    </div>
+                {% endif %}
+
+                <input type="text" name="carplatenumber" class="input" placeholder="Car Plate Number" value="{{ profile.plateNumber }}" required>
+
+                {% comment %} <label>State</label>
+                <div class="input-container">
+                    <select id="state" name="state" required>
+                        <option disabled selected>Select your state</option>
+                        {% for state in states %}
+                            {% if profile.state == state %}
+                                <option value="{{state}}" selected>{{state}}</option>
+                            {% else %}
+                                <option value="{{state}}">{{state}}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div> {% endcomment %}
+                <div class="select-box">
+                    <select id="state" name="state" class="select" required>
+                        <option disabled>Select your state</option>
+                        {% for state in states %}
+                            <option value="{{ state }}" {% if profile.state == state %}selected{% endif %}>
+                                {{ state }}
+                         </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+
+                {% comment %} <p>DEBUG: Update Success: {{ update_success }}</p>  <!-- ✅ ADD THIS --> {% endcomment %}
+
+                {% comment %} <button type="submit" id="savechanges">Save Changes</button> {% endcomment %}
+            </form>
+        </div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="driver-editProfile-btn-container">
+        <div class="driver-editProfile-SaveBtn">
+            <button onclick="driver_editProfile_ConfirmationPopup()" id="savechanges">Save Changes</button>
+        </div>
+    </div>
+
+    <!-- Confirmation Popup -->
+    <div id="driver-editProfile-confirmation-popup" class="driver-editProfile-popup-container" style="display: none;">
+        <div class="driver-editProfile-popup-content">
+            <h2><i>Confirmation</i></h2>
+            <p>Are you sure you want to save your changes?</p>
+            <button class="btn cancel" onclick="driver_editProfile_close_ConfirmationPopup()">Cancel</button>
+            <button class="btn proceed" onclick="driver_editProfile_submitForm()">Proceed</button>
+        </div>
+    </div>
+
+    <!---------- Changes Saved Successfully Popup ------------>
+        <div id="driver-editProfile-sucessful-popup" class="driver-editProfile-popup-container" style="display: none;">
+            <div class="driver-editProfile-popup-content">
+                <img src="{% static 'images/Picture1.png'%}" alt="JAS Logo" class="popup-logo">
+                <h2>Congratulations!</h2>
+                <p class="driver-editProfile-popup-text">Your profile has been successfully updated! Thanks for keeping your info current.</p>
+                <a href="{% url 'driver:user_profile'%}">
+                  <button>Back</button>
+                </a>
+            </div>
+        </div>
+
+    {% if Invalid %}
+        <script>
+            var errorMessage = "{{ error_message|escapejs }}";
+            alert(errorMessage);
+        </script>
+    {% endif %}
+
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'js/edituserprofile-driver.js'%}"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var updateSuccess = "{{ update_success|default:'False' }}";
+            if (updateSuccess === "True") {
+                driver_editProfile_show_SucessfulPopup();
+            }
+        });
+    </script>
+{% endblock %}

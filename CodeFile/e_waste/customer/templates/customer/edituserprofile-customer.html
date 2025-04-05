@@ -1,0 +1,116 @@
+{% extends 'customer/base_customer.html' %}
+{% load static %}
+
+{% block title %}Edit User Profile{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/edituserprofile-customer.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="container-top">
+        <!-- Display the user's actual profile picture if available -->
+        {% if profile.profile_picture %}
+            <img id="user" src="{{ profile.profile_picture.url }}" width="200" height="200" alt="User Profile Picture">
+        {% else %}
+            <img id="user" src="{% static 'images/userprofilelogonobg.png' %}" width="200" height="200" alt="Default Profile Picture">
+        {% endif %}
+
+        <h1>Edit Your User Profile</h1>
+    </div>
+</div>
+
+        <div class="container-bottom">
+            <form action="{% url 'customer:edit_profile' %}" id="editProfileForm" method="post">
+                {% csrf_token %}
+
+                <input type="text" name="fullname" class="input" placeholder="Full Name" value="{{profile.name}}" required>
+
+                <input type="email" name="email" class="input" placeholder="Email Address" value="{{profile.email}}" required>
+
+
+                <!-- <div class="input-container">
+                    <input type="password" name="password" placeholder="Enter your password" required>
+                </div>
+
+                <div class="input-container">
+                    <input type="password" name="confirm_password" placeholder="Re-enter your password" required>
+                </div> -->
+
+                <input type="tel" name="contact_number" class="input" placeholder="Contact Number" value="{{profile.phoneNumber}}" required>
+                {% if phone_error %}
+                    <div class="error-message">
+                        Invalid phone number. Please enter a valid phone number.
+                    </div>
+                {% endif %}
+
+                <textarea name="address" class="input" rows="4" cols="30" placeholder="Address" required>{{profile.address}}</textarea>
+
+                <div class="select-box">
+                    <select id="state" name="state" class="select" required>
+                        <option disabled selected>Select your state</option>
+                        {% for state in states %}
+                            {% if profile.state == state %}
+                                <option value="{{state}}" selected>{{state}}</option>
+                            {% else %}
+                                <option value="{{state}}">{{state}}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+
+                {% comment %} <button type="submit" id="savechanges">Save Changes</button> {% endcomment %}
+            </form>
+        </div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="customer-editProfile-btn-container">
+        <div class="customer-editProfile-SaveBtn">
+            <button onclick="customer_editProfile_ConfirmationPopup()" id="savechanges">Save Changes</button>
+        </div>
+    </div>
+
+    <!-- Confirmation Popup -->
+    <div id="customer-editProfile-confirmation-popup" class="customer-editProfile-popup-container" style="display: none;">
+        <div class="customer-editProfile-popup-content">
+            <h2><i>Confirmation</i></h2>
+            <p>Are you sure you want to save your changes?</p>
+            <button class="btn cancel" onclick="customer_editProfile_close_ConfirmationPopup()">Cancel</button>
+            <button class="btn proceed" onclick="customer_editProfile_submitForm()">Proceed</button>
+        </div>
+    </div>
+
+    <!---------- Changes Saved Successfully Popup ------------>
+        <div id="customer-editProfile-sucessful-popup" class="customer-editProfile-popup-container" style="display: none;">
+            <div class="customer-editProfile-popup-content">
+                <img src="{% static 'images/Picture1.png'%}" alt="JAS Logo" class="popup-logo">
+                <h2>Congratulation!</h2>
+                <p class="customer-editProfile-popup-text">Your profile has been successfully updated! Thanks for keeping your info current.</p>
+                <a href="{% url 'customer:user_profile'%}">
+                  <button>Back</button>
+                </a>
+            </div>
+        </div>
+
+    {% if Invalid %}
+        <script>
+            var errorMessage = "{{ error_message|escapejs }}";
+            alert(errorMessage);
+        </script>
+    {% endif %}
+
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'js/edituserprofile-customer.js'%}"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var updateSuccess = "{{ update_success|default:'False' }}";
+            if (updateSuccess === "True") {
+                customer_editProfile_show_SucessfulPopup();
+            }
+        });
+    </script>
+{% endblock %}
