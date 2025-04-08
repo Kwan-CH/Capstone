@@ -10,3 +10,6 @@ for data in all_data:
     print(data)
 
 ## Hi testing 
+# ababaabbababa
+word = 'hello world'
+print(word)
