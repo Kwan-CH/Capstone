@@ -164,3 +164,16 @@ h1 {
 .input:focus {
     box-shadow: 5.5px 7px 0 black;
 }
+
+.input2 {
+    max-width: 190px;
+}
+
+.codecityside {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.code {
+    margin-right: 60px;
+}

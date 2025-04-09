@@ -4,11 +4,11 @@ from database.models import Customer, Driver, Operator
 from .utils import authenticate_user
 from django.http import JsonResponse
 from Email import emailAutomation
+import requests
 
 # random password generation
 import secrets
 import string
-
 
 # ori version
 # def signup(request):
@@ -56,13 +56,26 @@ import string
 #     return render(request, 'e_waste/signup.html')
 
 def signup(request):
+    url = "https://api.countrystatecity.in/v1/countries/MY/states"
+
+    headers = {
+        'X-CSCAPI-KEY': 'S1FOTHE5OW56bXpRWDNVQmpwckhZMFliYXgyNU9nUkZKRm1DRlc5bA=='
+    }
+
+    response = requests.request("GET", url, headers=headers).json()
+    states = {}
+    for state in response:
+        states[state.get('name')] = state.get('iso2')
+
     if request.method == 'POST':
         email = request.POST['email']
         fullname = request.POST['fullname']
         password = request.POST['password']
         confirm_password = request.POST['confirm_password']
         contact_number = request.POST['contact_number']
-        address = request.POST['address']
+        street = request.POST['street']
+        postalCode = request.POST['postal_code']
+        area = request.POST.get('area')
         state = request.POST.get('state')
 
         if Customer.objects.filter(email=email).exists():
@@ -80,7 +93,20 @@ def signup(request):
         if not contact_number.isdigit():
             return JsonResponse({'success': False, 'error': 'Invalid contact number!'}, status=400)
 
-        new_user = Customer(email=email, name=fullname, password=password, phoneNumber=contact_number, address=address, state=state)
+        if not postalCode.isdigit():
+            return JsonResponse({'success': False, 'error': 'Invalid contact number!'}, status=400)
+
+        new_user = Customer(
+            email=email,
+            name=fullname,
+            password=password,
+            phoneNumber=contact_number,
+            street=street,
+            postalCode=postalCode,
+            area=area,
+            state=state
+        )
+
         new_user.save()
 
         request.session['user_id'] = new_user.customerID
@@ -89,7 +115,7 @@ def signup(request):
 
         return JsonResponse({'success': True})
 
-    return render(request, 'e_waste/signup.html')
+    return render(request, 'e_waste/signup.html', {'states':states})
 
 def user_login(request):
 

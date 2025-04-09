@@ -34,6 +34,7 @@
               <tr>
                   <th>Name</th>
                   <th>Car Plate</th>
+                  <th>Area</th>
                   <th>State</th>
                   <th>Phone Number</th>
                   <th>Action</th>
@@ -44,6 +45,11 @@
               <tr>
                   <td>{{driver.name}}</td>
                   <td>{{driver.plateNumber}}</td>
+                  {% if driver.areaCovered %}
+                      <td>{{driver.areaCovered}}</td>
+                  {% else %}
+                      <td>-</td>
+                  {% endif %}
                   <td>{{driver.stateCovered}}</td>
                   <td>{{driver.phoneNumber}}</td>
                   <td><button class="assign-btn" data-id="{{driver.driverID}}" onclick="storeDriverID(this)">Assign</button></td>

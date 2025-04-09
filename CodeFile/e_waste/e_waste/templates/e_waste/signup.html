@@ -55,47 +55,34 @@
             </div>
             <br>
 
-            <div class="inputGroup">
-                <input type="text" required autocomplete="off">
-                <label for="housenumber">House Number & Street Name</label>
+            <div class="input select">
+                <input type="hidden" name="state" id="state_text">
+                <select id="stateDropdown" onchange="populateAreaDropdown()" required>
+                    <option value="" disabled selected>Select your state</option>
+                    {% for state, siso in states.items %}
+                        <option value="{{siso}}">{{state}}</option>
+                    {% endfor %}
+                </select>
             </div>
             <br>
-            <div class="input select">
-                            <select id="state" name="state" required>
-                                <option value="" disabled selected>Select your state</option>
-                                <option value="Johor">Johor</option>
-                                <option value="Kedah">Kedah</option>
-                                <option value="Kelantan">Kelantan</option>
-                                <option value="Kuala Lumpur">Kuala Lumpur</option>
-                                <option value="Labuan">Labuan</option>
-                                <option value="Melaka">Melaka</option>
-                                <option value="Negeri Sembilan">Negeri Sembilan</option>
-                                <option value="Pahang">Pahang</option>
-                                <option value="Perak">Perak</option>
-                                <option value="Perlis">Perlis</option>
-                                <option value="Pulau Pinang">Pulau Pinang</option>
-                                <option value="Sabah">Sabah</option>
-                                <option value="Sarawak">Sarawak</option>
-                                <option value="Selangor">Selangor</option>
-                                <option value="Terengganu">Terengganu</option>
-                                <option value="Putrajaya">Putrajaya</option>
-                            </select>
-                        </div>
-            <br>
             <div class="codecityside">
-                <div class="inputGroup">
-                    <input type="text" required autocomplete="off">
-                    <label for="postalcode">Postal Code</label>
+                <div class="input select" style="width:100%">
+                    <select id="areaDropdown" name="area" required>
+                        <option value="" disabled selected>Select area</option>
+                    </select>
                 </div>
 
                 <div class="inputGroup">
-                    <input type="text" required autocomplete="off">
-                    <label for="city">City</label>
+                    <input type="text" name="postal_code" required autocomplete="off">
+                    <label for="postalcode">Postal Code</label>
                 </div>
                 <br>
             </div>
-            <br>
-
+            <div class="inputGroup">
+                <input type="text" name="street" required autocomplete="off">
+                <label for="housenumber">House Number & Street Name</label>
+            </div>
+        <br>
             <button class="submit" type="submit">Sign up</button>
 
             <p class="login-link">
@@ -158,5 +145,51 @@
         function showSuccessfulPopup() {
             document.getElementById("successful-popup").style.display = "flex";
         }
+
+        function populateAreaDropdown(){
+            const stateDropdown = document.getElementById('stateDropdown')
+            const areaDropdown = document.getElementById('areaDropdown')
+            const sisoCode = stateDropdown.value
+
+            const selectedStateText = stateDropdown.options[stateDropdown.selectedIndex].text;
+            document.getElementById('state_text').value = selectedStateText;
+
+            var headers = new Headers();
+            headers.append("X-CSCAPI-KEY", "S1FOTHE5OW56bXpRWDNVQmpwckhZMFliYXgyNU9nUkZKRm1DRlc5bA==");
+
+            var requestOptions = {
+                method: 'GET',
+                headers: headers,
+                redirect: 'follow'
+            };
+
+            fetch(`https://api.countrystatecity.in/v1/countries/MY/states/${sisoCode}/cities`, requestOptions)
+                .then(response => response.json())
+                .then(data => {
+                    areaDropdown.innerHTML = ''; // Reset area dropdown
+
+                    if (data && Object.keys(data).length > 1 ) {
+                        areaDropdown.disabled = false;
+
+                        // Populate the area dropdown
+                        data.forEach(area => {
+                            const option = document.createElement("option");
+                            option.value = area.name;
+                            option.textContent = area.name;
+                            areaDropdown.appendChild(option);
+                        });
+
+
+                    } else {
+                        areaDropdown.disabled = true;
+                        areaDropdown.innerHTML = '<option value="">No area available for this state</option>';
+                    }
+                })
+                .catch(error => {
+                console.error("Error fetching areas:", error);
+                areaDropdown.innerHTML = '<option value="">Error loading areas</option>';
+            });
+        }
+
     </script>
 {% endblock %}
