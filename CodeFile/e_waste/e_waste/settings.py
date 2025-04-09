@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'customer',
     'driver',
     'e_waste_operator',
-    'Email'
+    'utilities'
 ]
 
 MIDDLEWARE = [
@@ -69,6 +69,7 @@ TEMPLATES = [
             os.path.join(BASE_DIR, 'e_waste','templates'),
             os.path.join(BASE_DIR, 'customer', 'templates',),
             os.path.join(BASE_DIR, 'templates'),
+            os.path.join(BASE_DIR, 'utilities', 'Email', 'templates')
             ],
         # 'DIRS': [],
         'APP_DIRS': True,
@@ -144,6 +145,7 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'e_waste', 'static'),
+    os.path.join(BASE_DIR, 'utilities', 'static'),
     os.path.join(BASE_DIR, 'static'),
 ]
 
@@ -152,12 +154,18 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'noreplytoewastegov@gmail.com'
-EMAIL_HOST_PASSWORD = 'yumk vxyf tdpa dtla'  # Use an App Password, NOT your Gmail password
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_APP_PASSWORD')  # Use an App Password, NOT your Gmail password
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 MEDIA_URL = '/media/'

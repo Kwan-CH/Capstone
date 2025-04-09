@@ -8,7 +8,13 @@ from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 import json
 import re
-from state_data import getState
+from utilities.state_data import getState
+
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 
 states=getState.getState()
 
@@ -135,7 +141,8 @@ def edit_profile(request):
                 'Invalid': True,
                 'error_message': "All fields must be filled",
                 'profile': userInfo,  # Pass back the profile details and state selection
-                'states': states
+                'states': states,
+                "API_KEY": os.getenv('GET_STATE_AREA_API')
             })
 
         # Validate email
@@ -144,6 +151,7 @@ def edit_profile(request):
                 "profile": userInfo,
                 "Invalid": True,
                 "error_message": "Invalid email format. Please enter a valid email.",
+                 "API_KEY": os.getenv('GET_STATE_AREA_API')
             })
 
         # Validate Phone Number
@@ -151,7 +159,8 @@ def edit_profile(request):
             return render(request, "driver/edituserprofile-driver.html", {
                 "profile": userInfo,
                 "phone_error": True,
-                "states" : states
+                "states" : states,
+                "API_KEY": os.getenv('GET_STATE_AREA_API')
             })
 
         # if Validate passes only update userinfo
@@ -178,11 +187,16 @@ def edit_profile(request):
         userInfo.save()
         return render(request, "driver/edituserprofile-driver.html", {
             "profile": userInfo,
-            "update_success": True
+            "update_success": True,
+            "API_KEY": os.getenv('GET_STATE_AREA_API')
         })
 
     # reason to create a list at here, is to populate the option field while being able to set selected category
-    return render(request, "driver/edituserprofile-driver.html", {"profile": userInfo, "states": states})
+    return render(request, "driver/edituserprofile-driver.html", {
+        "profile": userInfo,
+        "states": states,
+        "API_KEY": os.getenv('GET_STATE_AREA_API')
+    })
 
 #function for getting user address
 def get_user_address(request):

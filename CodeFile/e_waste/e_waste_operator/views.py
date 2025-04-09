@@ -4,12 +4,17 @@ from database.models import Driver, ScheduleRequest, Reason, Voucher, Operator, 
 from django.db.models import Q
 from django.db.models import CharField, Value
 from django.db.models.functions import Concat
-from Email import emailAutomation
+from utilities.Email import emailAutomation
 from django.core.paginator import Paginator
 import json
 from django.http import JsonResponse
 from itertools import chain
-from state_data import getState
+from utilities.state_data import getState
+
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 states=getState.getState()
 
@@ -96,7 +101,10 @@ def reject_request(request):
     return JsonResponse({"success": False, "message": "Invalid request method."}, status=405)
 
 def operator_create_acc_page(request):
-    return render(request, 'operator/operator-create_acc.html', {"states":states})
+    return render(request, 'operator/operator-create_acc.html', {
+        "states":states,
+        "API_KEY": os.getenv('GET_STATE_AREA_API')
+    })
 
 def save_driver_account(request):
     if request.method == 'POST':
@@ -111,23 +119,50 @@ def save_driver_account(request):
         # Check if email already exists
         if Driver.objects.filter(email=email).exists():
             messages.error(request, "Email existed in the database already, please try a new one")
-            return render(request, 'operator/operator-create_acc.html',{"formData": request.POST, "states":states})
+            return render(request, 'operator/operator-create_acc.html',{
+                "formData": request.POST,
+                "states":states,
+                "API_KEY": os.getenv('GET_STATE_AREA_API')
+            })
 
-        if '@' not in email:
+        elif '@' not in email:
             messages.error(request, "Invalid email address")
-            return render(request, 'operator/operator-create_acc.html',{"formData": request.POST, "states":states})
+            return render(request, 'operator/operator-create_acc.html',{
+                "formData": request.POST,
+                "states":states,
+                "API_KEY": os.getenv('GET_STATE_AREA_API')
+            })
 
-        if len(password) < 8:
+        elif len(password) < 8:
             messages.error(request, "Password is too short, minimum length is 8")
-            return render(request, 'operator/operator-create_acc.html',{"formData": request.POST, "states":states})
+            return render(request, 'operator/operator-create_acc.html',{
+                "formData": request.POST,
+                "states":states,
+                "API_KEY": os.getenv('GET_STATE_AREA_API')
+            })
 
-        if not contact.isdigit():
+        elif not contact.isdigit():
             messages.error(request, "Contact number should not have alphabet")
-            return render(request, 'operator/operator-create_acc.html',{"formData": request.POST, "states":states})
+            return render(request, 'operator/operator-create_acc.html',{
+                "formData": request.POST,
+                "states":states,
+                "API_KEY": os.getenv('GET_STATE_AREA_API')
+            })
 
-        if not state:
+        elif not stateCovered:
             messages.error(request, "Please select a state before proceeding")
-            return render(request, 'operator/operator-create_acc.html',{"formData": request.POST, "states":states})
+            return render(request, 'operator/operator-create_acc.html',{
+                "formData": request.POST,
+                "states":states,
+                "API_KEY": os.getenv('GET_STATE_AREA_API')
+            })
+        elif not areaCovered:
+            messages.error(request, "Please select an area before proceeding")
+            return render(request, 'operator/operator-create_acc.html',{
+                "formData": request.POST,
+                "states":states,
+                "API_KEY": os.getenv('GET_STATE_AREA_API')
+            })
 
         new_user = Driver(name=name,
                           email=email,
@@ -138,9 +173,16 @@ def save_driver_account(request):
                           areaCovered=areaCovered)
         new_user.save()
 
-        return render(request, 'operator/operator-create_acc.html', {"Success":True, "states":states})
+        return render(request, 'operator/operator-create_acc.html', {
+            "Success":True,
+            "states":states,
+            "API_KEY": os.getenv('GET_STATE_AREA_API')
+        })
 
-    return render(request, 'operator/operator-create_acc.html', {"states":states})
+    return render(request, 'operator/operator-create_acc.html', {
+        "states":states,
+        "API_KEY": os.getenv('GET_STATE_AREA_API')
+    })
 
 def reward_system(request):
     vouchers = Voucher.objects.all()

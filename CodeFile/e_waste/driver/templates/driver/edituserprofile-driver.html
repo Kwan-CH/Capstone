@@ -46,7 +46,7 @@
                 <label>State Covered</label>
                 <div class="select-box">
                     <input type="hidden" name="state" id="state_text">
-                    <select id="stateDropdown" class="select" onchange="populateAreaDropdown()" required>
+                    <select id="stateDropdown" class="select" onchange="populateAreaDropdown('stateDropdown', 'areaDropdown', null, 'state_text', '{{API_KEY}}')" required>
                         <option disabled>Select your state</option>
                         {% for state, code in states.items %}
                             <option value="{{ code }}" {% if profile.stateCovered == state %}selected{% endif %}>
@@ -104,6 +104,7 @@
 
 {% block extra_js %}
     <script src="{% static 'js/edituserprofile-driver.js'%}"></script>
+    <script src="{% static 'populateAreaDropdown.js'%}"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             var updateSuccess = "{{ update_success|default:'False' }}";
@@ -112,63 +113,7 @@
             }
         });
 
-        populateAreaDropdown()
+        populateAreaDropdown('stateDropdown', 'areaDropdown', '{{profile.areaCovered}}', 'state_text', '{{API_KEY}}')
 
-        function populateAreaDropdown(){
-            const stateDropdown = document.getElementById('stateDropdown')
-            const areaDropdown = document.getElementById('areaDropdown')
-            const sisoCode = stateDropdown.value
-
-            const selectedArea = '{{profile.areaCovered}}'
-
-            const selectedStateText = stateDropdown.options[stateDropdown.selectedIndex].text;
-            document.getElementById('state_text').value = selectedStateText;
-
-            var headers = new Headers();
-            headers.append("X-CSCAPI-KEY", "S1FOTHE5OW56bXpRWDNVQmpwckhZMFliYXgyNU9nUkZKRm1DRlc5bA==");
-
-            var requestOptions = {
-                method: 'GET',
-                headers: headers,
-                redirect: 'follow'
-            };
-
-            fetch(`https://api.countrystatecity.in/v1/countries/MY/states/${sisoCode}/cities`, requestOptions)
-                .then(response => response.json())
-                .then(data => {
-                    areaDropdown.innerHTML = ''; // Reset area dropdown
-
-                    if (data && Object.keys(data).length > 1 ) {
-                        areaDropdown.disabled = false;
-
-                        // Populate the area dropdown
-                        data.forEach(area => {
-                            const option = document.createElement("option");
-                            option.value = area.name;
-                            option.textContent = area.name;
-                            areaDropdown.appendChild(option);
-                        });
-
-                        const selectedArea = '{{profile.areaCovered}}';
-                        if (selectedArea) {
-                    // Find the option that matches the selected area and set it as selected
-                        const selectedOption = Array.from(areaDropdown.options).find(option => option.value === selectedArea);
-
-                        if (selectedOption) {
-                            selectedOption.selected = true;
-                        }
-                    }
-
-
-                    } else {
-                        areaDropdown.disabled = true;
-                        areaDropdown.innerHTML = '<option value="">No area available for this state</option>';
-                    }
-                })
-                .catch(error => {
-                console.error("Error fetching areas:", error);
-                areaDropdown.innerHTML = '<option value="">Error loading areas</option>';
-            });
-        }
     </script>
 {% endblock %}

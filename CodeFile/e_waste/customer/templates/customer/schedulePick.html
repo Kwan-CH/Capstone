@@ -47,7 +47,7 @@
             <input type="hidden" name="state" id="state_text">
             <div class="state"> <label for="quantity-items">State:</label>
                 <div class="inputstate">
-                    <select id="stateDropdown" required onchange="populateAreaDropdown()">
+                    <select id="stateDropdown" required onchange="populateAreaDropdown('stateDropdown', 'areaDropdown', null, 'state_text', '{{API_KEY}}')">
                         <option disabled selected>Select your state</option>
                         {% for name, code in states.items %}
                             <option value="{{code}}">{{name}}</option>
@@ -116,16 +116,17 @@
     </div>
 
     <script src="{% static 'js/schedulePOP.js' %}"></script>
+    <script src="{% static 'populateAreaDropdown.js' %}"></script>
 {% endblock %}
 
 
 {% block extra_js %}
     {% if submitted %}
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            showTrackingPopup();
-        });
-    </script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                showTrackingPopup();
+            });
+        </script>
     {% endif %}
 
     {% if error %}
@@ -136,10 +137,6 @@
         document.addEventListener("DOMContentLoaded", function() {
             document.getElementById("use-current-location").addEventListener("click", function(event) {
                 event.preventDefault();  // Prevent unnecessary form submission
-
-                const stateDropdown = document.getElementById('stateDropdown')
-                const areaDropdown = document.getElementById('areaDropdown')
-
             });
         });
 
@@ -184,63 +181,12 @@
             if (selectedOption) {
                 selectedOption.selected = true;
             }
-            populateAreaDropdown()
+            populateAreaDropdown('stateDropdown', 'areaDropdown', '{{profile.area}}', 'state_text', '{{API_KEY}}')
         }
 
         // Submit the form
         function submitForm() {
             document.getElementById('schedule-pickup-form').submit();
-        }
-
-        function populateAreaDropdown(){
-            const selectedArea = '{{profile.area}}';
-
-            const sisoCode = stateDropdown.value
-            const selectedStateText = stateDropdown.options[stateDropdown.selectedIndex].text;
-            document.getElementById('state_text').value = selectedStateText;
-
-            var headers = new Headers();
-            headers.append("X-CSCAPI-KEY", "S1FOTHE5OW56bXpRWDNVQmpwckhZMFliYXgyNU9nUkZKRm1DRlc5bA==");
-
-            var requestOptions = {
-                method: 'GET',
-                headers: headers,
-                redirect: 'follow'
-            };
-
-            fetch(`https://api.countrystatecity.in/v1/countries/MY/states/${sisoCode}/cities`, requestOptions)
-                .then(response => response.json())
-                .then(data => {
-                    areaDropdown.innerHTML = ''; // Reset area dropdown
-
-                    if (data && Object.keys(data).length > 1 ) {
-                        areaDropdown.disabled = false;
-
-                        // Populate the area dropdown
-                        data.forEach(area => {
-                            const option = document.createElement("option");
-                            option.value = area.name;
-                            option.textContent = area.name;
-                            areaDropdown.appendChild(option);
-                        });
-
-                        if (selectedArea) {
-                    // Find the option that matches the selected area and set it as selected
-                        const selectedOption = Array.from(areaDropdown.options).find(option => option.value === selectedArea);
-                        if (selectedOption) {
-                            selectedOption.selected = true;
-                        }
-                    }
-
-                    } else {
-                        areaDropdown.disabled = true;
-                        areaDropdown.innerHTML = '<option value="">No area available for this state</option>';
-                    }
-                })
-                .catch(error => {
-                console.error("Error fetching areas:", error);
-                areaDropdown.innerHTML = '<option value="">Error loading areas</option>';
-            });
         }
 
 

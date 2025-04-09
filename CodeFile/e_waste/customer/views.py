@@ -14,21 +14,16 @@ import json, re
 from django.http import JsonResponse
 from datetime import datetime, timedelta
 from django.utils.timezone import now
-from state_data import getState
-from django.core.files.storage import default_storage
+from utilities.state_data import getState
 
+import os
+from dotenv import load_dotenv
+
+
+load_dotenv()
 
 states=getState.getState()
 
-# from .utils import authenticate_user
-
-def index(request):
-    return render(request, 'landing.html')
-
-# def homepage_customer(request):
-
-    
-#     return render(request, 'customer/homepage-customer.html')
 
 def homepage_customer(request):
     customerID = request.session.get("user_id")  # Get logged-in user's ID
@@ -98,7 +93,8 @@ def schedule_pickup(request):
                         "profile": userInfo,
                         'submitted': False,  # Ensures no undefined variable usage
                         'states': states,
-                        'error': 'Postal code should have 5 digits'
+                        'error': 'Postal code should have 5 digits',
+                        "API_KEY": os.getenv('GET_STATE_AREA_API')
                     })
         elif not postalCode.isdigit():
             print('posatl code  not digit')
@@ -107,7 +103,8 @@ def schedule_pickup(request):
                         "profile": userInfo,
                         'submitted': False,  # Ensures no undefined variable usage
                         'states': states,
-                        'error': 'Please enter digits only for postal code!'
+                        'error': 'Please enter digits only for postal code!',
+                        "API_KEY": os.getenv('GET_STATE_AREA_API')
                     })
 
         try:
@@ -152,7 +149,8 @@ def schedule_pickup(request):
             'submitted': True,
             'tracking_number': tracking_number,
             "profile": customer,
-            'states':states
+            'states':states,
+            "API_KEY":os.getenv('GET_STATE_AREA_API')
         })
 
     # Handle GET request
@@ -161,7 +159,8 @@ def schedule_pickup(request):
         'categories': ItemCategory.objects.all(),
         "profile": userInfo,
         'submitted': False,  # Ensures no undefined variable usage
-        'states': states
+        'states': states,
+        "API_KEY": os.getenv('GET_STATE_AREA_API')
     })
 
 def user_profile(request):
@@ -210,7 +209,8 @@ def edit_profile(request):
                 'Invalid': True,
                 'error_message': "All fields must be filled",
                 'profile': userInfo,  # Pass back the profile details and state selection
-                'states': states
+                'states': states,
+                "API_KEY": os.getenv('GET_STATE_AREA_API')
             })
 
         # Validate email
@@ -219,7 +219,8 @@ def edit_profile(request):
                 "profile": userInfo,
                 "Invalid": True,
                 "error_message": "Invalid email format. Please enter a valid email.",
-                 'states': states
+                 'states': states,
+                 "API_KEY": os.getenv('GET_STATE_AREA_API')
             })
 
         # Validate Phone Number
@@ -227,7 +228,8 @@ def edit_profile(request):
             return render(request, "customer/edituserprofile-customer.html", {
                 "profile": userInfo,
                 "phone_error": True,
-                "states" : states
+                "states" : states,
+                "API_KEY": os.getenv('GET_STATE_AREA_API')
             })
 
         elif not new_postalCode.isdigit() or len(new_postalCode) != 5 :
@@ -235,7 +237,8 @@ def edit_profile(request):
                 "profile": userInfo,
                 "error_message": 'Please enter digits only',
                 "Invalid": True,
-                "states" : states
+                "states" : states,
+                "API_KEY": os.getenv('GET_STATE_AREA_API')
             })
 
         elif len(new_postalCode) != 5 :
@@ -243,7 +246,8 @@ def edit_profile(request):
                 "profile": userInfo,
                 "error_message": 'Postal Code should have 5 digits',
                 "Invalid": True,
-                "states" : states
+                "states" : states,
+                "API_KEY": os.getenv('GET_STATE_AREA_API')
             })
 
         # if Validate passes only update userinfo
@@ -271,11 +275,16 @@ def edit_profile(request):
         userInfo.save()
         return render(request, "customer/edituserprofile-customer.html", {
             "profile": userInfo,
-            "update_success": True
+            "update_success": True,
+            "API_KEY": os.getenv('GET_STATE_AREA_API')
         })
 
     # reason to create a list at here, is to populate the option field while being able to set selected category
-    return render(request, "customer/edituserprofile-customer.html", {"profile": userInfo, "states": states})
+    return render(request, "customer/edituserprofile-customer.html", {
+        "profile": userInfo,
+        "states": states,
+        "API_KEY": os.getenv('GET_STATE_AREA_API')
+    })
 
 
 def edit_password(request):

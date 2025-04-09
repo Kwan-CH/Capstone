@@ -1,14 +1,20 @@
 from django.shortcuts import redirect, render
 from django.contrib import messages
 from database.models import Customer, Driver, Operator
+from dotenv import load_dotenv
+
 from .utils import authenticate_user
 from django.http import JsonResponse
-from Email import emailAutomation
+from utilities.Email import emailAutomation
 import requests
 
 # random password generation
 import secrets
 import string
+import  os
+import dotenv
+
+load_dotenv()
 
 # ori version
 # def signup(request):
@@ -59,7 +65,7 @@ def signup(request):
     url = "https://api.countrystatecity.in/v1/countries/MY/states"
 
     headers = {
-        'X-CSCAPI-KEY': 'S1FOTHE5OW56bXpRWDNVQmpwckhZMFliYXgyNU9nUkZKRm1DRlc5bA=='
+        'X-CSCAPI-KEY': os.getenv('GET_STATE_AREA_API')
     }
 
     response = requests.request("GET", url, headers=headers).json()
@@ -115,7 +121,7 @@ def signup(request):
 
         return JsonResponse({'success': True})
 
-    return render(request, 'e_waste/signup.html', {'states':states})
+    return render(request, 'e_waste/signup.html', {'states':states, 'API_KEY':os.getenv('GET_STATE_AREA_API')})
 
 def user_login(request):
 
