@@ -1,15 +1,16 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from database.models import Driver, ScheduleRequest, PickedUpRequest, CompletedRequest, Customer
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 from django.contrib import messages
+from django.db.models import CharField, Value
+from django.db.models.functions import Concat
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
-from django.utils.timezone import now
-from django.db.models import OuterRef, Subquery
 import json
 import re
+from state_data import getState
 
-
+states=getState.getState()
 
 def homepage_driver(request):
     driverID = request.session.get("user_id")  # Get logged-in user's ID
@@ -22,7 +23,10 @@ def homepage_driver(request):
 
 def pickup_details(request):
     driverID = request.session.get("user_id")
-    pickups = ScheduleRequest.objects.filter(driver_id=driverID, status="Approved").order_by('date', 'time') # Get user profile data#Sort by closest date and time
+    pickups = (ScheduleRequest.objects
+               .annotate(address=Concat('street', Value(', '), 'postalCode',
+                                        Value(', '), 'area', Value(', '), 'state', output_field=CharField()))
+               .filter(driver_id=driverID, status="Approved").order_by('date', 'time')) # Get user profile data#Sort by closest date and time
     userInfo = Driver.objects.only('profile_picture').get(driverID=driverID)
     return render(request, 'driver/pickupDetails.html', {'pickups': pickups, "profile": userInfo})
 
@@ -48,7 +52,10 @@ def update_pickup_status(request, requestID):
 
 def complete_pickup(request):
     driverID = request.session.get("user_id")
-    pickups = ScheduleRequest.objects.filter(driver_id=driverID, status="Picked Up").order_by('-date', '-time') #Sort by closest date and time
+    pickups = (ScheduleRequest.objects
+               .annotate(address=Concat('street', Value(', '), 'postalCode',
+                                        Value(', '), 'area', Value(', '), 'state', output_field=CharField()))
+               .filter(driver_id=driverID, status="Picked Up").order_by('-date', '-time')) #Sort by closest date and time
     userInfo = Driver.objects.only('profile_picture').get(driverID=driverID)
     return render(request, 'driver/completePick.html', {'pickups': pickups, "profile": userInfo})
 
@@ -77,7 +84,10 @@ def update_complete_status(request):
 
 def pickup_history(request):
     driverID = request.session.get("user_id")
-    pickups = ScheduleRequest.objects.filter(driver_id=driverID, status="Completed").order_by('-date', '-time') #Sort by closest date and time
+    pickups = (ScheduleRequest.objects
+               .annotate(address=Concat('street', Value(', '), 'postalCode',
+                                        Value(', '), 'area', Value(', '), 'state', output_field=CharField()))
+               .filter(driver_id=driverID, status="Completed").order_by('-date', '-time')) #Sort by closest date and time
     userInfo = Driver.objects.only('profile_picture').get(driverID=driverID)
     return render(request, 'driver/pickupHis.html', {"pickups": pickups, "profile": userInfo})
 
@@ -103,9 +113,6 @@ def user_profile(request):
             'new_profile_picture_url': userInfo.profile_picture.url
         })
 
-
-        return redirect('driver:user_profile')  # Redirect to refresh the page
-
     return render(request, "driver/userprofile-driver.html", {"profile": userInfo})
 
 
@@ -119,7 +126,8 @@ def edit_profile(request):
         new_phoneNumber = request.POST.get('contact_number')
         new_carplate = request.POST.get('carplatenumber')
         new_state = request.POST.get('state')
-        new_profile_pic = request.FILES.get("profile_picture") 
+        new_area = request.POST.get('area')
+        new_profile_pic = request.FILES.get("profile_picture")
 
         # Check if any field is empty
         if not new_name or not new_email or not new_phoneNumber or not new_carplate or not new_state :
@@ -127,9 +135,7 @@ def edit_profile(request):
                 'Invalid': True,
                 'error_message': "All fields must be filled",
                 'profile': userInfo,  # Pass back the profile details and state selection
-                'states': ['Johor', 'Kedah', 'Kelantan', 'Kuala Lumpur', 'Labuan', 'Melaka',
-                           'Negeri Sembilan', 'Pahang', 'Perak', 'Perlis', 'Pulau Pinang', 'Sabah', 'Sarawak',
-                           'Selangor', 'Terengganu', 'Putrajaya']
+                'states': states
             })
 
         # Validate email
@@ -145,9 +151,7 @@ def edit_profile(request):
             return render(request, "driver/edituserprofile-driver.html", {
                 "profile": userInfo,
                 "phone_error": True,
-                "states" : ['Johor', 'Kedah', 'Kelantan', 'Kuala Lumpur', 'Labuan', 'Melaka',
-                            'Negeri Sembilan', 'Pahang', 'Perak', 'Perlis', 'Pulau Pinang', 'Sabah', 'Sarawak',
-                            'Selangor', 'Terengganu', 'Putrajaya']
+                "states" : states
             })
 
         # if Validate passes only update userinfo
@@ -156,6 +160,7 @@ def edit_profile(request):
         userInfo.phoneNumber = new_phoneNumber
         userInfo.plateNumber = new_carplate
         userInfo.stateCovered = new_state
+        userInfo.areaCovered = new_area
 
         # ✅ Handle Profile Picture Update
         if new_profile_pic:
@@ -177,9 +182,6 @@ def edit_profile(request):
         })
 
     # reason to create a list at here, is to populate the option field while being able to set selected category
-    states = ['Johor', 'Kedah', 'Kelantan', 'Kuala Lumpur', 'Labuan', 'Melaka',
-              'Negeri Sembilan', 'Pahang', 'Perak', 'Perlis', 'Pulau Pinang', 'Sabah', 'Sarawak',
-              'Selangor', 'Terengganu', 'Putrajaya']
     return render(request, "driver/edituserprofile-driver.html", {"profile": userInfo, "states": states})
 
 #function for getting user address
@@ -243,8 +245,6 @@ def edit_password(request):
             "profile": driver,
             "update_success": True
         })
-
-       
 
     return render(request, 'driver/editpassword-driver.html', {"profile": driver})
 

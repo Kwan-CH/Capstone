@@ -55,11 +55,8 @@
                 <a href="{% url 'customer:edit_password' %}" id="editpassword">Edit Password</a>
             </div>
 
-            <label>Address</label>
+            <label>Full Address</label>
             <input type="text" class="input" value="{{profile.address}}" disabled>
-
-            <label>State</label>
-            <input type="text" class="input" value="{{profile.state}}" disabled>
 
             <a href="{% url 'customer:edit_profile' %}" id="edit-profile">Edit Your Profile</a>
         </div>

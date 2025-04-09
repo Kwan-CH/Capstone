@@ -1,13 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
     document.querySelector(".submit").addEventListener("click", function (event) {
         event.preventDefault();
-        if (validateForm()) {
-            showConfirmationPopup(); // Show confirmation popup only if validation passes
-        }
-    });
-
-    document.querySelector(".proceed").addEventListener("click", function () {
-        document.getElementById("schedule-pickup-form").submit(); // Submit form after confirmation
+        showConfirmationPopup(); // Show confirmation popup first
     });
 });
 
@@ -23,7 +17,7 @@ function closeConfirmationPopup() {
 
 // Show Tracking Number Popup After Confirmation
 function showTrackingPopup() {
-    closeConfirmationPopup();
+    closeConfirmationPopup(); 
     document.getElementById("tracking-popup").style.display = "flex";
 }
 

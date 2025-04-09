@@ -6,14 +6,19 @@ from database.models import Customer, ScheduleRequest, ItemCategory, CustomerRed
 from django.core.paginator import Paginator
 from django.db.models import F
 from django.db.models import Q
+from django.db.models import CharField, Value
+from django.db.models.functions import Concat
 from itertools import chain
 from django.core.paginator import Paginator
 import json, re
 from django.http import JsonResponse
 from datetime import datetime, timedelta
 from django.utils.timezone import now
+from state_data import getState
 from django.core.files.storage import default_storage
 
+
+states=getState.getState()
 
 # from .utils import authenticate_user
 
@@ -73,19 +78,37 @@ def schedule_pickup(request):
     customer_id = request.session.get("user_id")
 
     userInfo = Customer.objects.only('profile_picture').get(customerID=customer_id)  # Get user profile data
-    pickup_request = None
     if request.method == 'POST':
         category_id = request.POST.get('waste_type')
         quantity = request.POST.get('quantity_items')
         weight = request.POST.get('quantity_weight')
-        address = request.POST.get('address')
+        street = request.POST.get('street')
+        postalCode = request.POST.get('postal_code')
+        area = request.POST.get('area')
+        stateSelected = request.POST.get('state')
         pickup_date = request.POST.get('pickup_date')
         pickup_time = request.POST.get('pickup_time')
 
         # Get the logged-in user
-
         if not customer_id:
             return redirect("login")  # Redirect to login if session expired
+        elif len(postalCode) != 5:
+            return render(request, 'customer/schedulePick.html', {
+                        'categories': ItemCategory.objects.all(),
+                        "profile": userInfo,
+                        'submitted': False,  # Ensures no undefined variable usage
+                        'states': states,
+                        'error': 'Postal code should have 5 digits'
+                    })
+        elif not postalCode.isdigit():
+            print('posatl code  not digit')
+            return render(request, 'customer/schedulePick.html', {
+                        'categories': ItemCategory.objects.all(),
+                        "profile": userInfo,
+                        'submitted': False,  # Ensures no undefined variable usage
+                        'states': states,
+                        'error': 'Please enter digits only for postal code!'
+                    })
 
         try:
             customer = Customer.objects.get(customerID=customer_id)  # Fetch customer object
@@ -105,7 +128,10 @@ def schedule_pickup(request):
             category=category,
             quantity=quantity,
             weight=weight,
-            address=address,
+            street=street,
+            postalCode=postalCode,
+            area=area,
+            state=stateSelected,
             date=pickup_date,
             time=pickup_time,
             status="Pending",
@@ -113,6 +139,7 @@ def schedule_pickup(request):
             operator=None  # Operator will be assigned later
         )
         pickup_request.trackingnumber = pickup_request.generate_tracking_number()
+        print(pickup_request)
         pickup_request.save()
 
         tracking_number = pickup_request.trackingnumber  # Store tracking number
@@ -124,20 +151,25 @@ def schedule_pickup(request):
             'categories': ItemCategory.objects.all(),
             'submitted': True,
             'tracking_number': tracking_number,
-            "profile": customer
+            "profile": customer,
+            'states':states
         })
 
     # Handle GET request
+
     return render(request, 'customer/schedulePick.html', {
         'categories': ItemCategory.objects.all(),
         "profile": userInfo,
         'submitted': False,  # Ensures no undefined variable usage
-        # 'tracking_number': tracking_number
+        'states': states
     })
 
 def user_profile(request):
     customerID = request.session.get("user_id")
-    userInfo = Customer.objects.get(customerID=customerID)
+    userInfo = (Customer.objects
+                .annotate(address=Concat('street', Value(', '), 'postalCode',
+                                         Value(', '), 'area', Value(', '), 'state', output_field=CharField()))
+                .get(customerID=customerID))
 
     if request.method == 'POST' and request.FILES.get('profile_picture'):
         customerID = request.session.get("user_id")  # Get logged-in user
@@ -165,44 +197,62 @@ def edit_profile(request):
         new_name = request.POST.get('fullname')
         new_email = request.POST.get('email')
         new_phoneNumber = request.POST.get('contact_number')
-        new_address = request.POST.get('address')
+        new_street = request.POST.get('street')
+        new_postalCode = request.POST.get('postal_code')
+        new_area = request.POST.get('area')
         new_state = request.POST.get('state')
         new_profile_pic = request.FILES.get("profile_picture")  
 
         # Check if any field is empty
-        if not new_name or not new_email or not new_phoneNumber or not new_address or not new_state :
+        if (not new_name or not new_email or not new_phoneNumber or not new_street
+                or not new_postalCode or not new_area or not new_state) :
             return render(request, 'customer/edituserprofile-customer.html', {
                 'Invalid': True,
                 'error_message': "All fields must be filled",
                 'profile': userInfo,  # Pass back the profile details and state selection
-                'states': ['Johor', 'Kedah', 'Kelantan', 'Kuala Lumpur', 'Labuan', 'Melaka',
-                           'Negeri Sembilan', 'Pahang', 'Perak', 'Perlis', 'Pulau Pinang', 'Sabah', 'Sarawak',
-                           'Selangor', 'Terengganu', 'Putrajaya']
+                'states': states
             })
 
         # Validate email
-        if not re.match(r"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+$", new_email):
+        elif not re.match(r"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+$", new_email):
              return render(request, "customer/edituserprofile-customer.html", {
                 "profile": userInfo,
                 "Invalid": True,
                 "error_message": "Invalid email format. Please enter a valid email.",
+                 'states': states
             })
 
         # Validate Phone Number
-        if not new_phoneNumber.isdigit():
+        elif not new_phoneNumber.isdigit():
             return render(request, "customer/edituserprofile-customer.html", {
                 "profile": userInfo,
                 "phone_error": True,
-                "states" : ['Johor', 'Kedah', 'Kelantan', 'Kuala Lumpur', 'Labuan', 'Melaka',
-                            'Negeri Sembilan', 'Pahang', 'Perak', 'Perlis', 'Pulau Pinang', 'Sabah', 'Sarawak',
-                            'Selangor', 'Terengganu', 'Putrajaya']
+                "states" : states
+            })
+
+        elif not new_postalCode.isdigit() or len(new_postalCode) != 5 :
+            return render(request, "customer/edituserprofile-customer.html", {
+                "profile": userInfo,
+                "error_message": 'Please enter digits only',
+                "Invalid": True,
+                "states" : states
+            })
+
+        elif len(new_postalCode) != 5 :
+            return render(request, "customer/edituserprofile-customer.html", {
+                "profile": userInfo,
+                "error_message": 'Postal Code should have 5 digits',
+                "Invalid": True,
+                "states" : states
             })
 
         # if Validate passes only update userinfo
         userInfo.name = new_name
         userInfo.email = new_email
         userInfo.phoneNumber = new_phoneNumber
-        userInfo.address = new_address
+        userInfo.street = new_street
+        userInfo.postalCode = new_postalCode
+        userInfo.area = new_area
         userInfo.state = new_state
 
         # ✅ Handle Profile Picture Update
@@ -225,25 +275,8 @@ def edit_profile(request):
         })
 
     # reason to create a list at here, is to populate the option field while being able to set selected category
-    states = ['Johor', 'Kedah', 'Kelantan', 'Kuala Lumpur', 'Labuan', 'Melaka',
-              'Negeri Sembilan', 'Pahang', 'Perak', 'Perlis', 'Pulau Pinang', 'Sabah', 'Sarawak',
-              'Selangor', 'Terengganu', 'Putrajaya']
     return render(request, "customer/edituserprofile-customer.html", {"profile": userInfo, "states": states})
 
-#function for getting user address
-def get_user_address(request):
-    # Get the user_id from session
-    user_id = request.session.get("user_id")
-
-    if not user_id:
-        return JsonResponse({"error": "User not authenticated"}, status=401)
-
-    try:
-        # Fetch customer using session user_id
-        customer = Customer.objects.get(customerID=user_id)
-        return JsonResponse({"address": customer.address})
-    except Customer.DoesNotExist:
-        return JsonResponse({"error": "Address not found"}, status=404)
 
 def edit_password(request):
     customerID = request.session.get("user_id")
@@ -320,8 +353,10 @@ def history_all(request):
                         Q(status='Completed') | Q(status='Rejected'),
                         customer__customerID=customerID)
                       .select_related('category')
-                      .values('trackingnumber', 'address', 'category__itemType', 'date', 'quantity', 'status', 'rejectedReason__reason')
+                      .values('trackingnumber', 'category__itemType', 'date', 'quantity', 'status', 'rejectedReason__reason')
                       .annotate(total=F('quantity') * F('category__pointsGiven'))
+                      .annotate(address=Concat('street', Value(', '), 'postalCode',
+                                               Value(', '), 'area', Value(', '), 'state', output_field=CharField()))
                       .order_by('-date', '-time')  # Sort by date (latest first)
                       )
 
@@ -361,8 +396,10 @@ def device_recycled(request):
                         Q(status='Completed') | Q(status='Rejected'),
                         customer__customerID=customerID)
                        .select_related('category')
-                       .values('trackingnumber', 'address', 'category__itemType', 'date', 'quantity', 'status', 'rejectedReason__reason')
+                       .values('trackingnumber', 'category__itemType', 'date', 'quantity', 'status', 'rejectedReason__reason')
                        .annotate(total=F('quantity') * F('category__pointsGiven')) #this here is to calculate the total points using F()
+                       .annotate(address=Concat('street', Value(', '), 'postalCode',
+                                                Value(', '), 'area', Value(', '), 'state', output_field=CharField()))
                        .order_by('-date', '-time') # order by date
                         )
 

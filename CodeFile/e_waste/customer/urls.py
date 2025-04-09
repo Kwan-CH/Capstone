@@ -14,7 +14,6 @@ urlpatterns = [
 
     path('user_profile/', user_profile, name='user_profile'), #Customer Profile
     path('edit_profile/', edit_profile, name='edit_profile'), # Edit customer profile
-    path('get_user_address/', get_user_address, name='get_user_address'), # Get user address
     path('edit_password/', edit_password, name='edit_password'), # Edit customer password
 
     path('waste_category/', waste_category, name='waste_category'), #Waste category page

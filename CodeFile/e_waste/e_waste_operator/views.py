@@ -2,18 +2,26 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib import messages
 from database.models import Driver, ScheduleRequest, Reason, Voucher, Operator, CompletedRequest
 from django.db.models import Q
+from django.db.models import CharField, Value
+from django.db.models.functions import Concat
 from Email import emailAutomation
 from django.core.paginator import Paginator
 import json
 from django.http import JsonResponse
+from itertools import chain
+from state_data import getState
 
-
+states=getState.getState()
 
 def homepage_operator(request):
     return render(request, 'operator/operator-homepage.html')
 
 def manageReq(request):
-    requests = ScheduleRequest.objects.filter(~Q(status='Completed'), ~Q(status='Rejected')).order_by('-requestID') ## '-date', '-time'
+    requests = (ScheduleRequest.objects
+                .annotate(address=Concat('street', Value(', '), 'postalCode',
+                                         Value(', '), 'area', Value(', '), 'state', output_field=CharField()))
+                .filter(~Q(status='Completed'), ~Q(status='Rejected'))
+                .order_by('-requestID')) ## '-date', '-time'
     reasons = Reason.objects.all()
     return render(request, 'operator/operator-manageReq.html',{'requests': requests, 'reasons':reasons})
 
@@ -24,8 +32,15 @@ def update_request_status(requestID):
 
 def assign_driver_page(request):
     requestID = request.GET.get('requestID')
-    requestInfo = ScheduleRequest.objects.filter(requestID= requestID).first()
-    drivers = Driver.objects.all()
+    requestInfo = (ScheduleRequest.objects
+                   .annotate(address=Concat('street', Value(', '), 'postalCode',
+                                            Value(', '), 'area', Value(', '), 'state', output_field=CharField()))
+                   .filter(requestID= requestID).first())
+    priority_driver = Driver.objects.filter(areaCovered=requestInfo.area)
+    non_priority_driver = Driver.objects.filter(~Q(areaCovered=requestInfo.area))
+
+    drivers = list(chain(priority_driver, non_priority_driver))
+
     return render(request, 'operator/assign-driver.html', {'drivers': drivers, 'request':requestInfo})
 
 def assign_driver(request):
@@ -35,7 +50,11 @@ def assign_driver(request):
             requestID = data.get('requestID')
             driverID = data.get('driverID')
             if requestID and driverID:
-                selectedRequest = ScheduleRequest.objects.filter(requestID=requestID).first()
+                selectedRequest = (ScheduleRequest.objects
+                                   .annotate(address=Concat('street', Value(', '), 'postalCode',
+                                                            Value(', '), 'area', Value(', '), 'state',
+                                                            output_field=CharField()))
+                                   .filter(requestID=requestID).first())
                 driver = Driver.objects.filter(driverID=driverID).first()
                 operator = Operator.objects.filter(operatorID = request.session.get('user_id')).first()
                 selectedRequest.driver = driver
@@ -77,22 +96,16 @@ def reject_request(request):
     return JsonResponse({"success": False, "message": "Invalid request method."}, status=405)
 
 def operator_create_acc_page(request):
-    states = ["Johor", "Kedah", "Kelantan", "Melaka", "Negeri Sembilan",
-              "Pahang", "Perak", "Perlis", "Pulau Pinang", "Sabah", "Sarawak",
-              "Selangor", "Terengganu", "Kuala Lumpur", "Labuan", "Putrajaya"]
     return render(request, 'operator/operator-create_acc.html', {"states":states})
 
 def save_driver_account(request):
-    states = ["Johor", "Kedah", "Kelantan", "Melaka", "Negeri Sembilan",
-              "Pahang", "Perak", "Perlis", "Pulau Pinang", "Sabah", "Sarawak",
-              "Selangor", "Terengganu", "Kuala Lumpur", "Labuan", "Putrajaya"]
-
     if request.method == 'POST':
         name = request.POST['full_name']
         email = request.POST['email']
         password = request.POST['password']
         contact = request.POST['phone_number']
-        state = request.POST.get('state_covered')
+        stateCovered = request.POST.get('state_covered')
+        areaCovered = request.POST.get('area_covered')
         carPlate = request.POST['car_plate']
 
         # Check if email already exists
@@ -116,7 +129,13 @@ def save_driver_account(request):
             messages.error(request, "Please select a state before proceeding")
             return render(request, 'operator/operator-create_acc.html',{"formData": request.POST, "states":states})
 
-        new_user = Driver(name=name, email=email, password=password,phoneNumber=contact, plateNumber=carPlate, stateCovered=state)
+        new_user = Driver(name=name,
+                          email=email,
+                          password=password,
+                          phoneNumber=contact,
+                          plateNumber=carPlate,
+                          stateCovered=stateCovered,
+                          areaCovered=areaCovered)
         new_user.save()
 
         return render(request, 'operator/operator-create_acc.html', {"Success":True, "states":states})
@@ -174,7 +193,9 @@ def completed_request(request):
     operatorID = request.session.get('user_id')
     completedRequests = (CompletedRequest.objects.filter(requestID__operator__operatorID=operatorID).select_related('ScheduleRequest', 'ItemCategory')
                          .values('requestID__customer__name', 'completed_date', 'completed_time',
-                                 'requestID__customer__address','requestID__category__itemType')
+                                 'requestID__category__itemType')
+                         .annotate(address=Concat('requestID__street', Value(', '), 'requestID__postalCode',
+                                                  Value(', '), 'requestID__area', Value(', '), 'requestID__state', output_field=CharField()))
                          .order_by('-completed_date', 'completed_time')  # Order by latest date first
                          )
 

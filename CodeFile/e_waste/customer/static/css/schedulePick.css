@@ -11,24 +11,23 @@ body {
 
 .status-title {
     font-family: 'Sansita Swashed', cursive;
-    font-size: 32px;
-    color: #2d621a;
+    font-size: 50px;
+    color: #2d621a;  
     text-align: center;
-    margin-bottom: 10px;
-    margin-top: 10px;
+    padding: 40px; 
 }
 
 .progress-box {
-    width: 550px;
-    height: 25px;
-    background-color: #97B07A;
-    border-radius: 15px;
-    margin: -20px auto 20px auto;
+    width: 550px; 
+    height: 40px; 
+    background-color: #97B07A; 
+    border-radius: 15px; 
+    margin: -30px auto 20px auto; 
 }
 
 .container {
     width: 80%;
-    max-width: 900px;
+    max-width: 1000px;
     margin: 40px auto;
     padding: 20px;
     background: #D9DFCE;
@@ -38,9 +37,40 @@ body {
 }
 
 p {
-    font-family: 'Inter', sans-serif;
+  font-family: 'Inter', sans-serif;
+  font-weight: bold;
+  font-size: 17px;
+}
+
+.address-container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.address-btn {
+    background-color: #487319;
+    color: white;
+    padding: 6px 10px;
+    font-size: 14px;
     font-weight: bold;
-    font-size: 17px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 23px;
+}
+
+.address-btn:hover {
+    background-color: #2d621a;
+}
+
+textarea[placeholder] {
+    padding-top: 15px;
+    padding-left: 10px;
+    font-size: 14px;
+}
+
+.inputstate {
+    width: 800px;
 }
 
 /* Form Labels */
@@ -51,9 +81,21 @@ label {
     text-align: left;
 }
 
+.codecityside {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.margin {
+    margin-right: 100px;
+}
+
+.input2 {
+    width: 430px;
+}
+
 /* -------------------------Input Fields------------------------*/
-select,
-input {
+select, input {
     width: 100%;
     padding: 10px;
     margin-bottom: 10px;
@@ -75,14 +117,11 @@ select {
 }
 
 .btn {
-    padding: 18px 35px;
+    padding: 10px 20px;
     border: none;
-    border-radius: 10px;
+    border-radius: 5px;
     cursor: pointer;
-    font-size: 18px;
-    background-color: #186421;
-    color: white;
-    margin-top: 10px;
+    font-size: 16px;
 }
 
 .submit {
@@ -250,5 +289,16 @@ select {
 textarea[placeholder] {
     padding-top: 15px;
     padding-left: 10px;
-    font-size: 14px;
+    font-size:14px;
+}
+
+.btn {
+    padding: 18px 35px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    background-color: #186421;
+    color: white;
+    margin-top:10px;
 }
