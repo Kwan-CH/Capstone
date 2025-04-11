@@ -42,7 +42,11 @@
                     <table>
                         <tr>
                             <td>📦 <strong>Pickup {{ item.trackingnumber }}</strong></td>
-                            <td>📍 {{ item.address }}</td>
+                            {% comment %} <td>📍 {{ item.address }}</td> {% endcomment %}
+                            <td class="address-row">
+                                <span class="address-icon">📍</span>
+                                <span class="address-word">{{ item.address }}</span>
+                            </td>
                         </tr>
                         <tr>
                             <td>🗑️ Waste: {{ item.category__itemType }}</td>

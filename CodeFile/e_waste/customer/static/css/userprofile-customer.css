@@ -1,10 +1,15 @@
 body {
 
-    font-family: 'Sansita Swashed', cursive;
+    /* font-family: 'Sansita Swashed', cursive; */
     background-color: #f7f8ed;
     text-align: center;
     padding: 40px;
     margin-top: 20;
+}
+
+h1 {
+    font-family: 'Sansita Swashed', cursive;
+
 }
 
 .profile-form,
@@ -48,7 +53,7 @@ label {
     display: block;
     margin-top: 15px;
     margin-bottom: 5px;
-}   
+}
 
 .password-container {
     display: flex;
@@ -75,7 +80,7 @@ label {
 
 #editpassword:hover {
     background-color: #3e5f13;
-    
+
 }
 
 #edit-profile {

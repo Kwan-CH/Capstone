@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from database.models import Driver, ScheduleRequest, PickedUpRequest, CompletedRequest, Customer
 from django.http import JsonResponse
 from django.contrib import messages
-from django.db.models import CharField, Value
+from django.db.models import CharField, Value, When, Case
 from django.db.models.functions import Concat
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
@@ -18,6 +18,8 @@ load_dotenv()
 
 states=getState.getState()
 
+excluded_states = ["Kuala Lumpur", "Putrajaya", "Labuan"]
+
 def homepage_driver(request):
     driverID = request.session.get("user_id")  # Get logged-in user's ID
     if not driverID:
@@ -29,10 +31,37 @@ def homepage_driver(request):
 
 def pickup_details(request):
     driverID = request.session.get("user_id")
-    pickups = (ScheduleRequest.objects
-               .annotate(address=Concat('street', Value(', '), 'postalCode',
-                                        Value(', '), 'area', Value(', '), 'state', output_field=CharField()))
-               .filter(driver_id=driverID, status="Approved").order_by('date', 'time')) # Get user profile data#Sort by closest date and time
+    # pickups = (ScheduleRequest.objects
+    #            .annotate(address=Concat('street', Value(', '), 'postalCode',
+    #                                     Value(', '), 'area', Value(', '), 'state', output_field=CharField()))
+    #            .filter(driver_id=driverID, status="Approved").order_by('date', 'time')) # Get user profile data#Sort by closest date and time
+
+    #Use use case for address formatting
+    pickups = (
+    ScheduleRequest.objects
+    .annotate(
+        address=Case(
+            When(state__in=excluded_states,
+                 then=Concat(
+                     'street', Value(', '),
+                     'postalCode', Value(', '),
+                     'state',
+                     output_field=CharField()
+                 )),
+            default=Concat(
+                'street', Value(', '),
+                'postalCode', Value(', '),
+                'area', Value(', '),
+                'state',
+                output_field=CharField()
+            ),
+            output_field=CharField()
+        )
+    )
+    .filter(driver_id=driverID, status="Approved")
+    .order_by('date', 'time')  # Sort by closest date and time
+    )
+
     userInfo = Driver.objects.only('profile_picture').get(driverID=driverID)
     return render(request, 'driver/pickupDetails.html', {'pickups': pickups, "profile": userInfo})
 
@@ -58,10 +87,37 @@ def update_pickup_status(request, requestID):
 
 def complete_pickup(request):
     driverID = request.session.get("user_id")
-    pickups = (ScheduleRequest.objects
-               .annotate(address=Concat('street', Value(', '), 'postalCode',
-                                        Value(', '), 'area', Value(', '), 'state', output_field=CharField()))
-               .filter(driver_id=driverID, status="Picked Up").order_by('-date', '-time')) #Sort by closest date and time
+    # pickups = (ScheduleRequest.objects
+    #            .annotate(address=Concat('street', Value(', '), 'postalCode',
+    #                                     Value(', '), 'area', Value(', '), 'state', output_field=CharField()))
+    #            .filter(driver_id=driverID, status="Picked Up").order_by('-date', '-time')) #Sort by closest date and time
+
+    #Use use case for address formatting
+    pickups = (
+    ScheduleRequest.objects
+    .annotate(
+        address=Case(
+            When(state__in=excluded_states,
+                 then=Concat(
+                     'street', Value(', '),
+                     'postalCode', Value(', '),
+                     'state',
+                     output_field=CharField()
+                 )),
+            default=Concat(
+                'street', Value(', '),
+                'postalCode', Value(', '),
+                'area', Value(', '),
+                'state',
+                output_field=CharField()
+            ),
+            output_field=CharField()
+        )
+    )
+    .filter(driver_id=driverID, status="Picked Up")
+    .order_by('-date', '-time')  # Sort by most recent pickups
+    )
+
     userInfo = Driver.objects.only('profile_picture').get(driverID=driverID)
     return render(request, 'driver/completePick.html', {'pickups': pickups, "profile": userInfo})
 
@@ -90,10 +146,37 @@ def update_complete_status(request):
 
 def pickup_history(request):
     driverID = request.session.get("user_id")
-    pickups = (ScheduleRequest.objects
-               .annotate(address=Concat('street', Value(', '), 'postalCode',
-                                        Value(', '), 'area', Value(', '), 'state', output_field=CharField()))
-               .filter(driver_id=driverID, status="Completed").order_by('-date', '-time')) #Sort by closest date and time
+    # pickups = (ScheduleRequest.objects
+    #            .annotate(address=Concat('street', Value(', '), 'postalCode',
+    #                                     Value(', '), 'area', Value(', '), 'state', output_field=CharField()))
+    #            .filter(driver_id=driverID, status="Completed").order_by('-date', '-time')) #Sort by closest date and time
+
+    #Use use case for address formatting
+    pickups = (
+    ScheduleRequest.objects
+    .annotate(
+        address=Case(
+            When(state__in=excluded_states,
+                 then=Concat(
+                     'street', Value(', '),
+                     'postalCode', Value(', '),
+                     'state',
+                     output_field=CharField()
+                 )),
+            default=Concat(
+                'street', Value(', '),
+                'postalCode', Value(', '),
+                'area', Value(', '),
+                'state',
+                output_field=CharField()
+            ),
+            output_field=CharField()
+        )
+    )
+    .filter(driver_id=driverID, status="Completed")
+    .order_by('-date', '-time')  # Sort by most recent pickups
+)
+    
     userInfo = Driver.objects.only('profile_picture').get(driverID=driverID)
     return render(request, 'driver/pickupHis.html', {"pickups": pickups, "profile": userInfo})
 
@@ -150,18 +233,19 @@ def edit_profile(request):
              return render(request, "driver/edituserprofile-driver.html", {
                 "profile": userInfo,
                 "Invalid": True,
+                "states" : states,
                 "error_message": "Invalid email format. Please enter a valid email.",
                  "API_KEY": os.getenv('GET_STATE_AREA_API')
             })
 
         # Validate Phone Number
-        if not new_phoneNumber.isdigit():
+        if not new_phoneNumber.isdigit() or not new_phoneNumber.startswith("01") or len(new_phoneNumber) not in [10,11]:
             return render(request, "driver/edituserprofile-driver.html", {
-                "profile": userInfo,
-                "phone_error": True,
-                "states" : states,
-                "API_KEY": os.getenv('GET_STATE_AREA_API')
-            })
+            "profile": userInfo,
+            "phone_error": True,
+            "states" : states,
+            "API_KEY": os.getenv('GET_STATE_AREA_API')
+        })
 
         # if Validate passes only update userinfo
         userInfo.name = new_name

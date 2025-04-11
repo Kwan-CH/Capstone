@@ -1,8 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib import messages
 from database.models import Driver, ScheduleRequest, Reason, Voucher, Operator, CompletedRequest
-from django.db.models import Q
-from django.db.models import CharField, Value
+from django.db.models import Q, Case, CharField, Value, When
 from django.db.models.functions import Concat
 from utilities.Email import emailAutomation
 from django.core.paginator import Paginator
@@ -18,15 +17,33 @@ load_dotenv()
 
 states=getState.getState()
 
+excluded_states = ['Kuala Lumpur', 'Putrajaya', 'Labuan']
+
 def homepage_operator(request):
     return render(request, 'operator/operator-homepage.html')
 
 def manageReq(request):
-    requests = (ScheduleRequest.objects
-                .annotate(address=Concat('street', Value(', '), 'postalCode',
-                                         Value(', '), 'area', Value(', '), 'state', output_field=CharField()))
-                .filter(~Q(status='Completed'), ~Q(status='Rejected'))
-                .order_by('-requestID')) ## '-date', '-time'
+    # requests = (ScheduleRequest.objects
+    #             .annotate(address=Concat('street', Value(', '), 'postalCode',
+    #                                      Value(', '), 'area', Value(', '), 'state', output_field=CharField()))
+    #             .filter(~Q(status='Completed'), ~Q(status='Rejected'))
+    #             .order_by('-requestID')) ## '-date', '-time'
+
+    #Use Case to handle address formatting based on state [KL, Putrajaya, Labuan]
+    requests = (
+        ScheduleRequest.objects
+        .annotate(
+            address=Case(
+                When(state__in=excluded_states,
+                    then=Concat('street', Value(', '), 'postalCode', Value(', '), 'state', output_field=CharField())),
+                default=Concat('street', Value(', '), 'postalCode', Value(', '), 'area', Value(', '), 'state', output_field=CharField()),
+                output_field=CharField()
+            )
+        )
+        .filter(~Q(status='Completed'), ~Q(status='Rejected'))
+        .order_by('-requestID')
+    )
+
     reasons = Reason.objects.all()
     return render(request, 'operator/operator-manageReq.html',{'requests': requests, 'reasons':reasons})
 
@@ -141,13 +158,13 @@ def save_driver_account(request):
                 "API_KEY": os.getenv('GET_STATE_AREA_API')
             })
 
-        elif not contact.isdigit():
-            messages.error(request, "Contact number should not have alphabet")
-            return render(request, 'operator/operator-create_acc.html',{
+        elif not contact.isdigit() or not contact.startswith("01") or len(contact) not in [10,11]:
+            messages.error(request, "Please enter a valid phone number")
+            return render(request, "operator/operator-create_acc.html", {
                 "formData": request.POST,
                 "states":states,
                 "API_KEY": os.getenv('GET_STATE_AREA_API')
-            })
+        })
 
         elif not stateCovered:
             messages.error(request, "Please select a state before proceeding")
@@ -156,7 +173,8 @@ def save_driver_account(request):
                 "states":states,
                 "API_KEY": os.getenv('GET_STATE_AREA_API')
             })
-        elif not areaCovered:
+
+        elif stateCovered not in excluded_states and not areaCovered:
             messages.error(request, "Please select an area before proceeding")
             return render(request, 'operator/operator-create_acc.html',{
                 "formData": request.POST,
@@ -233,13 +251,46 @@ def edit_reward(request, voucherID):
 
 def completed_request(request):
     operatorID = request.session.get('user_id')
-    completedRequests = (CompletedRequest.objects.filter(requestID__operator__operatorID=operatorID).select_related('ScheduleRequest', 'ItemCategory')
-                         .values('requestID__customer__name', 'completed_date', 'completed_time',
-                                 'requestID__category__itemType')
-                         .annotate(address=Concat('requestID__street', Value(', '), 'requestID__postalCode',
-                                                  Value(', '), 'requestID__area', Value(', '), 'requestID__state', output_field=CharField()))
-                         .order_by('-completed_date', 'completed_time')  # Order by latest date first
-                         )
+    # completedRequests = (CompletedRequest.objects.filter(requestID__operator__operatorID=operatorID).select_related('ScheduleRequest', 'ItemCategory')
+    #                      .values('requestID__customer__name', 'completed_date', 'completed_time',
+    #                              'requestID__category__itemType')
+    #                      .annotate(address=Concat('requestID__street', Value(', '), 'requestID__postalCode',
+    #                                               Value(', '), 'requestID__area', Value(', '), 'requestID__state', output_field=CharField()))
+    #                      .order_by('-completed_date', 'completed_time')  # Order by latest date first
+    #                      )
+
+    # Use Case to handle address formatting based on state [KL, Putrajaya, Labuan]
+    completedRequests = (
+        CompletedRequest.objects
+        .filter(requestID__operator__operatorID=operatorID)
+        .select_related('requestID', 'requestID__customer', 'requestID__category')  # optimize joins
+        .values(
+            'requestID__customer__name',
+            'completed_date',
+            'completed_time',
+            'requestID__category__itemType'
+        )
+        .annotate(
+            address=Case(
+                When(requestID__state__in=excluded_states,
+                    then=Concat(
+                        'requestID__street', Value(', '),
+                        'requestID__postalCode', Value(', '),
+                        'requestID__state',
+                        output_field=CharField()
+                    )),
+                default=Concat(
+                    'requestID__street', Value(', '),
+                    'requestID__postalCode', Value(', '),
+                    'requestID__area', Value(', '),
+                    'requestID__state',
+                    output_field=CharField()
+                ),
+                output_field=CharField()
+            )
+        )
+        .order_by('-completed_date', 'completed_time')
+    )
 
     paginator = Paginator(completedRequests, 5)
     page = request.GET.get('page')

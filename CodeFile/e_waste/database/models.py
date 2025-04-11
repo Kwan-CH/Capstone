@@ -11,13 +11,13 @@ class Customer (models.Model):
     # age = models.IntegerField()
     email = models.EmailField(max_length=100, unique=True)
     password = models.CharField(max_length=200)
-    phoneNumber = models.IntegerField()
+    phoneNumber = models.CharField(max_length=15)
     street = models.CharField(max_length=255, null=True)
     postalCode = models.CharField(max_length=20, null=True)
     area = models.CharField(max_length=50, null=True)
     state = models.CharField(max_length=50)
     points = models.IntegerField(blank = True, null = True, default=0)
-    profile_picture = models.ImageField(upload_to='profile_pics/', null=True, blank=True)  
+    profile_picture = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
 
     def save(self, *args, **kwargs):
         # if not self.pk or Customer.objects.get(pk=self.pk).password != self.password:

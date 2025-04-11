@@ -40,7 +40,7 @@
                         <td>⏰ Time: {{ voucher.time|time:"h:i A" }}</td>
                     </tr>
                 </table>
-                <div class="points-deducted">Points Deducted: {{ voucher.voucher__pointsRequired }} points</div>
+                <div class="points-deducted">Points Deducted: -{{ voucher.voucher__pointsRequired }} points</div>
                 <div class="show-qr">
                     {% comment %} <button id="show-qr">🎁 Click here to view QR</button> {% endcomment %}
                     <button class="show-qr qr-code">🎁 Click here to view QR</button>

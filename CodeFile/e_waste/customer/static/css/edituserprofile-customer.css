@@ -10,6 +10,11 @@ body {
     margin-bottom: 30px;
 }
 
+h1 {
+    font-family: 'Sansita Swashed', cursive;
+
+}
+
 .container-bottom {
     display: flex;
     flex-direction: column;
@@ -29,7 +34,8 @@ body {
     margin-bottom: 5px;
 }
 
-.input-container input, select {
+.input-container input,
+select {
     background-color: #f8f8ff;
     padding: 1rem;
     padding-right: 3rem;
@@ -41,6 +47,7 @@ body {
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     font-family: 'Inter', sans-serif;
     font-size: 14px;
+    box-sizing: border-box;
 }
 
 .container-bottom p {
@@ -63,6 +70,7 @@ body {
     border-radius: 0.5rem;
     box-shadow: 2.5px 3px 0 #000;
     outline: none;
+    margin-bottom: 50px;
 }
 
 #savechanges:hover {
@@ -82,7 +90,8 @@ body {
     background-color: #ccc;
     box-shadow: inset 2px 5px 10px rgba(0, 0, 0, 0.3);
     transition: 300ms ease-in-out;
-    width: 420px;
+    /* width: 420px; */
+    width: 100%;
     margin-bottom: 30px;
 }
 
@@ -103,7 +112,7 @@ body {
     transition: 300ms ease-in-out;
     width: 420px;
     margin-bottom: 30px;
-    appearance: none; 
+    appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
     cursor: pointer;
@@ -116,7 +125,7 @@ body {
 }
 
 .select-box::after {
-    content: "▼"; 
+    content: "▼";
     font-size: 14px;
     position: absolute;
     right: 20px;
@@ -134,10 +143,6 @@ body {
         -13px -13px 100px #ffffff;
 }
 
-.input2 {
-    max-width: 190px;
-}
-
 .code {
     margin-right: 35px;
 }
@@ -150,11 +155,12 @@ body {
 .codecityside {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    /* gap: 10px; */
     justify-content: center;
-    max-width: 310px;
-    margin: 0 auto;
-    margin-bottom: -10px;
+    /* max-width: 100%; */
+    /* flex: wrap; */
+    /* flex: 1; */
+    gap: 1rem;
 }
 
 /* -----------------Popups (Confirmation & Tracking)---------- */
@@ -242,5 +248,5 @@ body {
 
 #user {
     border-radius: 50%;
-    margin-bottom:20px;
+    margin-bottom: 20px;
 }

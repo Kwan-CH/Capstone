@@ -32,7 +32,7 @@
                 <input type="email" name="email" class="input" placeholder="Email Address" value="{{profile.email}}" required>
 
                 <label>Contact Number</label>
-                <input type="tel" name="contact_number" class="input" placeholder="Contact Number" value="{{profile.phoneNumber}}" required>
+                <input type="text" name="contact_number" pattern="01\d{8,9}" class="input" placeholder="Contact Number" value="{{profile.phoneNumber}}" required>
                 {% if phone_error %}
                     <div class="error-message">
                         Invalid phone number. Please enter a valid phone number.
@@ -57,12 +57,12 @@
             <div class="codecityside">
                 <div class="codecity">
                     <label>Area:</label>
-                    <select class="input input2" id="areaDropdown" name="area" required ></select>
+                    <select class="input" id="areaDropdown" name="area" required ></select>
                 </div>
 
                 <div class="codecity">
                     <label>Postal Code:</label>
-                    <input type="text"  class=" input input2 margin" placeholder="Enter your postal code"
+                    <input type="text"  class="input" placeholder="Enter your postal code"
                         name="postal_code" value="{{profile.postalCode}}" required>
                 </div>
             </div>

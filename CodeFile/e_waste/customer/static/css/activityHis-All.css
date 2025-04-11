@@ -20,6 +20,21 @@ body {
     padding: 40px;
 }
 
+.address-word {
+    white-space: pre-wrap;
+}
+
+.address-row {
+    border: none;
+    display: flex;
+    align-items: center;
+}
+
+.address-icon {
+    /* margin-right: 4px; */
+    flex-shrink: 0;
+}
+
 /* ------------------------Navigation Buttons -----------------*/
 .btn-container {
     display: flex;
@@ -85,6 +100,7 @@ td {
     border-left: 1px solid #134E1A;
     border-right: 1px solid #134E1A;
     border-radius: 5px;
+    /* box-sizing: border-box; */
 }
 
 /* Remove border from the last row */
