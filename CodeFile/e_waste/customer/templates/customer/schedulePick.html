@@ -44,6 +44,14 @@
 
 
             <!-- Address -->
+            <label for="street">Address:</label>
+            <div class="address-container">
+                <input type="text" name="street" id="street" placeholder="Enter your address" required>
+                <div class="address">
+                <button class="address-btn" id="use-current-location" onclick="fillAddress()">Use My Address</button>
+                </div>
+            </div>
+
             <input type="hidden" name="state" id="state_text">
             <div class="state"> <label for="quantity-items">State:</label>
                 <div class="inputstate">
@@ -58,26 +66,21 @@
 
             <div class="codecityside">
                 <div class="codecity">
-                    <label for="quantity-items">Area:</label>
-                    <select id="areaDropdown" name="area" required></select>
-                </div>
-
-                <div class="codecity">
                     <label>Postal Code:</label>
                     <input type="text" class="input2 margin" placeholder="Enter your postal code"
                         name="postal_code" id="postal_code" required>
                 </div>
 
+                <div class="codecity">
+                    <label for="quantity-items">Area:</label>
+                    <select id="areaDropdown" class="input2" name="area" required></select>
+                </div>
             </div>
 
-           <label for="street">C. Address:</label>
-           <div class="address-container">
-               <input type="text" name="street" id="street">
-               <button class="address-btn" id="use-current-location" onclick="fillAddress()">Use My Address</button>
-            </div>
+
 
             <!-- Date & Time  -->
-            <label for="pickup-date">D. Preferred Pickup Date/Time (DD/MM/YYY):</label>
+            <label for="pickup-date">Preferred Pickup Date/Time (DD/MM/YYY):</label>
             <input type="date" id="pickup-date" name="pickup_date" required>
             <input type="time" id="pickup-time" name="pickup_time" required>
             <br><br>
@@ -130,7 +133,11 @@
     {% endif %}
 
     {% if error %}
-        <script>alert({{error}})</script>
+        <script>
+            {% comment %} alert({{error}}) {% endcomment %}
+            var errorMessage = "{{ error|escapejs }}";
+            alert(errorMessage);
+        </script>
     {% endif %}
 
     <script>

@@ -4,9 +4,8 @@ from django.shortcuts import redirect, render
 from django.contrib import messages
 from database.models import Customer, ScheduleRequest, ItemCategory, CustomerRedemption, Voucher
 from django.core.paginator import Paginator
-from django.db.models import F
-from django.db.models import Q
-from django.db.models import CharField, Value
+from django.db.models import F, Q
+from django.db.models import CharField, Value, Case, When
 from django.db.models.functions import Concat
 from itertools import chain
 from django.core.paginator import Paginator
@@ -23,6 +22,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 states=getState.getState()
+
+# states for dont have areas
+excluded_states = ['Kuala Lumpur', 'Putrajaya', 'Labuan']
 
 
 def homepage_customer(request):
@@ -75,35 +77,105 @@ def schedule_pickup(request):
     userInfo = Customer.objects.only('profile_picture').get(customerID=customer_id)  # Get user profile data
     if request.method == 'POST':
         category_id = request.POST.get('waste_type')
-        quantity = request.POST.get('quantity_items')
+        quantity = request.POST.get('quantity_items').strip()
         weight = request.POST.get('quantity_weight')
         street = request.POST.get('street')
+        # address = request.POST.get('street') #naming purpose
         postalCode = request.POST.get('postal_code')
         area = request.POST.get('area')
         stateSelected = request.POST.get('state')
         pickup_date = request.POST.get('pickup_date')
         pickup_time = request.POST.get('pickup_time')
 
+        # Make Sure all fields are not empty
+        required_fields = {
+            'Waste Type': category_id,
+            # 'Quantity': quantity,
+            'Weight': weight,
+            'Address': street,
+            'State': stateSelected,
+            'Postal Code': postalCode,
+            # 'Area': area,
+            'Pickup Date': pickup_date,
+            'Pickup Time': pickup_time,
+        }
+
+        for field_name, value in required_fields.items():
+            if not value:
+                return render(request, 'customer/schedulePick.html', {
+                    'categories': ItemCategory.objects.all(),
+                    "profile": userInfo,
+                    'submitted': False,
+                    'states': states,
+                    'error': f'{field_name} is required!',
+                    "API_KEY": os.getenv('GET_STATE_AREA_API')
+                })
+
+        # 3. Special condition: If state is NOT Kuala Lumpur, Area is required
+        excluded_states = ["Kuala Lumpur", "Putrajaya", "Labuan"]
+        if stateSelected not in excluded_states and not area:
+            return render(request, 'customer/schedulePick.html', {
+                'categories': ItemCategory.objects.all(),
+                "profile": userInfo,
+                'submitted': False,
+                'states': states,
+                'error': 'Area is required for selected state!',
+                "API_KEY": os.getenv('GET_STATE_AREA_API')
+            })
+
         # Get the logged-in user
         if not customer_id:
             return redirect("login")  # Redirect to login if session expired
-        elif len(postalCode) != 5:
+
+        #Validate Quantity
+        # if not quantity:  # Check if quantity is provided
+        #     return render(request, 'customer/schedulePick.html', {
+        #         'categories': ItemCategory.objects.all(),
+        #         "profile": userInfo,
+        #         'submitted': False,  # Ensures no undefined variable usage
+        #         'states': states,
+        #         'error': 'Please enter quantity!',
+        #         "API_KEY": os.getenv('GET_STATE_AREA_API')
+        #     })
+
+        if not quantity.isdigit() or not quantity:
+            return render(request, 'customer/schedulePick.html', {
+                'categories': ItemCategory.objects.all(),
+                "profile": userInfo,
+                'submitted': False,  # Ensures no undefined variable usage
+                'states': states,
+                'error': 'Please enter digits only for quantity!',
+                "API_KEY": os.getenv('GET_STATE_AREA_API')
+            })
+
+        #Validate Postal Codes
+        # if not len(postalCode) != 5:
+        #     return render(request, 'customer/schedulePick.html', {
+        #                 'categories': ItemCategory.objects.all(),
+        #                 "profile": userInfo,
+        #                 'submitted': False,  # Ensures no undefined variable usage
+        #                 'states': states,
+        #                 'error': 'Postal code should have 5 digits',
+        #                 "API_KEY": os.getenv('GET_STATE_AREA_API')
+        #             })
+        # elif not postalCode.isdigit():
+        #     print('posatl code  not digit')
+        #     return render(request, 'customer/schedulePick.html', {
+        #                 'categories': ItemCategory.objects.all(),
+        #                 "profile": userInfo,
+        #                 'submitted': False,  # Ensures no undefined variable usage
+        #                 'states': states,
+        #                 'error': 'Please enter digits only for postal code!',
+        #                 "API_KEY": os.getenv('GET_STATE_AREA_API')
+        #             })
+
+        if not postalCode.isdigit() or len(postalCode) != 5 :
             return render(request, 'customer/schedulePick.html', {
                         'categories': ItemCategory.objects.all(),
                         "profile": userInfo,
                         'submitted': False,  # Ensures no undefined variable usage
                         'states': states,
-                        'error': 'Postal code should have 5 digits',
-                        "API_KEY": os.getenv('GET_STATE_AREA_API')
-                    })
-        elif not postalCode.isdigit():
-            print('posatl code  not digit')
-            return render(request, 'customer/schedulePick.html', {
-                        'categories': ItemCategory.objects.all(),
-                        "profile": userInfo,
-                        'submitted': False,  # Ensures no undefined variable usage
-                        'states': states,
-                        'error': 'Please enter digits only for postal code!',
+                        'error': 'Please enter 5 digits only for postal code!',
                         "API_KEY": os.getenv('GET_STATE_AREA_API')
                     })
 
@@ -165,10 +237,24 @@ def schedule_pickup(request):
 
 def user_profile(request):
     customerID = request.session.get("user_id")
-    userInfo = (Customer.objects
-                .annotate(address=Concat('street', Value(', '), 'postalCode',
-                                         Value(', '), 'area', Value(', '), 'state', output_field=CharField()))
-                .get(customerID=customerID))
+    # userInfo = (Customer.objects
+    #             .annotate(address=Concat('street', Value(', '), 'postalCode',
+    #                                      Value(', '), 'area', Value(', '), 'state', output_field=CharField()))
+    #             .get(customerID=customerID))
+
+    #Use Case to handle address formatting based on state [KL, Putrajaya, Labuan]
+    userInfo = (
+    Customer.objects
+    .annotate(
+        address=Case(
+            When(state__in=excluded_states,
+                 then=Concat('street', Value(', '), 'postalCode', Value(', '), 'state', output_field=CharField())),
+            default=Concat('street', Value(', '), 'postalCode', Value(', '), 'area', Value(', '), 'state', output_field=CharField()),
+            output_field=CharField()
+        )
+    )
+    .get(customerID=customerID)
+    )
 
     if request.method == 'POST' and request.FILES.get('profile_picture'):
         customerID = request.session.get("user_id")  # Get logged-in user
@@ -200,11 +286,13 @@ def edit_profile(request):
         new_postalCode = request.POST.get('postal_code')
         new_area = request.POST.get('area')
         new_state = request.POST.get('state')
-        new_profile_pic = request.FILES.get("profile_picture")  
+        new_profile_pic = request.FILES.get("profile_picture")
+
+        excluded_states = ["Kuala Lumpur", "Putrajaya", "Labuan"]
 
         # Check if any field is empty
         if (not new_name or not new_email or not new_phoneNumber or not new_street
-                or not new_postalCode or not new_area or not new_state) :
+                or not new_postalCode or not new_state) :
             return render(request, 'customer/edituserprofile-customer.html', {
                 'Invalid': True,
                 'error_message': "All fields must be filled",
@@ -224,7 +312,7 @@ def edit_profile(request):
             })
 
         # Validate Phone Number
-        elif not new_phoneNumber.isdigit():
+        elif not new_phoneNumber.isdigit() or not new_phoneNumber.startswith("01") or len(new_phoneNumber) not in [10,11]:
             return render(request, "customer/edituserprofile-customer.html", {
                 "profile": userInfo,
                 "phone_error": True,
@@ -232,28 +320,39 @@ def edit_profile(request):
                 "API_KEY": os.getenv('GET_STATE_AREA_API')
             })
 
-        elif not new_postalCode.isdigit() or len(new_postalCode) != 5 :
-            return render(request, "customer/edituserprofile-customer.html", {
+        elif new_state not in excluded_states and not new_area:
+            return render(request, 'customer/edituserprofile-customer.html', {
                 "profile": userInfo,
-                "error_message": 'Please enter digits only',
+                "error_message": 'Please fill in the State and Area',
                 "Invalid": True,
                 "states" : states,
                 "API_KEY": os.getenv('GET_STATE_AREA_API')
             })
 
-        elif len(new_postalCode) != 5 :
+        elif not new_postalCode.isdigit() or len(new_postalCode) != 5 :
             return render(request, "customer/edituserprofile-customer.html", {
                 "profile": userInfo,
-                "error_message": 'Postal Code should have 5 digits',
+                "error_message": 'Please enter only 5 digits for postal code',
                 "Invalid": True,
                 "states" : states,
                 "API_KEY": os.getenv('GET_STATE_AREA_API')
             })
+
+        # elif len(new_postalCode) != 5 :
+        #     return render(request, "customer/edituserprofile-customer.html", {
+        #         "profile": userInfo,
+        #         "error_message": 'Postal Code should have 5 digits',
+        #         "Invalid": True,
+        #         "states" : states,
+        #         "API_KEY": os.getenv('GET_STATE_AREA_API')
+        #     })
+
 
         # if Validate passes only update userinfo
         userInfo.name = new_name
         userInfo.email = new_email
         userInfo.phoneNumber = new_phoneNumber
+        print("new_phoneNumber: ", new_phoneNumber)
         userInfo.street = new_street
         userInfo.postalCode = new_postalCode
         userInfo.area = new_area
@@ -285,6 +384,7 @@ def edit_profile(request):
         "states": states,
         "API_KEY": os.getenv('GET_STATE_AREA_API')
     })
+
 
 
 def edit_password(request):
@@ -356,18 +456,39 @@ def waste_category(request):
 def history_all(request):
     customerID = request.session.get('user_id')
     userInfo = Customer.objects.only('profile_picture').get(customerID=customerID)  # Get user profile data
-      # Get device recycling history
+    # Get device recycling history
+    # device_history = (ScheduleRequest.objects.filter(
+    #                     # ~Q(status='Pending'),
+    #                     Q(status='Completed') | Q(status='Rejected'),
+    #                     customer__customerID=customerID)
+    #                   .select_related('category')
+    #                   .values('trackingnumber', 'category__itemType', 'date', 'quantity', 'status', 'rejectedReason__reason')
+    #                   .annotate(total=F('quantity') * F('category__pointsGiven'))
+    #                   .annotate(address=Concat('street', Value(', '), 'postalCode',
+    #                                            Value(', '), 'area', Value(', '), 'state', output_field=CharField()))
+    #                   .order_by('-date', '-time')  # Sort by date (latest first)
+    #                   )
+
+    # Use use case for address formatting
     device_history = (ScheduleRequest.objects.filter(
-                        # ~Q(status='Pending'),
-                        Q(status='Completed') | Q(status='Rejected'),
-                        customer__customerID=customerID)
-                      .select_related('category')
-                      .values('trackingnumber', 'category__itemType', 'date', 'quantity', 'status', 'rejectedReason__reason')
-                      .annotate(total=F('quantity') * F('category__pointsGiven'))
-                      .annotate(address=Concat('street', Value(', '), 'postalCode',
-                                               Value(', '), 'area', Value(', '), 'state', output_field=CharField()))
-                      .order_by('-date', '-time')  # Sort by date (latest first)
-                      )
+                    # ~Q(status='Pending'),
+                    Q(status='Completed') | Q(status='Rejected'),
+                    customer__customerID=customerID)
+                    .select_related('category')
+                    .values('trackingnumber', 'category__itemType', 'date', 'quantity', 'status', 'rejectedReason__reason')
+                    .annotate(
+                        total=F('quantity') * F('category__pointsGiven'),
+                        address=Case(
+                            When(
+                                state__in=excluded_states,
+                                then=Concat('street', Value(', '), 'postalCode', Value(', '), 'state', output_field=CharField())
+                            ),
+                            default=Concat('street', Value(', '), 'postalCode', Value(', '), 'area', Value(', '), 'state', output_field=CharField()),
+                            output_field=CharField()
+                        )
+                    )
+                    .order_by('-date', '-time')  # Sort by date (latest first)
+                    )
 
     # Get voucher redemption history
     voucher_history = (CustomerRedemption.objects.filter(customer__customerID=customerID, status=False)
@@ -400,17 +521,38 @@ def device_recycled(request):
     # select the pickup request that the customer made, while retrieve the item type based on categoryID
     # reason using small 'c' in customer is because it is not referring to the table but refer to the field itself
     # same goes to the select_relate(), it refers to the field not table
+
+    # pickup_requests = (ScheduleRequest.objects.filter(
+    #                     # ~Q(status='Pending'), ~Q functions to exclude condition specified
+    #                     Q(status='Completed') | Q(status='Rejected'),
+    #                     customer__customerID=customerID)
+    #                    .select_related('category')
+    #                    .values('trackingnumber', 'category__itemType', 'date', 'quantity', 'status', 'rejectedReason__reason')
+    #                    .annotate(total=F('quantity') * F('category__pointsGiven')) #this here is to calculate the total points using F()
+    #                    .annotate(address=Concat('street', Value(', '), 'postalCode',
+    #                                             Value(', '), 'area', Value(', '), 'state', output_field=CharField()))
+    #                    .order_by('-date', '-time') # order by date
+    #                     )
+
     pickup_requests = (ScheduleRequest.objects.filter(
-                        # ~Q(status='Pending'), ~Q functions to exclude condition specified
-                        Q(status='Completed') | Q(status='Rejected'),
-                        customer__customerID=customerID)
-                       .select_related('category')
-                       .values('trackingnumber', 'category__itemType', 'date', 'quantity', 'status', 'rejectedReason__reason')
-                       .annotate(total=F('quantity') * F('category__pointsGiven')) #this here is to calculate the total points using F()
-                       .annotate(address=Concat('street', Value(', '), 'postalCode',
-                                                Value(', '), 'area', Value(', '), 'state', output_field=CharField()))
-                       .order_by('-date', '-time') # order by date
+                    # ~Q(status='Pending'),
+                    Q(status='Completed') | Q(status='Rejected'),
+                    customer__customerID=customerID)
+                    .select_related('category')
+                    .values('trackingnumber', 'category__itemType', 'date', 'quantity', 'status', 'rejectedReason__reason')
+                    .annotate(
+                        total=F('quantity') * F('category__pointsGiven'),
+                        address=Case(
+                            When(
+                                state__in=excluded_states,
+                                then=Concat('street', Value(', '), 'postalCode', Value(', '), 'state', output_field=CharField())
+                            ),
+                            default=Concat('street', Value(', '), 'postalCode', Value(', '), 'area', Value(', '), 'state', output_field=CharField()),
+                            output_field=CharField()
                         )
+                    )
+                    .order_by('-date', '-time')  # Sort by date (latest first)
+                    )
 
 
     pagination = Paginator(pickup_requests, 4) # limit 4 data per page

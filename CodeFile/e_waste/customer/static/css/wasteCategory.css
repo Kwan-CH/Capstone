@@ -1,4 +1,5 @@
-html, body {
+html,
+body {
     height: 100%;
     margin: 0;
     display: flex;
@@ -16,8 +17,12 @@ body {
     background-color: #F5F8EE;
 }
 
-h1, p {
-    margin-top: 15px;
+h1 {
+    margin: 40px 0 20px 0;
+}
+
+p {
+    margin: 15px;
 }
 
 .e-waste-classification {
@@ -37,7 +42,8 @@ table {
     margin-bottom: 30px;
 }
 
-th, td {
+th,
+td {
     border: 1px solid #ddd;
     padding: 12px;
     text-align: center;
@@ -66,7 +72,8 @@ tr:hover {
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Meddon&display=swap');
 
-td, th {
+td,
+th {
     font-family: 'Inter', sans-serif;
     font-weight: bold;
 }
@@ -74,15 +81,15 @@ td, th {
 h1 {
     font-family: 'Sansita Swashed', cursive;
     font-size: 32px;
-    color: #2d621a;  
+    color: #2d621a;
 }
 
 .small-box {
-    width: 400px; 
-    height: 25px; 
-    background-color: #97B07A; 
-    border-radius: 15px; 
-    margin: -20px auto 20px auto; 
+    width: 400px;
+    height: 25px;
+    background-color: #97B07A;
+    border-radius: 15px;
+    margin: -20px auto 20px auto;
     margin-top: 20px;
 }
 
@@ -102,10 +109,14 @@ p {
     font-weight: bold;
     font-size: 18px;
     width: 100px;
-    display: block; /* Make it a block element */
-    margin-left: auto; /* Center horizontally */
-    margin-right: auto; /* Center horizontally */
-    text-align: center; /* Center text inside the button */
+    display: block;
+    /* Make it a block element */
+    margin-left: auto;
+    /* Center horizontally */
+    margin-right: auto;
+    /* Center horizontally */
+    text-align: center;
+    /* Center text inside the button */
 }
 
 #backButton:hover {

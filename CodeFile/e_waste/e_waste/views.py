@@ -96,11 +96,11 @@ def signup(request):
         if len(password) < 8:
             return JsonResponse({'success': False, 'error': 'Password is too short! Minimium 8 characters'}, status=400)
 
-        if not contact_number.isdigit():
+        if not contact_number.isdigit() or not contact_number.startswith("01") or len(contact_number) not in [10,11]:
             return JsonResponse({'success': False, 'error': 'Invalid contact number!'}, status=400)
 
-        if not postalCode.isdigit():
-            return JsonResponse({'success': False, 'error': 'Invalid contact number!'}, status=400)
+        if not postalCode.isdigit() or len(postalCode)!=5 :
+            return JsonResponse({'success': False, 'error': 'Invalid Postal Code!'}, status=400)
 
         new_user = Customer(
             email=email,
