@@ -45,7 +45,15 @@ def manageReq(request):
     )
 
     reasons = Reason.objects.all()
-    return render(request, 'operator/operator-manageReq.html',{'requests': requests, 'reasons':reasons})
+
+    paginator = Paginator(requests, 5)
+    page = request.GET.get('page')
+    requests = paginator.get_page(page)
+
+    return render(request, 'operator/operator-manageReq.html',{
+        'requests': requests,
+        'reasons':reasons,
+        })
 
 def update_request_status(requestID):
     pickUpRequest = ScheduleRequest.objects.filter(requestID=requestID).first()
@@ -204,6 +212,14 @@ def save_driver_account(request):
 
 def reward_system(request):
     vouchers = Voucher.objects.all()
+    
+    paginator = Paginator(vouchers, 6)
+    page = request.GET.get('page')
+    vouchers = paginator.get_page(page)
+
+    # return render(request, 'operator/operator-manageReq.html',{
+    #     'vouchers': vouchers,
+    #     })
     return render(request, 'operator/operator-rewardSystem.html', {"vouchers":vouchers})
 
 def add_reward(request):

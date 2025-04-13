@@ -49,4 +49,21 @@
         </tbody>
       </table>
    </div>
+
+<div class="pagination">
+    {% if not Empty %}
+        {% if vouchers.has_previous %}
+            <a href="?page={{ vouchers.previous_page_number }}" style="text-decoration:none;"> &larr; Previous</a>
+        {% endif %}
+
+        <span>Page {{ vouchers.number }} of {{ vouchers.paginator.num_pages }}</span>
+
+        {% if vouchers.has_next %}
+            <a href="?page={{ vouchers.next_page_number }}" style="text-decoration:none;">Next &rarr; </a>
+        {% endif %}
+    {% else %}
+        <p>No History Available</p>
+    {% endif %}
+</div>
+
 {% endblock %}

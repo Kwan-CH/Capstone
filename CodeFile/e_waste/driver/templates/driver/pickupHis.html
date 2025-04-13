@@ -40,4 +40,20 @@
             <p style="text-align: center;">No pickup requests found.</p>
         {% endif %}
     </div>
+
+    <div class="pagination">
+        {% if not Empty %}
+            {% if pickups.has_previous %}
+                <a href="?page={{ pickups.previous_page_number }}" style="text-decoration:none;"> &larr; Previous</a>
+            {% endif %}
+
+            <span>Page {{ pickups.number }} of {{ pickups.paginator.num_pages }}</span>
+
+            {% if pickups.has_next %}
+                <a href="?page={{ pickups.next_page_number }}" style="text-decoration:none;">Next &rarr; </a>
+            {% endif %}
+        {% else %}
+            <p>No History Available</p>
+        {% endif %}
+    </div>
 {% endblock %}

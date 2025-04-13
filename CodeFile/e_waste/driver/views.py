@@ -8,6 +8,7 @@ from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 import json
 import re
+from django.core.paginator import Paginator
 from utilities.state_data import getState
 
 import os
@@ -176,8 +177,13 @@ def pickup_history(request):
     .filter(driver_id=driverID, status="Completed")
     .order_by('-date', '-time')  # Sort by most recent pickups
 )
-    
+
     userInfo = Driver.objects.only('profile_picture').get(driverID=driverID)
+
+    paginator = Paginator(pickups, 6)
+    page = request.GET.get('page')
+    pickups = paginator.get_page(page)
+
     return render(request, 'driver/pickupHis.html', {"pickups": pickups, "profile": userInfo})
 
 

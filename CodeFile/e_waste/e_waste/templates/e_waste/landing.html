@@ -4,113 +4,607 @@
 {% block title %} Landing Page {% endblock %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'css/landing.css' %}">
+    <link rel="stylesheet" href="{% static 'e_waste/css/landing.css' %}">
 {% endblock %}
 
 {% block content %}
-    <div class="title">
-        <h1>Welcome to Jabatan Alam Sekitar (JAS) E-Waste Management System</h1>
-        <h1>On Demand E-Waste Disposal System</h1>
-        <br>
+<section class="hero">
+
+    <div class="blur-overlay"></div>
+
+    <div class="leaf-container">
+        <img src="{% static 'e_waste/images/Leave1.png' %}" class="leaf leaf-1" alt="leaf">
+        <img src="{% static 'e_waste/images/Leave2.png' %}" class="leaf leaf-2" alt="leaf">
+        <img src="{% static 'e_waste/images/Leave3.png' %}" class="leaf leaf-3" alt="leaf">
+        <img src="{% static 'e_waste/images/Leave4.png' %}" class="leaf leaf-4" alt="leaf">
     </div>
 
-    <div class="slideshow-container">
-        <div class="slide fade">
-            <img src="{% static 'images/slide1.png' %}" alt="Slide 1">
-        </div>
-        <div class="slide fade">
-            <img src="{% static 'images/slide2.png' %}" alt="Slide 2">
-        </div>
-        <div class="slide fade">
-            <img src="{% static 'images/slide3.png' %}" alt="Slide 3">
-        </div>
-        <div class="slide fade">
-            <img src="{% static 'images/slide4.png' %}" alt="Slide 4">
-        </div>
+    <h1>Welcome to Jabatan Alam Sekitar (JAS) E-Waste Management System</h1>
+    <h2>On Demand E-Waste Disposal System</h2>
 
-        <!-- Next and Previous buttons -->
-        <a class="prev" onclick="changeSlide(-1)">&#10094;</a>
-        <a class="next" onclick="changeSlide(1)">&#10095;</a>
+    <div class="scroll-prompt">
+        <span>Learn More</span>
+        <div class="arrow-down"></div>
     </div>
 
-    <br>
+</section>
 
-    <div class="container">
-        <div class="left-column">
-            <div class="info3">
-                <h2>How to Dispose of E-Waste, and Why?</h2>
-                <br>
-                <p>Component in E-waste contain toxic and hazardous material such as mercury, lead, cadmium, arsenic,
-                    bromine, beryllium will permeate into the earth and
-                    subsequently water sources as well as threaten the aquatic and human life if E-waste is not disposed
-                    in environmentally sound manner.
-                </p>
-                <br>
-                <p>Disposal Procedure</p>
-                <br>
-                <p>1. Identify and separate e-waste from regular trash</p>
-                <br>
-                <p>2. Schedule a collection from your house through our system</p>
-                <br>
-                <p>3. Once the pickup is scheduled, a driver will be sent to collect the e-waste</p>
-                <br>
-                <p><a href="https://ewaste.doe.gov.my/index.php/what-is-e-waste/" target="_blank">Find Out How to
-                        Dispose of E-Waste</a></p>
+<section class="facts-section">
+    <div class="facts-container">
+        <!-- Box 1 -->
+        <div class="fact-box paper-texture">
+            <div class="box-leaf-container">
+                <img src="{% static 'e_waste/images/Leave1.png' %}" class="box-leaf leaf-1" alt="">
+                <img src="{% static 'e_waste/images/Leave2.png' %}" class="box-leaf leaf-2" alt="">
+                <img src="{% static 'e_waste/images/Leave3.png' %}" class="box-leaf leaf-3" alt="">
+                <img src="{% static 'e_waste/images/Leave4.png' %}" class="box-leaf leaf-4" alt="">
             </div>
+
+            <div class="staple-corner"></div>
+            <div class="fact-icon">♻️</div>
+            <h2>What is E-Waste?</h2>
+            <p>Discarded electronic devices like phones, laptops, and appliances...</p>
+            <a href="https://ewaste.doe.gov.my/index.php/what-is-e-waste/" target="_blank" class="eco-link">Learn More →</a>
+            <div class="torn-edge"></div>
         </div>
-        <div class="right-column">
-            <div class="info1">
-                <h2>What is E-Waste?</h2>
-                <br>
-                <p>E-waste refers to discarded electronic devices like phones, laptops, and appliances.
-                    They can also refer to broken, non-working or obsolete TVs, PCs, air conditioners, washing machines
-                    and refrigerators.</p>
-                <br>
-                <p><a href="https://www.who.int/news-room/fact-sheets/detail/electronic-waste-%28e-waste%29"
-                        target="_blank">Click Here to Get More Info!</a></p>
+
+        <!-- Box 2 -->
+        <div class="fact-box paper-texture">
+            <div class="box-leaf-container">
+                <img src="{% static 'e_waste/images/Leave1.png' %}" class="box-leaf leaf-1" alt="">
+                <img src="{% static 'e_waste/images/Leave2.png' %}" class="box-leaf leaf-2" alt="">
+                <img src="{% static 'e_waste/images/Leave3.png' %}" class="box-leaf leaf-3" alt="">
+                <img src="{% static 'e_waste/images/Leave4.png' %}" class="box-leaf leaf-4" alt="">
             </div>
-            <div class="info2">
-                <h2>Why is E-Waste Management Important?</h2>
-                <p>Proper e-waste management helps prevent environmental pollution and health hazards. It also allows
-                    for the recovery of valuable materials.</p>
-                <p>Include images/icons of the benefits of proper e-waste management.</p>
-                <br>
-                <p><a href="https://www.greenatlanta.com/why-e-waste-management-is-important/" target="_blank">Learn
-                        More About E-Waste Management</a></p>
+
+            <div class="staple-corner"></div>
+            <div class="fact-icon">⚠️</div>
+            <h2>Why It Matters</h2>
+            <p>Improper disposal leads to soil/water contamination...</p>
+            <a href="https://www.greenatlanta.com/why-e-waste-management-is-important/"
+                         target="_blank" class="eco-link">See Impacts →</a>
+            <div class="torn-edge"></div>
+        </div>
+
+        <!-- Box 3 -->
+        <div class="fact-box paper-texture">
+            <div class="box-leaf-container">
+                <img src="{% static 'e_waste/images/Leave1.png' %}" class="box-leaf leaf-1" alt="">
+                <img src="{% static 'e_waste/images/Leave2.png' %}" class="box-leaf leaf-2" alt="">
+                <img src="{% static 'e_waste/images/Leave3.png' %}" class="box-leaf leaf-3" alt="">
+                <img src="{% static 'e_waste/images/Leave4.png' %}" class="box-leaf leaf-4" alt="">
             </div>
+
+            <div class="staple-corner"></div>
+            <div class="fact-icon">📅</div>
+            <h2>How to Dispose</h2>
+            <p>1. Separate e-waste<br>2. Schedule pickup<br>3. We handle the rest</p>
+            <a href="https://www.who.int/news-room/fact-sheets/detail/electronic-waste-%28e-waste%29" target="_blank" class="eco-link">Disposal Guide →</a>
+            <div class="torn-edge"></div>
         </div>
     </div>
+</section>
+
+<section class="how-it-works">
+  <h2 class="section-title">How It Works</h2>
+  
+  <div class="process-steps">
+    <!-- Step 1 -->
+    <div class="step">
+      <div class="step-number">1</div>
+      <div class="step-content">
+        <h3>Submit Request</h3>
+        <p>Fill our simple form in 2 minutes</p>
+      </div>
+      <img src="{% static 'e_waste/images/Leave1.png' %}" class="step-leaf" alt="">
+    </div>
+
+    <!-- Step 2 -->
+    <div class="step">
+      <div class="step-number">2</div>
+      <div class="step-content">
+        <h3>Schedule Pickup</h3>
+        <p>Choose a date/time that suits you</p>
+      </div>
+      <img src="{% static 'e_waste/images/Leave2.png' %}" class="step-leaf" alt="">
+    </div>
+
+    <!-- Step 3 -->
+    <div class="step">
+      <div class="step-number">3</div>
+      <div class="step-content">
+        <h3>We Handle the Rest</h3>
+        <p>Certified eco-friendly recycling</p>
+      </div>
+      <img src="{% static 'e_waste/images/Leave4.png' %}" class="step-leaf" alt="">
+    </div>
+
+    <div class="schedule-cta">
+      <a href="{% url 'login' %}" class="cta-button">
+        <span class="cta-text">Schedule Pickup Now</span>
+        <span class="cta-icon">→</span>
+      </a>
+    </div>
+
+</section>
+
+<section class="carbon-calculator">
+  <div class="section-header">
+    <h2>Calculate Your E-Waste Impact</h2>
+    <p>See how much CO₂ you can save by recycling</p>
+  </div>
+
+  <div class="calculator-container">
+    <!-- Device Selection -->
+    <div class="input-group">
+      <label for="device-type">Select Device:</label>
+      <select id="device-type">
+        <option value="smartphone">Smartphone</option>
+        <option value="laptop">Laptop</option>
+        <option value="tablet">Tablet</option>
+        <option value="tv">TV</option>
+        <option value="refrigerator">Refrigerator</option>
+      </select>
+    </div>
+
+    <!-- Quantity Input -->
+    <div class="input-group">
+      <label for="quantity">Quantity:</label>
+      <input type="number" id="quantity" min="1" value="1">
+    </div>
+
+    <!-- Calculate Button -->
+    <button id="calculate-btn">Calculate CO₂ Savings</button>
+
+    <!-- Results -->
+    <div class="results" id="results">
+      <div class="result-card">
+        <span class="co2-saved" id="co2-saved">0 kg</span>
+        <p>CO₂ emissions avoided</p>
+      </div>
+      <div class="result-comparison" id="comparison">
+        Equivalent to planting <span id="trees">0</span> tree seedlings!
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="recyclable-items">
+  <div class="section-header">
+    <h2>Accepted E-Waste Categories</h2>
+    <p>Proper recycling protects our environment ♻️</p>
+  </div>
+
+  <div class="category-grid">
+      <!--Category 1-->
+      <div class="card-wrapper" onclick="flipCard(this)">
+        <div class="card">
+          <div class="front">
+            <h3>Large Household Appliances</h3>
+          </div>
+          <div class="back">
+            <h4>Accepted Items</h4>
+            <ul>
+              <li>Refrigerators</li>
+              <li>Freezers</li>
+              <li>Washing Machines</li>
+              <li>Air Conditioners</li>
+            </ul>
+            <div class="tips">⚠️ Remove coolants first</div>
+          </div>
+        </div>
+      </div>
+
+        <!--Category 2-->
+        <div class="card-wrapper" onclick="flipCard(this)">
+          <div class="card">
+            <div class="front">
+              <h3>Small Household Appliances</h3>
+            </div>
+            <div class="back">
+              <h4>Accepted Items</h4>
+              <ul>
+                <li>Vacuum Cleaners</li>
+                <li>Hair Dryers</li>
+                <li>Microwaves</li>
+                <li>Electric Kettles</li>
+              </ul>
+              <div class="tips">🔋 Battery removal required</div>
+            </div>
+          </div>
+        </div>
+
+        <!--Category 3-->
+        <div class="card-wrapper" onclick="flipCard(this)">
+          <div class="card">
+            <div class="front">
+              <h3>Large Telecom Equipment</h3>
+            </div>
+            <div class="back">
+              <h4>Accepted Items</h4>
+              <ul>
+                <li>Printers</li>
+                <li>Desktop Computers</li>
+                <li>Servers</li>
+                <li>Photocopiers</li>
+              </ul>
+              <div class="tips">💾 Guaranteed data removal</div>
+            </div>
+          </div>
+        </div>
+
+        <!--Category 4-->
+        <div class="card-wrapper" onclick="flipCard(this)">
+          <div class="card">
+            <div class="front">
+              <h3>Small Telecom Equipment</h3>
+            </div>
+            <div class="back">
+              <h4>Accepted Items</h4>
+              <ul>
+                <li>Smartphones</li>
+                <li>Earphones</li>
+                <li>Tablets</li>
+                <li>Routers</li>
+              </ul>
+              <div class="tips">📱 Factory reset recommended</div>
+            </div>
+          </div>
+        </div>
+</section>
+
+<div class="ewaste-split-container">
+  <section class="e-waste-quote">
+    <div class="eco-motivation">
+      <h2 class="impact-title">Every Device Recycled is a Step Towards a Cleaner Malaysia</h2>
+
+      <div class="eco-quotes">
+        <div class="quote active">
+          <div class="quote-icon">♻️</div>
+          <p>"Recycling 1,000 phones recovers 1kg of gold – mining that would produce 3,000kg of waste"</p>
+        </div>
+        <div class="quote">
+          <div class="quote-icon">🌱</div>
+          <p>"Malaysia's e-waste could fill 42 Petronas Towers annually – let's change that!"</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="e-waste-counter">
+    <div class="counter-wrapper">
+      <div class="counter-container">
+        <div class="earth-spinner">
+          <div class="earth-icon">🌎</div>
+          <div class="spinner-ring"></div>
+        </div>
+
+        <div class="counter-display">
+          <div class="counter" id="globalEwaste" data-target="12785643">0</div>
+          <div class="counter-label">Kilograms of e-waste recycled worldwide</div>
+        </div>
+
+        <div class="live-pulse">
+          <span class="pulse-dot"></span>
+          LIVE UPDATE
+        </div>
+      </div>
+
+      <div class="counter-comparison">
+        <div class="comparison-item">
+          <span class="comparison-value" id="elephantsEq">0</span>
+          <span class="comparison-label">Equivalent to<br>African elephants</span>
+        </div>
+        <div class="comparison-item">
+          <span class="comparison-value" id="carsEq">0</span>
+          <span class="comparison-label">Equivalent to<br>cars' CO₂ emissions</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
 
 {% endblock %}
 
 {% block extra_js %}
-    <script>
-        let slideIndex = 1; // Start at first slide
+<script>
+    let lastScrollY = window.scrollY;
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const factBoxes = document.querySelectorAll('.fact-box');
+        factBoxes.forEach((box, index) => {
+            box.style.transition = 'all 0.7s cubic-bezier(0.22, 1, 0.36, 1)';
+            box.style.willChange = 'transform, opacity';
+            box.style.opacity = '0';
+            box.style.transform = 'translateX(100px)';
+            box.dataset.delay = `${index * 0.15}s`;
+        });
+
+        const steps = document.querySelectorAll('.step');
+        function animateSteps() {
+            steps.forEach((step, index) => {
+                const stepTop = step.getBoundingClientRect().top;
+                const triggerPoint = window.innerHeight * 0.9;
+
+                if (stepTop < triggerPoint) {
+                    step.style.opacity = '1';
+                    step.style.transform = 'translateY(0)';
+                    step.style.transitionDelay = `${index * 0.15}s`;
+                }
+            });
+        }
+        window.addEventListener('scroll', animateSteps);
+        animateSteps();
+
+        const hero = document.querySelector('.hero');
+        const overlay = document.createElement('div');
+        overlay.className = 'hero-blur-overlay';
+        hero.appendChild(overlay);
+
+        let slideIndex = 1;
         showSlides(slideIndex);
 
-        // Function to change slides manually
         function changeSlide(n) {
             showSlides(slideIndex += n);
         }
 
-        // Function to show slides
         function showSlides(n) {
             let slides = document.querySelectorAll(".slide");
-
-            if (n > slides.length) { slideIndex = 1; } // Loop back to first slide
-            if (n < 1) { slideIndex = slides.length; } // Loop to last slide
-
-            for (let i = 0; i < slides.length; i++) {
-                slides[i].style.display = "none";
-            }
-
+            if (n > slides.length) slideIndex = 1;
+            if (n < 1) slideIndex = slides.length;
+            slides.forEach(slide => slide.style.display = "none");
             slides[slideIndex - 1].style.display = "block";
         }
 
-        // Auto-slide every 3 seconds
-        setInterval(() => {
-            changeSlide(1);
-        }, 10000);
+        setInterval(() => changeSlide(1), 10000);
+    });
 
-    </script>
+    window.addEventListener('scroll', () => {
+        const currentScrollY = window.scrollY;
+        const scrollDirection = currentScrollY > lastScrollY ? 'down' : 'up';
+        lastScrollY = currentScrollY;
+
+        const hero = document.querySelector('.hero');
+        const h1 = document.querySelector('.hero h1');
+        const h2 = document.querySelector('.hero h2');
+        const overlay = document.querySelector('.hero-blur-overlay');
+        const heroHeight = hero.offsetHeight;
+        const heroProgress = Math.min(1.5, currentScrollY / (heroHeight * 0.4));
+
+        h1.style.fontSize = `${3 * Math.max(0.5, 1 - heroProgress * 0.5)}rem`;
+        h1.style.opacity = Math.max(0.2, 1 - heroProgress * 0.8);
+        h2.style.fontSize = `${1.5 * Math.max(0.5, 1 - heroProgress * 0.5)}rem`;
+        h2.style.opacity = Math.max(0.2, 1 - heroProgress * 0.8);
+
+        const blurAmount = Math.min(12, heroProgress * 20);
+        const overlayOpacity = Math.min(0.6, heroProgress * 0.4);
+
+        hero.style.backdropFilter = `blur(${blurAmount}px)`;
+        hero.style.webkitBackdropFilter = `blur(${blurAmount}px)`;
+        overlay.style.opacity = overlayOpacity;
+
+        // Scroll behavior for fact-boxes and steps
+        const factBoxes = document.querySelectorAll('.fact-box');
+        const steps = document.querySelectorAll('.step');
+        const triggerOffset = window.innerHeight * 0.7;
+
+        if (scrollDirection === 'down') {
+            factBoxes.forEach((box, index) => {
+                const boxRect = box.getBoundingClientRect();
+                if (boxRect.top < triggerOffset) {
+                    box.style.opacity = '1';
+                    box.style.transform = 'translateX(0)';
+                }
+            });
+
+            steps.forEach((step, index) => {
+                const stepRect = step.getBoundingClientRect();
+                if (stepRect.top < triggerOffset) {
+                    step.style.opacity = '1';
+                    step.style.transform = 'translateY(0)';
+                    step.style.transitionDelay = `${index * 0.15}s`;
+                }
+                if (stepRect.top > window.innerHeight * 0.2) {
+                    step.style.opacity = '0';
+                    step.style.transform = 'translateY(20px)';
+                    step.style.transition = 'all 0.3s ease-out';
+                }
+            });
+        } else {
+            let allStepsHidden = true;
+            steps.forEach((step, index) => {
+                const reverseIndex = steps.length - 1 - index;
+                step.style.opacity = '0';
+                step.style.transform = 'translateY(20px)';
+                step.style.transition = `all 0.3s ease-out ${reverseIndex * 0.1}s`;
+
+                const rect = step.getBoundingClientRect();
+                if (rect.top < window.innerHeight && rect.bottom > 0) {
+                    allStepsHidden = false;
+                }
+            });
+
+            if (allStepsHidden) {
+                factBoxes.forEach((box, index) => {
+                    const reverseIndex = factBoxes.length - 1 - index;
+                    box.style.opacity = '0';
+                    box.style.transform = 'translateX(-100px)';
+                    box.style.transition = `all 0.3s ease-out ${reverseIndex * 0.1}s`;
+                });
+            }
+        }
+
+    });
+
+    document.querySelectorAll('.faq-question').forEach(button => {
+        button.addEventListener('click', () => {
+            const faqCard = button.closest('.faq-card');
+            faqCard.classList.toggle('active');
+        });
+    });
+
+    let activeCard = null;
+    function flipCard(element) {
+      const card = element.querySelector('.card');
+
+      if(activeCard && activeCard !== card) {
+        activeCard.classList.remove('flipped');
+      }
+
+      card.classList.toggle('flipped');
+      activeCard = card.classList.contains('flipped') ? card : null;
+    }
+
+    const co2Data = {
+      smartphone: 50,
+      laptop: 300,
+      tablet: 100,
+      tv: 200,
+      refrigerator: 800
+    };
+
+    const CO2_PER_TREE = 21;
+
+    document.getElementById('calculate-btn').addEventListener('click', () => {
+      const deviceType = document.getElementById('device-type').value;
+      const quantity = parseInt(document.getElementById('quantity').value);
+      const totalCO2 = co2Data[deviceType] * quantity;
+      const treesEquivalent = Math.round(totalCO2 / CO2_PER_TREE);
+
+      document.getElementById('co2-saved').textContent = `${totalCO2} kg`;
+      document.getElementById('trees').textContent = `${treesEquivalent}`;
+      document.getElementById('results').classList.add('show');
+      triggerConfetti();
+    });
+
+    function triggerConfetti() {
+      const confettiCount = 100;
+      const confettiContainer = document.createElement('div');
+      confettiContainer.style.position = 'fixed';
+      confettiContainer.style.top = '0';
+      confettiContainer.style.left = '0';
+      confettiContainer.style.width = '100%';
+      confettiContainer.style.height = '100%';
+      confettiContainer.style.pointerEvents = 'none';
+      confettiContainer.style.zIndex = '1000';
+      document.body.appendChild(confettiContainer);
+
+      for (let i = 0; i < confettiCount; i++) {
+        const confetti = document.createElement('div');
+        confetti.innerHTML = ['♻️', '🌱', '✨', '🍃'][Math.floor(Math.random() * 4)];
+        confetti.style.position = 'absolute';
+        confetti.style.fontSize = `${Math.random() * 20 + 10}px`;
+        confetti.style.left = `${Math.random() * 100}vw`;
+        confetti.style.animation = `confetti-fall ${Math.random() * 3 + 2}s linear forwards`;
+        confetti.style.opacity = Math.random() + 0.5;
+        confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+        confettiContainer.appendChild(confetti);
+
+        setTimeout(() => {
+          confetti.remove();
+          if (i === confettiCount - 1) confettiContainer.remove();
+        }, 5000);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      // Configuration
+      const config = {
+        refreshInterval: 3000, // Update every 3 seconds
+        incrementStep: 217, // Base increment (simulates real-time growth)
+        variance: 50, // Random variation to make it feel organic
+        elephantsRatio: 6000, // 1 elephant = 6000kg
+        carsRatio: 300 // 1 car's annual CO₂ = 300kg
+      };
+
+      // DOM Elements
+      const counterEl = document.getElementById('globalEwaste');
+      const elephantsEl = document.getElementById('elephantsEq');
+      const carsEl = document.getElementById('carsEq');
+
+      // Initial Values
+      let currentValue = 0;
+      const targetValue = parseInt(counterEl.dataset.target);
+
+      // Animation Function
+      function animateCounter() {
+        const increment = config.incrementStep + Math.floor(Math.random() * config.variance);
+        currentValue = Math.min(currentValue + increment, targetValue);
+
+        // Update main counter
+        counterEl.textContent = currentValue.toLocaleString();
+
+        // Update comparisons
+        elephantsEl.textContent = Math.floor(currentValue / config.elephantsRatio);
+        carsEl.textContent = Math.floor(currentValue / config.carsRatio);
+
+        // Continue animation if not reached target
+        if (currentValue < targetValue) {
+          setTimeout(animateCounter, 100); // Speed of number increment
+        } else {
+          // Start "live updates" after initial count-up
+          setInterval(updateLiveCounter, config.refreshInterval);
+        }
+      }
+
+      // Simulate live updates
+      function updateLiveCounter() {
+        const liveIncrement = 50 + Math.floor(Math.random() * 30);
+        currentValue += liveIncrement;
+        counterEl.textContent = currentValue.toLocaleString();
+        elephantsEl.textContent = Math.floor(currentValue / config.elephantsRatio);
+        carsEl.textContent = Math.floor(currentValue / config.carsRatio);
+
+        // Trigger visual pulse
+        counterEl.classList.add('pulse');
+        setTimeout(() => counterEl.classList.remove('pulse'), 300);
+      }
+
+      // Start animation when visible
+      const observer = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          animateCounter();
+          observer.disconnect();
+        }
+      });
+      observer.observe(document.querySelector('.e-waste-counter'));
+
+      // Add pulse animation to CSS
+      const style = document.createElement('style');
+      style.textContent = `
+        .pulse {
+          animation: numberPulse 0.3s ease;
+        }
+        @keyframes numberPulse {
+          0% { transform: scale(1); }
+          50% { transform: scale(1.05); }
+          100% { transform: scale(1); }
+        }
+      `;
+      document.head.appendChild(style);
+    });
+
+    // Quote rotation with smooth transitions
+    const quotes = document.querySelectorAll('.quote');
+    let currentQuote = 0;
+
+    function rotateQuote() {
+      quotes[currentQuote].classList.remove('active');
+      currentQuote = (currentQuote + 1) % quotes.length;
+      quotes[currentQuote].classList.add('active');
+    }
+
+    // Rotate every 6 seconds
+    const quoteInterval = setInterval(rotateQuote, 6000);
+
+    // Pause on hover for better readability
+    document.querySelector('.eco-quotes').addEventListener('mouseenter', () => {
+      clearInterval(quoteInterval);
+    });
+
+    document.querySelector('.eco-quotes').addEventListener('mouseleave', () => {
+      quoteInterval = setInterval(rotateQuote, 6000);
+    });
+
+  </script>
 {% endblock %}
