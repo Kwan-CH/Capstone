@@ -28,8 +28,8 @@
     </div>
     <button type="submit" class="redeem" disabled>Redeem</button>
 
-    <div>
-        {% if not Empty %}
+    <div class="pagination">
+        {% if vouchers %}
             {% if vouchers.has_previous %}
                 <a href="?page={{ vouchers.previous_page_number }}" style="text-decoration:none;"> &larr; Previous</a>
             {% endif %}

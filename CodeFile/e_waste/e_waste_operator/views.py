@@ -1,7 +1,8 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib import messages
-from database.models import Driver, ScheduleRequest, Reason, Voucher, Operator, CompletedRequest
-from django.db.models import Q, Case, CharField, Value, When
+from database.models import Driver, ScheduleRequest, Reason, Voucher, Operator
+# CompletedRequest
+from django.db.models import Q, Case, CharField, Value, When, F
 from django.db.models.functions import Concat
 from utilities.Email import emailAutomation
 from django.core.paginator import Paginator
@@ -45,7 +46,15 @@ def manageReq(request):
     )
 
     reasons = Reason.objects.all()
-    return render(request, 'operator/operator-manageReq.html',{'requests': requests, 'reasons':reasons})
+
+    paginator = Paginator(requests, 5)
+    page = request.GET.get('page')
+    requests = paginator.get_page(page)
+
+    return render(request, 'operator/operator-manageReq.html',{
+        'requests': requests,
+        'reasons':reasons,
+        })
 
 def update_request_status(requestID):
     pickUpRequest = ScheduleRequest.objects.filter(requestID=requestID).first()
@@ -204,6 +213,14 @@ def save_driver_account(request):
 
 def reward_system(request):
     vouchers = Voucher.objects.all()
+    
+    paginator = Paginator(vouchers, 6)
+    page = request.GET.get('page')
+    vouchers = paginator.get_page(page)
+
+    # return render(request, 'operator/operator-manageReq.html',{
+    #     'vouchers': vouchers,
+    #     })
     return render(request, 'operator/operator-rewardSystem.html', {"vouchers":vouchers})
 
 def add_reward(request):
@@ -261,29 +278,31 @@ def completed_request(request):
 
     # Use Case to handle address formatting based on state [KL, Putrajaya, Labuan]
     completedRequests = (
-        CompletedRequest.objects
-        .filter(requestID__operator__operatorID=operatorID)
-        .select_related('requestID', 'requestID__customer', 'requestID__category')  # optimize joins
+        ScheduleRequest.objects
+        .filter(operator__operatorID=operatorID, status="Completed")
+        .exclude(completed_date__isnull=True)
+        .exclude(completed_time__isnull=True)
+        .select_related('customer', 'category')  # optimize joins
         .values(
-            'requestID__customer__name',
+            'customer__name',
             'completed_date',
             'completed_time',
-            'requestID__category__itemType'
+            'category__itemType'
         )
         .annotate(
             address=Case(
-                When(requestID__state__in=excluded_states,
+                When(state__in=excluded_states,
                     then=Concat(
-                        'requestID__street', Value(', '),
-                        'requestID__postalCode', Value(', '),
-                        'requestID__state',
+                        F('street'), Value(', '),
+                        F('postalCode'), Value(', '),
+                        F('state'),
                         output_field=CharField()
                     )),
                 default=Concat(
-                    'requestID__street', Value(', '),
-                    'requestID__postalCode', Value(', '),
-                    'requestID__area', Value(', '),
-                    'requestID__state',
+                    F('street'), Value(', '),
+                    F('postalCode'), Value(', '),
+                    F('area'), Value(', '),
+                    F('state'),
                     output_field=CharField()
                 ),
                 output_field=CharField()
@@ -295,4 +314,6 @@ def completed_request(request):
     paginator = Paginator(completedRequests, 5)
     page = request.GET.get('page')
     completedRequests = paginator.get_page(page)
+
     return render(request, 'operator/operator-completedReq.html', {'completedRequests':completedRequests})
+    # return render(request, 'operator/operator-completedReq.html')

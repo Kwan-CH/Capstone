@@ -27,11 +27,12 @@
         <tbody>
               {% for completedRequest in completedRequests %}
             <tr>
-                <td>{{ completedRequest.requestID__customer__name }}</td>
+                <td>{{ completedRequest.customer__name }}</td>
+                {% comment %} <td>{{ completedRequest.completed_date|date:"d/m/Y" }}</td> {% endcomment %}
                 <td>{{ completedRequest.completed_date|date:"d/m/Y" }}</td>
                 <td>{{ completedRequest.completed_time|time:"h:i A" }}</td>
                 <td>{{ completedRequest.address }}</td>
-                <td>{{ completedRequest.requestID__category__itemType }}</td>
+                <td>{{ completedRequest.category__itemType }}</td>
             </tr>
               {% endfor %}
         </tbody>
@@ -40,7 +41,7 @@
    </div>
 
     <div class="pagination">
-        {% if not Empty %}
+        {% if completedRequests %}
             {% if completedRequests.has_previous %}
                 <a href="?page={{ completedRequests.previous_page_number }}" style="text-decoration:none;"> &larr; Previous</a>
             {% endif %}
@@ -51,7 +52,7 @@
                 <a href="?page={{ completedRequests.next_page_number }}" style="text-decoration:none;">Next &rarr; </a>
             {% endif %}
         {% else %}
-            <p>No History Available</p>
+            <p>No Request Available</p>
         {% endif %}
     </div>
 </body>

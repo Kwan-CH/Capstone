@@ -139,9 +139,24 @@
         </div>
       </div>
 
-{% block extra_js %}
-    <script src="{% static 'js/manageRequest.js' %}"></script>
+      <div class="pagination">
+        {% if requests %}
+            {% if requests.has_previous %}
+                <a href="?page={{ requests.previous_page_number }}" style="text-decoration:none;"> &larr; Previous</a>
+            {% endif %}
+
+            <span>Page {{ requests.number }} of {{ requests.paginator.num_pages }}</span>
+
+            {% if requests.has_next %}
+                <a href="?page={{ requests.next_page_number }}" style="text-decoration:none;">Next &rarr; </a>
+            {% endif %}
+        {% else %}
+            <p>No Request Available</p>
+        {% endif %}
+    </div>
+
 {% endblock %}
 
-</body>
+{% block extra_js %}
+    <script src="{% static 'js/manageRequest.js' %}"></script>
 {% endblock %}

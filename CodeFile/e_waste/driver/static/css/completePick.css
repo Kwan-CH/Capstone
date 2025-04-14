@@ -131,8 +131,8 @@ p {
     background: #F5F8EE;
     padding: 30px;
     border-radius: 10px;
-    width: 600px;
-    height: 600px;
+    width: 700px;
+    height: 500px;
     text-align: center;
     box-shadow: 2px 2px 15px rgba(0, 0, 0, 0.3);
     display: flex;
@@ -143,8 +143,9 @@ p {
 
 .popup-container h2 {
     font-family: 'Sansita Swashed', cursive;
-    font-size: 50px;
+    font-size: 32px;
     color: #2d621a;
+    padding: 10px;
     margin-bottom: 20px;
 }
 

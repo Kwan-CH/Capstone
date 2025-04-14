@@ -26,8 +26,8 @@
                     {% for pickup in pickups %}
                     <tr>
                         <td>{{ pickup.customer.name }}</td>
-                        <td>{{ pickup.completed_requests.completed_date|date:"d/m/Y" }}</td>
-                        <td>{{ pickup.completed_requests.completed_time|time:"h:i A" }}</td>
+                        <td>{{ pickup.completed_date|date:"d/m/Y" }}</td>
+                        <td>{{ pickup.completed_time|time:"h:i A" }}</td>
                         <td>{{ pickup.address }}</td>
                         <td>{{ pickup.category.itemType }}</td>
                     </tr>
@@ -38,6 +38,22 @@
         </div>
         {% if not pickups %}
             <p style="text-align: center;">No pickup requests found.</p>
+        {% endif %}
+    </div>
+
+    <div class="pagination">
+        {% if not Empty %}
+            {% if pickups.has_previous %}
+                <a href="?page={{ pickups.previous_page_number }}" style="text-decoration:none;"> &larr; Previous</a>
+            {% endif %}
+
+            <span>Page {{ pickups.number }} of {{ pickups.paginator.num_pages }}</span>
+
+            {% if pickups.has_next %}
+                <a href="?page={{ pickups.next_page_number }}" style="text-decoration:none;">Next &rarr; </a>
+            {% endif %}
+        {% else %}
+            <p>No History Available</p>
         {% endif %}
     </div>
 {% endblock %}
