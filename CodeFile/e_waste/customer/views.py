@@ -14,6 +14,7 @@ from django.http import JsonResponse
 from datetime import datetime, timedelta
 from django.utils.timezone import now
 from utilities.state_data import getState
+from datetime import timedelta
 
 import os
 from dotenv import load_dotenv
@@ -45,7 +46,7 @@ def pickup_status(request):
         return redirect('login')
 
     # Get yesterday's date (24 hours ago)
-    yesterday = now().date() - timedelta(days=1)
+    time_threshold = now() - timedelta(days=1)
 
     # Filter requests that are NOT rejected and either:
     # - Have no completed request
@@ -55,7 +56,7 @@ def pickup_status(request):
     ).exclude(
         status="Rejected"
     ).exclude(
-        completed_requests__completed_date__lt=yesterday  # Exclude if completed > 24 hours ago
+        completed_date__lt=time_threshold.date()  # Exclude if completed > 24 hours ago
     ).order_by('-trackingnumber')
 
     # pickUpRequest = ScheduleRequest.objects.filter(customer__customerID=customer_id).exclude(status="Rejected").order_by('-trackingnumber')

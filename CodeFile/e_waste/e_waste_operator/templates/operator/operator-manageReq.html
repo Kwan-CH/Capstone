@@ -140,7 +140,7 @@
       </div>
 
       <div class="pagination">
-        {% if not Empty %}
+        {% if requests %}
             {% if requests.has_previous %}
                 <a href="?page={{ requests.previous_page_number }}" style="text-decoration:none;"> &larr; Previous</a>
             {% endif %}
@@ -151,7 +151,7 @@
                 <a href="?page={{ requests.next_page_number }}" style="text-decoration:none;">Next &rarr; </a>
             {% endif %}
         {% else %}
-            <p>No History Available</p>
+            <p>No Request Available</p>
         {% endif %}
     </div>
 

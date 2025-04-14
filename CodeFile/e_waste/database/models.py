@@ -210,6 +210,10 @@ class ScheduleRequest(models.Model):
     driver = models.ForeignKey(Driver, on_delete=models.CASCADE, null=True, blank=True)
     operator = models.ForeignKey(Operator, on_delete=models.CASCADE, null=True, blank=True)
     trackingnumber = models.CharField(max_length=200, unique=True)
+    pickedUp_date = models.DateField(null=True, blank=True)
+    pickedUp_time = models.TimeField(null=True, blank=True)
+    completed_date = models.DateField(null=True, blank=True)
+    completed_time = models.TimeField(null=True, blank=True)
 
     def generate_tracking_number(self):
         current_year = timezone.now().year
@@ -240,18 +244,18 @@ class ScheduleRequest(models.Model):
     def __str__(self):
         return f"{self.requestID} {self.customer} {self.date} {self.time} {self.trackingnumber}"
 
-class CompletedRequest(models.Model):
-    requestID = models.OneToOneField(ScheduleRequest, on_delete=models.CASCADE, related_name="completed_requests")
-    completed_date = models.DateField(auto_now_add=True)
-    completed_time = models.TimeField(auto_now_add=True)
+# class CompletedRequest(models.Model):
+#     requestID = models.OneToOneField(ScheduleRequest, on_delete=models.CASCADE, related_name="completed_requests")
+#     completed_date = models.DateField(auto_now_add=True)
+#     completed_time = models.TimeField(auto_now_add=True)
 
-    def __str__(self):
-        return f"{self.requestID} {self.completed_date} {self.completed_time}"
+#     def __str__(self):
+#         return f"{self.requestID} {self.completed_date} {self.completed_time}"
 
-class PickedUpRequest(models.Model):
-    requestID =  models.OneToOneField(ScheduleRequest, on_delete=models.CASCADE,  related_name="pickedup_requests")
-    pickedUp_date = models.DateField(auto_now_add=True)
-    pickedUp_time = models.TimeField(auto_now_add=True)
+# class PickedUpRequest(models.Model):
+#     requestID =  models.OneToOneField(ScheduleRequest, on_delete=models.CASCADE,  related_name="pickedup_requests")
+#     pickedUp_date = models.DateField(auto_now_add=True)
+#     pickedUp_time = models.TimeField(auto_now_add=True)
     
-    def __str__(self):
-        return f"{self.requestID} {self.pickedUp_date} {self.pickedUp_date}"
+#     def __str__(self):
+#         return f"{self.requestID} {self.pickedUp_date} {self.pickedUp_date}"

@@ -25,6 +25,11 @@ body {
   font-size: 18px;
 }
 
+.pagination p {
+  font-weight: normal;
+  padding-top: 50px;
+}
+
 p {
   font-family: 'Inter', sans-serif;
   font-weight: bold;
@@ -39,7 +44,7 @@ p {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 30vh;
+  /* min-height: 30vh; */
   width: 100%;
   margin-bottom: 320px;
   position: abosolute;

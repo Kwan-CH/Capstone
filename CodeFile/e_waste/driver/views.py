@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from database.models import Driver, ScheduleRequest, PickedUpRequest, CompletedRequest, Customer
+from database.models import Driver, ScheduleRequest, Customer
+# PickedUpRequest, CompletedRequest
 from django.http import JsonResponse
 from django.contrib import messages
 from django.db.models import CharField, Value, When, Case
@@ -10,6 +11,7 @@ import json
 import re
 from django.core.paginator import Paginator
 from utilities.state_data import getState
+from datetime import datetime
 
 import os
 from dotenv import load_dotenv
@@ -68,22 +70,46 @@ def pickup_details(request):
 
 @require_POST
 def update_pickup_status(request, requestID):
+
     try:
         pickUpRequest = ScheduleRequest.objects.get(requestID=requestID)
         pickUpRequest.status = "Picked Up"
+
+        now = datetime.now()
+        pickUpRequest.pickedUp_date = now.date()
+        pickUpRequest.pickedUp_time = now.time()
+
         pickUpRequest.save()
 
         customer = Customer.objects.get(customerID=pickUpRequest.customer.customerID)
         customer.points += (pickUpRequest.category.pointsGiven * pickUpRequest.quantity)
         customer.save()
 
-        PickedUpRequest.objects.create(requestID=pickUpRequest)
-
         messages.success(request, f"Pickup request {requestID} has been updated successfully!")
         return JsonResponse({'status': 'success'})
+
     except ScheduleRequest.DoesNotExist:
         return JsonResponse({'status': 'error', 'message': 'Pickup not found'}, status=404)
+
     except Exception as e:
+        return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+
+    # try:
+    #     pickUpRequest = ScheduleRequest.objects.get(requestID=requestID)
+    #     pickUpRequest.status = "Picked Up"
+    #     pickUpRequest.save()
+
+    #     customer = Customer.objects.get(customerID=pickUpRequest.customer.customerID)
+    #     customer.points += (pickUpRequest.category.pointsGiven * pickUpRequest.quantity)
+    #     customer.save()
+
+    #     PickedUpRequest.objects.create(requestID=pickUpRequest)
+
+    #     messages.success(request, f"Pickup request {requestID} has been updated successfully!")
+    #     return JsonResponse({'status': 'success'})
+    # except ScheduleRequest.DoesNotExist:
+    #     return JsonResponse({'status': 'error', 'message': 'Pickup not found'}, status=404)
+    # except Exception as e:
         return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
 
 def complete_pickup(request):
@@ -135,8 +161,13 @@ def update_complete_status(request):
             # Update the status of selected requests
             requests_to_complete = ScheduleRequest.objects.filter(requestID__in=request_ids)
             requests_to_complete.update(status="Completed")
-            for request in requests_to_complete:
-                CompletedRequest.objects.get_or_create(requestID=request)
+
+            # Update the completed date and time
+            requests_to_complete.update(completed_date=datetime.now().date())
+            requests_to_complete.update(completed_time=datetime.now().time())
+
+            # for request in requests_to_complete:
+            #     CompletedRequest.objects.get_or_create(requestID=request)
 
             return JsonResponse({"success": True})
 

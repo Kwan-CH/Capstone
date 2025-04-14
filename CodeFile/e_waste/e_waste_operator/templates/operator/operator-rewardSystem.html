@@ -51,7 +51,7 @@
    </div>
 
 <div class="pagination">
-    {% if not Empty %}
+    {% if vouchers %}
         {% if vouchers.has_previous %}
             <a href="?page={{ vouchers.previous_page_number }}" style="text-decoration:none;"> &larr; Previous</a>
         {% endif %}
@@ -62,7 +62,7 @@
             <a href="?page={{ vouchers.next_page_number }}" style="text-decoration:none;">Next &rarr; </a>
         {% endif %}
     {% else %}
-        <p>No History Available</p>
+        <p>No Rewards Available</p>
     {% endif %}
 </div>
 
