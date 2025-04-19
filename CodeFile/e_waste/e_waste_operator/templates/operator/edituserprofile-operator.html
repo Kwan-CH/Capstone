@@ -1,0 +1,44 @@
+{% extends 'operator/base_operator.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/edituserprofile-operator.css' %}">
+{% endblock %}
+
+{% block title %}Edit User Profile{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="container-top">
+            {% if operator.profile_picture %}
+                <img src="{{ operator.profile_picture.url }}" style="width:200px; height:200px; border-radius:50%" alt="Profile Picture" id="profile-pic-preview">
+            {% else %}
+                <img src="{% static 'images/userprofilelogo.jpg' %}" style="width:200px; height:200px; border-radius:50%" alt="Profile Picture" id="profile-pic-preview">
+            {% endif %}
+            <h1>Edit Your User Profile</h1>
+        </div>
+
+        <div class="container-bottom">
+            <form action="{% url 'operator:edit_profile' %}" method="post">{% csrf_token %}
+                <label>Name:</label>
+                <input type="text" name="name" class="input" value="{{operator.name}}" oninput="setVisible()" required>
+
+                <label>Email:</label>
+                <input type="email" name="email" class="input" value="{{operator.email}}" oninput="setVisible()" required>
+                {% if duplicate_email %}
+                    <p id="visible" style="color:red">The email address you input previously already exists</p>
+                {% endif %}
+
+                <button type="submit" id="savechanges">Save Changes</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+        function setVisible(){
+            document.getElementById('visible').style.display = 'none'
+        }
+    </script>
+{% endblock %}

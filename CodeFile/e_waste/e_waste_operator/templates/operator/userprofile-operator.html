@@ -1,0 +1,103 @@
+{% extends 'operator/base_operator.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/userprofile-operator.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Sansita+Swashed:wght@500&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block title %}User Profile{% endblock %}
+
+{% block content %}
+    <div class="container-top">
+        <div class="profile-container">
+            <div class="profile-picture">
+                {% if operator.profile_picture %}
+                    <img src="{{ operator.profile_picture.url }}" alt="Profile Picture" id="profile-pic-preview">
+                {% else %}
+                    <img src="{% static 'images/userprofilelogo.jpg' %}" alt="Profile Picture" id="profile-pic-preview">
+                {% endif %}
+                <label for="profile-pic-input" title="Change Profile Picture">✏️</label>
+                <input type="file" id="profile-pic-input" accept="image/*">
+            </div>
+            <span class="error" id="profile-pic-error"></span>
+        </div>
+        <h1> Your User Profile</h1>
+    </div>
+
+    <div class="container">
+        <div class="profile-form">
+            <label>Name</label>
+            <input class="input" type="text" value="{{operator.name}}" disabled>
+
+            <label>Email</label>
+            <input class="input" type="email" value="{{operator.email}}" disabled>
+
+            <label>Password</label>
+            <div class="password-container">
+                <input class="input password-box" type="password" value="{{operator.password}}" disabled>
+                <a href="{% url 'operator:edit_password' %}" id="editpassword">Edit Password</a>
+            </div>
+
+            <a href="{% url 'operator:edit_profile' %}" id="edit-profile">Edit Your Profile</a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+        const profilePicInput = document.getElementById('profile-pic-input');
+        const profilePicImage = document.getElementById('profile-pic-preview');
+        const profilePicError = document.getElementById('profile-pic-error');
+
+        profilePicInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    profilePicImage.src = e.target.result;
+                    profilePicError.textContent = '';
+                }
+                reader.readAsDataURL(file);
+            } else {
+                profilePicError.textContent = 'Please select a valid image file.';
+                profilePicInput.value = ''; // Reset file input
+            }
+        });
+    </script>
+
+    <script>
+        // Event listener for the file input change
+        document.getElementById('profile-pic-input').addEventListener('change', function(e) {
+            var formData = new FormData();
+            formData.append('profile_picture', e.target.files[0]);
+            formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');  // Attach CSRF token
+
+            // Send the image to the server via AJAX
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '{% url "operator:user_profile" %}', true);
+
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    // Update the profile picture preview if the upload is successful
+                    var response = JSON.parse(xhr.responseText);
+                    document.getElementById('profile-pic-preview').src = response.new_profile_picture_url;
+
+                    location.reload();
+                } else {
+                    document.getElementById('profile-pic-error').textContent = "Error uploading the image.";
+                }
+            };
+
+            xhr.send(formData);
+        });
+    </script>
+
+    {% if profile %}
+        <script>alert('Your profile has been updated successfully')</script>
+    {% endif %}
+
+    {% if password %}
+        <script>alert('Your password has been updated successfully')</script>
+    {% endif %}
+{% endblock %}

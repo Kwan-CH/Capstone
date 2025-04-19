@@ -4,7 +4,6 @@ from .views import *
 
 
 app_name = 'operator'
-
 urlpatterns = [
      path('', homepage_operator, name='homepage-operator'), #Operator Homepage
 
@@ -19,5 +18,10 @@ urlpatterns = [
      path('reward_system/', reward_system, name='reward_system'), #Reward System
      path('add_reward/', add_reward, name='add_reward'), #Add Reward
      path('edit_reward/<str:voucherID>/', edit_reward, name='edit_reward'), #Edit Reward
-     path('completed_request/', completed_request, name='completed_request')#Add Reward
+     path('completed_request/', completed_request, name='completed_request'),#Add Reward
+
+     path('profile/', user_profile, name='user_profile'),#profile page
+     path('edit-profile/', edit_profile, name='edit_profile'),#profile page
+     path('edit-password/', edit_password, name='edit_password'),#profile page
 ]
+

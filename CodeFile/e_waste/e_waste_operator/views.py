@@ -20,17 +20,18 @@ states=getState.getState()
 
 excluded_states = ['Kuala Lumpur', 'Putrajaya', 'Labuan']
 
+#centralised all request.get.session()
+def get_userID_from_session(request):
+    return request.session.get('user_id')
+
+def get_profile_picture(request):
+    return Operator.objects.only('profile_picture').get(operatorID=get_userID_from_session(request))
+
+
 def homepage_operator(request):
-    return render(request, 'operator/operator-homepage.html')
+    return render(request, 'operator/operator-homepage.html', {'operator':get_profile_picture(request)})
 
 def manageReq(request):
-    # requests = (ScheduleRequest.objects
-    #             .annotate(address=Concat('street', Value(', '), 'postalCode',
-    #                                      Value(', '), 'area', Value(', '), 'state', output_field=CharField()))
-    #             .filter(~Q(status='Completed'), ~Q(status='Rejected'))
-    #             .order_by('-requestID')) ## '-date', '-time'
-
-    #Use Case to handle address formatting based on state [KL, Putrajaya, Labuan]
     requests = (
         ScheduleRequest.objects
         .annotate(
@@ -54,6 +55,7 @@ def manageReq(request):
     return render(request, 'operator/operator-manageReq.html',{
         'requests': requests,
         'reasons':reasons,
+        'operator': get_profile_picture(request)
         })
 
 def update_request_status(requestID):
@@ -72,7 +74,11 @@ def assign_driver_page(request):
 
     drivers = list(chain(priority_driver, non_priority_driver))
 
-    return render(request, 'operator/assign-driver.html', {'drivers': drivers, 'request':requestInfo})
+    return render(request, 'operator/assign-driver.html', {
+        'drivers': drivers,
+        'request':requestInfo,
+        'operator': get_profile_picture(request)
+    })
 
 def assign_driver(request):
     if request.method == 'POST':
@@ -87,7 +93,7 @@ def assign_driver(request):
                                                             output_field=CharField()))
                                    .filter(requestID=requestID).first())
                 driver = Driver.objects.filter(driverID=driverID).first()
-                operator = Operator.objects.filter(operatorID = request.session.get('user_id')).first()
+                operator = Operator.objects.filter(operatorID = get_userID_from_session(request)).first()
                 selectedRequest.driver = driver
                 selectedRequest.operator = operator
                 selectedRequest.save()
@@ -113,7 +119,7 @@ def reject_request(request):
             if requestID and reasonID:
                 selectedRequest = ScheduleRequest.objects.filter(requestID=requestID).first()
                 reason = Reason.objects.filter(reasonID=reasonID).first()
-                operator = Operator.objects.filter(operatorID=request.session.get('user_id')).first()
+                operator = Operator.objects.filter(operatorID=get_userID_from_session(request)).first()
                 selectedRequest.rejectedReason = reason
                 selectedRequest.status = 'Rejected'
                 selectedRequest.operator = operator
@@ -129,10 +135,12 @@ def reject_request(request):
 def operator_create_acc_page(request):
     return render(request, 'operator/operator-create_acc.html', {
         "states":states,
-        "API_KEY": os.getenv('GET_STATE_AREA_API')
+        "API_KEY": os.getenv('GET_STATE_AREA_API'),
+        'operator': get_profile_picture(request)
     })
 
 def save_driver_account(request):
+    operator = get_profile_picture(request)
     if request.method == 'POST':
         name = request.POST['full_name']
         email = request.POST['email']
@@ -148,7 +156,8 @@ def save_driver_account(request):
             return render(request, 'operator/operator-create_acc.html',{
                 "formData": request.POST,
                 "states":states,
-                "API_KEY": os.getenv('GET_STATE_AREA_API')
+                "API_KEY": os.getenv('GET_STATE_AREA_API'),
+                'operator': operator
             })
 
         elif '@' not in email:
@@ -156,7 +165,8 @@ def save_driver_account(request):
             return render(request, 'operator/operator-create_acc.html',{
                 "formData": request.POST,
                 "states":states,
-                "API_KEY": os.getenv('GET_STATE_AREA_API')
+                "API_KEY": os.getenv('GET_STATE_AREA_API'),
+                'operator': operator
             })
 
         elif len(password) < 8:
@@ -164,7 +174,8 @@ def save_driver_account(request):
             return render(request, 'operator/operator-create_acc.html',{
                 "formData": request.POST,
                 "states":states,
-                "API_KEY": os.getenv('GET_STATE_AREA_API')
+                "API_KEY": os.getenv('GET_STATE_AREA_API'),
+                'operator': operator
             })
 
         elif not contact.isdigit() or not contact.startswith("01") or len(contact) not in [10,11]:
@@ -172,7 +183,8 @@ def save_driver_account(request):
             return render(request, "operator/operator-create_acc.html", {
                 "formData": request.POST,
                 "states":states,
-                "API_KEY": os.getenv('GET_STATE_AREA_API')
+                "API_KEY": os.getenv('GET_STATE_AREA_API'),
+                'operator': operator
         })
 
         elif not stateCovered:
@@ -180,7 +192,8 @@ def save_driver_account(request):
             return render(request, 'operator/operator-create_acc.html',{
                 "formData": request.POST,
                 "states":states,
-                "API_KEY": os.getenv('GET_STATE_AREA_API')
+                "API_KEY": os.getenv('GET_STATE_AREA_API'),
+                'operator': operator
             })
 
         elif stateCovered not in excluded_states and not areaCovered:
@@ -188,7 +201,8 @@ def save_driver_account(request):
             return render(request, 'operator/operator-create_acc.html',{
                 "formData": request.POST,
                 "states":states,
-                "API_KEY": os.getenv('GET_STATE_AREA_API')
+                "API_KEY": os.getenv('GET_STATE_AREA_API'),
+                'operator': operator
             })
 
         new_user = Driver(name=name,
@@ -203,12 +217,14 @@ def save_driver_account(request):
         return render(request, 'operator/operator-create_acc.html', {
             "Success":True,
             "states":states,
-            "API_KEY": os.getenv('GET_STATE_AREA_API')
+            "API_KEY": os.getenv('GET_STATE_AREA_API'),
+            'operator': operator
         })
 
     return render(request, 'operator/operator-create_acc.html', {
         "states":states,
-        "API_KEY": os.getenv('GET_STATE_AREA_API')
+        "API_KEY": os.getenv('GET_STATE_AREA_API'),
+        'operator': operator
     })
 
 def reward_system(request):
@@ -221,7 +237,7 @@ def reward_system(request):
     # return render(request, 'operator/operator-manageReq.html',{
     #     'vouchers': vouchers,
     #     })
-    return render(request, 'operator/operator-rewardSystem.html', {"vouchers":vouchers})
+    return render(request, 'operator/operator-rewardSystem.html', {"vouchers":vouchers, 'operator': get_profile_picture(request)})
 
 def add_reward(request):
     if request.method == 'POST':
@@ -239,9 +255,9 @@ def add_reward(request):
             return JsonResponse({'status': 'success', 'message': 'Reward updated successfully!'})
 
         messages.success(request, 'Reward updated successfully!')
-        return render(request, 'operator/operator-addReward.html')
+        return render(request, 'operator/operator-addReward.html', {'operator': get_profile_picture(request)})
 
-    return render(request, 'operator/operator-addReward.html')
+    return render(request, 'operator/operator-addReward.html', {'operator': get_profile_picture(request)})
 
 def edit_reward(request, voucherID):
     voucher = get_object_or_404(Voucher, voucherID=voucherID)
@@ -262,21 +278,13 @@ def edit_reward(request, voucherID):
             return JsonResponse({'status': 'success', 'message': 'Reward updated successfully!'})
 
         messages.success(request, 'Reward updated successfully!')
-        return render(request, 'operator/operator-editReward.html', {"voucher": voucher})
+        return render(request, 'operator/operator-editReward.html', {"voucher": voucher, 'operator': get_profile_picture(request)})
 
-    return render(request, 'operator/operator-editReward.html', {"voucher": voucher})
+    return render(request, 'operator/operator-editReward.html', {"voucher": voucher, 'operator': get_profile_picture(request)})
 
 def completed_request(request):
-    operatorID = request.session.get('user_id')
-    # completedRequests = (CompletedRequest.objects.filter(requestID__operator__operatorID=operatorID).select_related('ScheduleRequest', 'ItemCategory')
-    #                      .values('requestID__customer__name', 'completed_date', 'completed_time',
-    #                              'requestID__category__itemType')
-    #                      .annotate(address=Concat('requestID__street', Value(', '), 'requestID__postalCode',
-    #                                               Value(', '), 'requestID__area', Value(', '), 'requestID__state', output_field=CharField()))
-    #                      .order_by('-completed_date', 'completed_time')  # Order by latest date first
-    #                      )
+    operatorID = get_userID_from_session(request)
 
-    # Use Case to handle address formatting based on state [KL, Putrajaya, Labuan]
     completedRequests = (
         ScheduleRequest.objects
         .filter(operator__operatorID=operatorID, status="Completed")
@@ -315,5 +323,65 @@ def completed_request(request):
     page = request.GET.get('page')
     completedRequests = paginator.get_page(page)
 
-    return render(request, 'operator/operator-completedReq.html', {'completedRequests':completedRequests})
+    return render(request, 'operator/operator-completedReq.html', {'completedRequests':completedRequests, 'operator': get_profile_picture(request)})
     # return render(request, 'operator/operator-completedReq.html')
+
+def user_profile(request):
+    operator = Operator.objects.get(operatorID=get_userID_from_session(request))
+
+    if request.method == 'POST' and request.FILES.get('profile_picture'):
+
+        # ✅ Only delete old picture IF a new one is uploaded
+        if operator.profile_picture and operator.profile_picture.name != "profile_pics/default.jpg":
+            operator.profile_picture.delete(save=False)
+
+        # ✅ Save the new profile picture
+        operator.profile_picture = request.FILES['profile_picture']
+        operator.save()
+
+        return JsonResponse({
+            'new_profile_picture_url': operator.profile_picture.url
+        })
+    return render(request, 'operator/userprofile-operator.html', {'operator':operator})
+
+def edit_profile(request):
+    operator = Operator.objects.get(operatorID=get_userID_from_session(request))
+
+    if request.method == 'POST':
+        new_name = request.POST['name'].strip()
+        new_email = request.POST['email'].strip()
+
+        duplicate_email = Operator.objects.filter(email=new_email).exists()
+        if duplicate_email:
+            return render(request, 'operator/edituserprofile-operator.html', {'duplicate_email': True, 'operator': operator})
+
+        operator.name = new_name
+        operator.email = new_email
+
+        operator.save()
+
+        return render(request, 'operator/userprofile-operator.html', {'operator':operator, 'profile':True})
+
+    return render(request, 'operator/edituserprofile-operator.html', {'operator': operator})
+
+def edit_password(request):
+    operator = Operator.objects.get(operatorID=get_userID_from_session(request))
+
+    if request.method == 'POST':
+
+        current_password = request.POST['current']
+        new_password = request.POST['new']
+        confirm_password = request.POST['confirm']
+
+        if current_password != operator.password:
+            return render(request, 'operator/editpassword-operator.html', {'wrong_current':True})
+
+        if new_password != confirm_password:
+            return render(request, 'operator/editpassword-operator.html', {'wrong_confirmation':True})
+
+        operator.password = new_password
+        operator.save()
+
+        return render(request, 'operator/userprofile-operator.html', {'password': True, 'operator':operator})
+
+    return render(request, 'operator/editpassword-operator.html', {'operator':operator})

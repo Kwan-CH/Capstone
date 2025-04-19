@@ -1,5 +1,5 @@
-{% load static %}
 <!DOCTYPE html>
+{% load static %}
 
 <html lang="en">
 <head>
@@ -48,6 +48,29 @@
             background-color: #487319;
         }
 
+        .topright {
+            position: absolute;
+            top: 0;
+            right: 0;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 10px;
+        }
+
+        .userprofile {
+            padding: 10px;
+            margin-left: 10px;
+        }
+
+        #user {
+            border-radius: 50%;
+            margin-bottom: 20px;
+            object-fit: cover;
+            align-items: center;
+            margin-top: 10px;
+        }
+
         .logout {
             padding: 10px;
         }
@@ -57,11 +80,22 @@
 <body>
     <div class="header">
         <a href="{% url 'operator:homepage-operator' %}"><img id="logo" src="{% static 'images/companylogo.jpg' %}" alt="company logo"></a>
+        <div class="topright">
+            <a href="{% url 'operator:user_profile' %}">
+                <div class="userprofile">
+                    {% if operator.profile_picture %}
+                        <img id="user" src="{{ operator.profile_picture.url }}" width="70" height="70" alt="User Profile Picture">
+                    {% else %}
+                        <img id="user" src="{% static 'images/userprofilelogonobg.png' %}" width="70" height="70" alt="Default Profile Picture">
+                    {% endif %}
+                </div>
+            </a>
             <a href="{% url 'landing' %}">
                 <div class="logout">
                     <button id="logout">Log Out</button>
                 </div>
             </a>
+        </div>
     </div>
 </body>
 </html>

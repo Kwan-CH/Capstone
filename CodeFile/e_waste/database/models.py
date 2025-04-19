@@ -48,6 +48,7 @@ class Operator(models.Model):
     name = models.CharField(max_length=50)
     email = models.EmailField(max_length=100, unique=True)
     password = models.CharField(max_length=200)
+    profile_picture = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
 
     def save(self, *args, **kwargs):
         if not self.operatorID:
