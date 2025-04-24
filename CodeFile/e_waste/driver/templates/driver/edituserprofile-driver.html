@@ -22,7 +22,7 @@
 </div>
 
         <div class="container-bottom">
-            <form  method="post"
+            <form method="post"
                 action="{% url 'driver:edit_profile' %}" id="editProfileForm" method="post">
                 {% csrf_token %}
 
@@ -60,16 +60,18 @@
                 <div class="select-box">
                     <select id="areaDropdown" name="area" class="select" required></select>
                 </div>
+
+                <!-- Buttons -->
+                <div class="driver-editProfile-btn-container">
+                    <div class="driver-editProfile-SaveBtn">
+                        <button type="button" onclick="verifyForm()" id="savechanges">Save Changes</button>
+                    </div>
+                </div>
             </form>
         </div>
     </div>
 
-    <!-- Buttons -->
-    <div class="driver-editProfile-btn-container">
-        <div class="driver-editProfile-SaveBtn">
-            <button onclick="driver_editProfile_ConfirmationPopup()" id="savechanges">Save Changes</button>
-        </div>
-    </div>
+
 
     <!-- Confirmation Popup -->
     <div id="driver-editProfile-confirmation-popup" class="driver-editProfile-popup-container" style="display: none;">

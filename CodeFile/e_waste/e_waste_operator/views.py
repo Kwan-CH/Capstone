@@ -43,7 +43,7 @@ def manageReq(request):
             )
         )
         .filter(~Q(status='Completed'), ~Q(status='Rejected'))
-        .order_by('-requestID')
+        .order_by('date', 'time') #Sort from oldest to newest date and time
     )
 
     reasons = Reason.objects.all()
@@ -374,10 +374,13 @@ def edit_password(request):
         confirm_password = request.POST['confirm']
 
         if current_password != operator.password:
-            return render(request, 'operator/editpassword-operator.html', {'wrong_current':True})
+            return render(request, 'operator/editpassword-operator.html', {'wrong_current':True, 'operator':operator})
 
         if new_password != confirm_password:
-            return render(request, 'operator/editpassword-operator.html', {'wrong_confirmation':True})
+            return render(request, 'operator/editpassword-operator.html', {'wrong_confirmation':True, 'operator':operator})
+
+        if len(new_password) < 8:
+            return render(request, 'operator/editpassword-operator.html',  {"password_length": True, 'operator':operator})
 
         operator.password = new_password
         operator.save()

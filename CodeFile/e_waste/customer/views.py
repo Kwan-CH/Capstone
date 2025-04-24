@@ -105,6 +105,7 @@ def schedule_pickup(request):
             if not value:
                 return render(request, 'customer/schedulePick.html', {
                     'categories': ItemCategory.objects.all(),
+                    "formData": request.POST,
                     "profile": userInfo,
                     'submitted': False,
                     'states': states,
@@ -117,6 +118,7 @@ def schedule_pickup(request):
         if stateSelected not in excluded_states and not area:
             return render(request, 'customer/schedulePick.html', {
                 'categories': ItemCategory.objects.all(),
+                "formData": request.POST,
                 "profile": userInfo,
                 'submitted': False,
                 'states': states,
@@ -140,8 +142,10 @@ def schedule_pickup(request):
         #     })
 
         if not quantity.isdigit() or not quantity:
+            print("State Selected:", stateSelected, "Area:", area)
             return render(request, 'customer/schedulePick.html', {
                 'categories': ItemCategory.objects.all(),
+                "formData": request.POST,
                 "profile": userInfo,
                 'submitted': False,  # Ensures no undefined variable usage
                 'states': states,
@@ -173,6 +177,7 @@ def schedule_pickup(request):
         if not postalCode.isdigit() or len(postalCode) != 5 :
             return render(request, 'customer/schedulePick.html', {
                         'categories': ItemCategory.objects.all(),
+                        "formData": request.POST,
                         "profile": userInfo,
                         'submitted': False,  # Ensures no undefined variable usage
                         'states': states,
@@ -407,16 +412,14 @@ def edit_password(request):
          # Check if the current password matches
         if customer.password != current_password_input:
             return render(request, 'customer/editpassword-customer.html', {
-                'Invalid': True,
-                'error_message': "Current password is incorrect",
+                'wrong_current':True,
                 'profile': customer
             })
 
          # Check if new password matches confirm password
         if new_password != confirm_password:
             return render(request, 'customer/editpassword-customer.html', {
-                'Invalid': True,
-                'error_message': "New password and confirm password do not match",
+                'wrong_confirmation':True,
                 'profile': customer
             })
 
@@ -430,9 +433,9 @@ def edit_password(request):
         if len(new_password) < 8:
             # messages.error(request, "Password must be at least 8 characters long")
             return render(request, 'customer/editpassword-customer.html', {
-                'Invalid': True,
-                'error_message': "Password must be at least 8 characters long",
-                'profile': customer})
+                "password_length": True,
+                'profile': customer
+                })
 
 
   # If all checks pass, update the password

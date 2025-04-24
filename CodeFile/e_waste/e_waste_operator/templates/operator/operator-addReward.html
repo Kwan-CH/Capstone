@@ -16,7 +16,6 @@
             <div class="text-box"></div>
         </div>
 
-
         <form method="POST" action="{% url 'operator:add_reward' %}" id="add-reward-form">
             {% csrf_token %}
 
@@ -28,22 +27,25 @@
 
             <label for="quantity">Quantity:</label>
             <input id="quantity" name="quantity" type="number" placeholder="Example: 10" required>
+
+            <!-- Buttons -->
+            <div class="addNew-btn-container">
+                <div class="addNew-SaveBtn">
+                    {% comment %} <button onclick="addNew_ConfirmationPopup()" class="btn-save">Save</button> {% endcomment %}
+                    <button type="button" onclick="verifyForm()" class="btn-save">Save</button>
+                </div>
+
+                <div class="addNew-CancelBtn">
+                    <a href="{% url 'operator:reward_system'%}">
+                        <button type="button" class="btn-cancel">Cancel</button>
+                    </a>
+                </div>
+            </div>
+
         </form>
     </div>
 
-    <!-- Buttons -->
-    <div class="addNew-btn-container">
-        <div class="addNew-SaveBtn">
-            {% comment %} <button onclick="addNew_ConfirmationPopup()" class="btn-save">Save</button> {% endcomment %}
-            <button onclick="validateAndConfirm()" class="btn-save">Save</button>
-        </div>
 
-        <div class="addNew-CancelBtn">
-            <a href="{% url 'operator:reward_system'%}">
-                <button class="btn-cancel">Cancel</button>
-            </a>
-        </div>
-    </div>
 
 <!-- Confirmation Popup -->
 <div id="addNew-confirmation-popup" class="addNew-popup-container" style="display: none;">

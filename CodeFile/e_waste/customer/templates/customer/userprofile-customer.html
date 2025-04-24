@@ -14,7 +14,7 @@
     <div class="profile-container">
         <form method="POST" action="{% url 'customer:user_profile' %}" enctype="multipart/form-data">
             {% csrf_token %}
-            
+
             <div class="profile-picture">
                 <!-- Show the existing profile picture -->
                 {% if profile.profile_picture %}
@@ -24,7 +24,7 @@
                 {% endif %}
 
 
-                <label for="profile-pic-input" title="Change Profile Picture">✏️</label>
+                <label for="profile-pic-input" title="Change Profile Picture" class="edit-profile">✏️</label>
                 <input type="file" name="profile_picture" id="profile-pic-input" accept="image/*"> 
             </div>
 

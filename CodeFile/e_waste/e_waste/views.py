@@ -177,7 +177,6 @@ def generatePassword():
 
     # special_chars = string.punctuation
 
-    # selection_list = letters + digits + special_chars
     selection_list = letters + digits
 
     password_len = 10
