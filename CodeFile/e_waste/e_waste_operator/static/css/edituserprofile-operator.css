@@ -4,6 +4,10 @@ body {
     background-color: #F5F8EE;
 }
 
+h1{
+    font-family: 'Sansita Swashed', cursive;
+}
+
 .container-top {
     text-align: center;
     padding-top: 20px;

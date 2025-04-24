@@ -6,7 +6,7 @@ body {
 
 .pagination {
   padding-top: 0;
-  margin-top: -50px;
+  /* margin-top: -50px; */
   margin-bottom: 50px;
   text-align: center;
   justify-content: center;
@@ -118,6 +118,8 @@ button:active {
   height: auto;
   margin-top: 20px;
   margin-bottom: 80px;
+  width: 95%;
+  margin: 0 auto;
 }
 
 html,

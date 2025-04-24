@@ -17,7 +17,7 @@ function closeConfirmationPopup() {
 
 // Show Tracking Number Popup After Confirmation
 function showTrackingPopup() {
-    closeConfirmationPopup(); 
+    closeConfirmationPopup();
     document.getElementById("tracking-popup").style.display = "flex";
 }
 

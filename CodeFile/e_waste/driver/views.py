@@ -45,7 +45,7 @@ def pickup_details(request):
     .annotate(
         address=Case(
             When(state__in=excluded_states,
-                 then=Concat(
+                then=Concat(
                      'street', Value(', '),
                      'postalCode', Value(', '),
                      'state',
@@ -142,7 +142,7 @@ def complete_pickup(request):
         )
     )
     .filter(driver_id=driverID, status="Picked Up")
-    .order_by('-date', '-time')  # Sort by most recent pickups
+    .order_by('-pickedUp_date', '-pickedUp_time')  # Sort by most recent pickups
     )
 
     userInfo = Driver.objects.only('profile_picture').get(driverID=driverID)
@@ -206,7 +206,7 @@ def pickup_history(request):
         )
     )
     .filter(driver_id=driverID, status="Completed")
-    .order_by('-date', '-time')  # Sort by most recent pickups
+    .order_by('-completed_date', '-completed_time')  # Sort by most recent pickups
 )
 
     userInfo = Driver.objects.only('profile_picture').get(driverID=driverID)
@@ -348,28 +348,29 @@ def edit_password(request):
         if not current_password_input or not new_password or not confirm_password:
             return render(request, 'driver/editpassword-driver.html', {
                 'Invalid': True,
-                'error_message': "All fields must be filled"
+                'error_message': "All fields must be filled",
+                "profile": driver,
             })
 
          # Check if the current password matches
         if driver.password != current_password_input:
             return render(request, 'driver/editpassword-driver.html', {
-                'Invalid': True,
-                'error_message': "Current password is incorrect"
+                'wrong_current':True,
+                "profile": driver,
             })
 
          # Check if new password matches confirm password
         if new_password != confirm_password:
             return render(request, 'driver/editpassword-driver.html', {
-                'Invalid': True,
-                'error_message': "New password and confirm password do not match"
+                'wrong_confirmation':True,
+                "profile": driver,
             })
 
        
         # Then check if the password length is atleast 8 char
         if len(new_password) < 8:
             # messages.error(request, "Password must be at least 8 characters long")
-            return render(request, 'driver/editpassword-driver.html',  {'Invalid': True, 'error_message': "Password must be at least 8 characters long"})
+            return render(request, 'driver/editpassword-driver.html',  {"password_length": True, "profile": driver,})
 
 
   # If all checks pass, update the password

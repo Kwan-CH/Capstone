@@ -1,4 +1,4 @@
-function populateAreaDropdown(stateDropdownID, areaDropdownID, areaCovered=null, hiddenStateID, API_KEY){
+function populateAreaDropdown(stateDropdownID, areaDropdownID, areaCovered = null, hiddenStateID, API_KEY) {
 
     const stateDropdown = document.getElementById(stateDropdownID)
     const areaDropdown = document.getElementById(areaDropdownID)
@@ -24,7 +24,7 @@ function populateAreaDropdown(stateDropdownID, areaDropdownID, areaCovered=null,
         .then(data => {
             areaDropdown.innerHTML = ''; // Reset area dropdown
 
-            if (data && Object.keys(data).length > 1 ) {
+            if (data && Object.keys(data).length > 1) {
                 areaDropdown.disabled = false;
 
                 // Populate the area dropdown
@@ -36,12 +36,12 @@ function populateAreaDropdown(stateDropdownID, areaDropdownID, areaCovered=null,
                 });
 
                 if (selectedArea) {
-            // Find the option that matches the selected area and set it as selected
-                const selectedOption = Array.from(areaDropdown.options).find(option => option.value === selectedArea);
-                if (selectedOption) {
-                    selectedOption.selected = true;
+                    // Find the option that matches the selected area and set it as selected
+                    const selectedOption = Array.from(areaDropdown.options).find(option => option.value === selectedArea);
+                    if (selectedOption) {
+                        selectedOption.selected = true;
+                    }
                 }
-            }
 
             } else {
                 areaDropdown.disabled = true;
@@ -49,7 +49,7 @@ function populateAreaDropdown(stateDropdownID, areaDropdownID, areaCovered=null,
             }
         })
         .catch(error => {
-        console.error("Error fetching areas:", error);
-        areaDropdown.innerHTML = '<option value="">Error loading areas</option>';
-    });
+            console.error("Error fetching areas:", error);
+            areaDropdown.innerHTML = '<option value="">Error loading areas</option>';
+        });
 }
