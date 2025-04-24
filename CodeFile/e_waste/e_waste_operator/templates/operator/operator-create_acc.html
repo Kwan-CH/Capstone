@@ -18,36 +18,41 @@
         <div class="text-box"></div>
     </div>
 
-    <form id="driverForm" method="post" action="{% url 'operator:save_account' %}"> {% csrf_token %}
+    <form id="driverForm" method="post" action="{% url 'operator:save_account' %}">
+        {% csrf_token %}
+
         <label for="full_name">Full Name:</label>
-        <input name="full_name" id="full_name" type="text" placeholder="Example: Jayden Lai Sea Ming" required>
+        <input name="full_name" id="full_name" type="text" placeholder="Example: Jayden Lai Sea Ming"  value="{{ formData.full_name|default_if_none:'' }}" required>
 
         <label for="email">Email:</label>
-        <input name="email" id="email" type="text" placeholder="Example: abc@gmail.com" required>
+        <input name="email" id="email" type="text" placeholder="Example: abc@gmail.com"  value="{{ formData.email|default_if_none:'' }}" required>
 
         <label for="password">Password:</label>
         <input name="password" id="password" type="text" placeholder="Example: Abc12345" required>
 
         <label for="phone_number">Phone Number:</label>
-        <input name="phone_number" id="phone_number" type="tel" placeholder="Example: 0123456789" required>
+        <input name="phone_number" id="phone_number" type="tel" placeholder="Example: 0123456789" value="{{ formData.phone_number|default_if_none:'' }}" required>
 
 
-        <label>State covered:</label>
-        <input type="hidden" name="state_covered" id="state_text">
+        <label>State Covered:</label>
+        <input type="hidden" name="state_covered" id="state_text" value="{{ formData.state_covered|default_if_none:'' }}">
         <select id="stateDropdown" onchange="populateAreaDropdown('stateDropdown', 'areaDropdown', null, 'state_text', '{{API_KEY}}')" required>
-            <option disabled selected>Select state covered</option>
+            <option disabled {% if not formData.state_covered %}selected{% endif %}>Select state covered</option>
             {% for state, code in states.items %}
-                <option value="{{code}}">{{state}}</option>
+                <option value="{{code}}" {% if formData.state_covered == state %}selected{% endif %}>{{state}}</option>
             {% endfor %}
         </select>
 
-        <label>Area covered:</label>
-        <select name="area_covered" id="areaDropdown" required>
-            <option disabled selected>Select area covered</option>
+        <label>Area Covered:</label>
+        <select name="area_covered" id="areaDropdown" class="select" required>
+            {% comment %} <option disabled {% if not formData.area_covered %}selected{% endif %}>Select area covered</option>
+            {% if formData.area_covered %}
+                <option selected value="{{ formData.area_covered }}">{{ formData.area_covered }}</option>
+            {% endif %} {% endcomment %}
         </select>
 
         <label for="car_plate">Car Plate:</label>
-        <input name="car_plate" type="text" id="car_plate" placeholder="Example: ABC0123" required>
+        <input name="car_plate" type="text" id="car_plate" placeholder="Example: ABC0123" value="{{ formData.car_plate|default_if_none:'' }}" required>
 
         <!-- Buttons -->
         <div class="btn-container">
@@ -79,6 +84,18 @@
 </div>
 
 {% block extra_js %}
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const stateDropdown = document.getElementById('stateDropdown');
+        const selectedState = stateDropdown ? stateDropdown.value : null;
+        const selectedArea = "{{ formData.area_covered|default_if_none:'' }}";
+
+        if (selectedState) {
+            populateAreaDropdown('stateDropdown', 'areaDropdown', selectedArea, 'state_text', '{{API_KEY}}');
+        }
+    });
+</script>
 
     {% if Success %}
         <script>showSuccessfulPopup()</script>
