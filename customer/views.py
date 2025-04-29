@@ -104,6 +104,7 @@ def schedule_pickup(request):
             if not value:
                 return render(request, 'customer/schedulePick.html', {
                     'categories': ItemCategory.objects.all(),
+                    "formData": request.POST,
                     "profile": userInfo,
                     'submitted': False,
                     'states': states,
@@ -116,6 +117,7 @@ def schedule_pickup(request):
         if stateSelected not in excluded_states and not area:
             return render(request, 'customer/schedulePick.html', {
                 'categories': ItemCategory.objects.all(),
+                "formData": request.POST,
                 "profile": userInfo,
                 'submitted': False,
                 'states': states,
@@ -139,8 +141,10 @@ def schedule_pickup(request):
         #     })
 
         if not quantity.isdigit() or not quantity:
+            print("State Selected:", stateSelected, "Area:", area)
             return render(request, 'customer/schedulePick.html', {
                 'categories': ItemCategory.objects.all(),
+                "formData": request.POST,
                 "profile": userInfo,
                 'submitted': False,  # Ensures no undefined variable usage
                 'states': states,
@@ -172,6 +176,7 @@ def schedule_pickup(request):
         if not postalCode.isdigit() or len(postalCode) != 5 :
             return render(request, 'customer/schedulePick.html', {
                         'categories': ItemCategory.objects.all(),
+                        "formData": request.POST,
                         "profile": userInfo,
                         'submitted': False,  # Ensures no undefined variable usage
                         'states': states,

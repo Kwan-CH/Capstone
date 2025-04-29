@@ -70,16 +70,17 @@
            <label for="address">Address:</label>
            <input type="text" name="street" id="address" class="input" value="{{profile.street}}" required></input>
 
+            <!-- Buttons -->
+            <div class="customer-editProfile-btn-container">
+                <div class="customer-editProfile-SaveBtn">
+                    <button type="button" onclick="verifyForm()" id="savechanges">Save Changes</button>
+                </div>
+            </div>
+
             </form>
         </div>
     </div>
 
-    <!-- Buttons -->
-    <div class="customer-editProfile-btn-container">
-        <div class="customer-editProfile-SaveBtn">
-            <button onclick="customer_editProfile_ConfirmationPopup()" id="savechanges">Save Changes</button>
-        </div>
-    </div>
 
     <!-- Confirmation Popup -->
     <div id="customer-editProfile-confirmation-popup" class="customer-editProfile-popup-container" style="display: none;">

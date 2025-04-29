@@ -142,7 +142,7 @@ def complete_pickup(request):
         )
     )
     .filter(driver_id=driverID, status="Picked Up")
-    .order_by('-date', '-time')  # Sort by most recent pickups
+    .order_by('-pickedUp_date', '-pickedUp_time')  # Sort by most recent pickups
     )
 
     userInfo = Driver.objects.only('profile_picture').get(driverID=driverID)
@@ -206,7 +206,7 @@ def pickup_history(request):
         )
     )
     .filter(driver_id=driverID, status="Completed")
-    .order_by('-date', '-time')  # Sort by most recent pickups
+    .order_by('-completed_date', '-completed_time')  # Sort by most recent pickups
 )
 
     userInfo = Driver.objects.only('profile_picture').get(driverID=driverID)

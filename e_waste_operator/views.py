@@ -43,7 +43,7 @@ def manageReq(request):
             )
         )
         .filter(~Q(status='Completed'), ~Q(status='Rejected'))
-        .order_by('-requestID')
+        .order_by('date', 'time') #Sort from oldest to newest date and time
     )
 
     reasons = Reason.objects.all()
