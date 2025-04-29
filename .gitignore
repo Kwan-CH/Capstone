@@ -3,3 +3,4 @@
 /staticfiles/videos/
 /.env
 /ca.pem
+/database/migrations/
