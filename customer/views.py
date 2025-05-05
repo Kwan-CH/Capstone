@@ -38,7 +38,6 @@ def homepage_customer(request):
     return render(request, "customer/homepage-customer.html", {"profile": userInfo})
 
 
-@login_required
 def pickup_status(request):
     customer_id = request.session.get('user_id')
     userInfo = Customer.objects.only('profile_picture').get(customerID=customer_id)  # Get user profile data
@@ -71,7 +70,7 @@ def pickup_status(request):
 
     return render(request, 'customer/pickupStatus.html', {'deliveries': deliveries, "profile": userInfo})
 
-@login_required
+
 def schedule_pickup(request):
     customer_id = request.session.get("user_id")
 
