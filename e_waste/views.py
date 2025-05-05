@@ -12,7 +12,6 @@ import requests
 import secrets
 import string
 import  os
-import dotenv
 
 load_dotenv()
 
@@ -175,9 +174,9 @@ def generatePassword():
 
     digits = string.digits
 
-    # special_chars = string.punctuation
+    special_chars = string.punctuation
 
-    selection_list = letters + digits
+    selection_list = letters + digits + special_chars
 
     password_len = 10
 

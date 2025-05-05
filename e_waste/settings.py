@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ['127.0.0.1', '.vercel.app']
 # Application definition
 
 INSTALLED_APPS = [
+    'whitenoise.runserver_nostatic',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -46,6 +47,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -89,22 +91,43 @@ WSGI_APPLICATION = 'e_waste.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
+import os
+from dotenv import load_dotenv
+import base64
+import tempfile
+
+load_dotenv()
+
+# Decode base64 cert and write to a temp file
+ca_cert_content = base64.b64decode(os.getenv('DATABASE_CERT'))
+
+# Create a temp file to hold the cert
+temp_cert_file = tempfile.NamedTemporaryFile(delete=False, suffix=".pem")
+temp_cert_file.write(ca_cert_content)
+temp_cert_file.flush()  # Ensure it's written to disk
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': BASE_DIR / 'db.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
     # 'default': {
-    #     'ENGINE': 'django.db.backends.mysql',
-    #     'NAME': 'e-waste',
-    #     'USER': 'root',
-    #     'PASSWORD': '',
-    #     'HOST': 'localhost',
-    #     'PORT': '3306'
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     # 'NAME': BASE_DIR / 'db.sqlite3',
+    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     # }
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'e_waste',
+        'USER': 'avnadmin',
+        'PASSWORD': os.getenv('DATABASE_PASSWORD'),
+        'HOST': 'mysql-23ecb9bb-wastemanagement.l.aivencloud.com',
+        'PORT': '23589',
+        'OPTIONS': {
+            'ssl': {
+                'check_hostname':False, 'verify_cert':False
+            }
+        }
+    }
 }
+# DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
+
 
 
 
@@ -149,16 +172,13 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
-import os
-from dotenv import load_dotenv
-
-load_dotenv()
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
@@ -170,5 +190,3 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1", "http://localhost"]
