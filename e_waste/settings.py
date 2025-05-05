@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-to(rm0g=r^g0r=xl(34g&e6jhy2cwk)4v&iy6s=n)b&ptimofg'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', '.vercel.app']
 
@@ -121,7 +121,7 @@ DATABASES = {
         'PORT': '23589',
         'OPTIONS': {
             'ssl': {
-                'ca': temp_cert_file.name,
+                'check_hostname':False, 'verify_cert':False
             }
         }
     }

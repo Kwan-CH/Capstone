@@ -1,6 +1,7 @@
 /e_waste_operator/static/videos/
+
+/.env/
+
 /myenv/
-/staticfiles/videos/
-/.env
+
 /tmp_ca.pem
-/database/migrations/

@@ -174,7 +174,9 @@ def generatePassword():
 
     digits = string.digits
 
-    selection_list = letters + digits
+    special_chars = string.punctuation
+
+    selection_list = letters + digits + special_chars
 
     password_len = 10
 
