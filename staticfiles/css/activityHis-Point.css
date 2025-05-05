@@ -10,6 +10,11 @@ body {
     flex: 1;
 }
 
+.pagination {
+    margin-bottom: 20px;
+}
+
+
 body {
     background-color: #F5F8EE;
     text-align: center;

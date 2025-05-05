@@ -105,6 +105,7 @@ p {
     color: #030500;
     font-size: 16px;
     font-weight: bold;
+    margin-top: 10px;
 }
 
 a {
@@ -1208,6 +1209,7 @@ input {
     padding: 1.5rem;
     border-radius: 12px;
     margin-bottom: 1rem;
+    word-wrap: break-word;
 }
 
 .co2-saved {
