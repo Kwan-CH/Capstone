@@ -2,5 +2,5 @@
 /myenv/
 /staticfiles/videos/
 /.env
-/ca.pem
+/tmp_ca.pem
 /database/migrations/
