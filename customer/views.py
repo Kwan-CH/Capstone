@@ -34,6 +34,7 @@ def homepage_customer(request):
         return redirect('customer:login')  # Redirect to login if not authenticated
 
     userInfo = Customer.objects.only('profile_picture').get(customerID=customerID)  # Get user profile data
+    print(userInfo.profile_picture.url)
 
     return render(request, "customer/homepage-customer.html", {"profile": userInfo})
 
@@ -69,7 +70,6 @@ def pickup_status(request):
         return render(request, 'customer/pickupStatus.html', {'Empty': True, "profile": userInfo})
 
     return render(request, 'customer/pickupStatus.html', {'deliveries': deliveries, "profile": userInfo})
-
 
 def schedule_pickup(request):
     customer_id = request.session.get("user_id")
@@ -357,7 +357,6 @@ def edit_profile(request):
         userInfo.name = new_name
         userInfo.email = new_email
         userInfo.phoneNumber = new_phoneNumber
-        print("new_phoneNumber: ", new_phoneNumber)
         userInfo.street = new_street
         userInfo.postalCode = new_postalCode
         userInfo.area = new_area

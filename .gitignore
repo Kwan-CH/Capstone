@@ -1,7 +1,7 @@
 /e_waste_operator/static/videos/
 
-/.env/
+/.env
 
 /myenv/
 
-/tmp_ca.pem
+/db.sqlite3

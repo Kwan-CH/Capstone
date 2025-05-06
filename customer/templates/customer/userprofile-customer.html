@@ -83,45 +83,6 @@
         });
     </script> 
 
-    {% comment %} <script>
-        const profilePicInput = document.getElementById('profile-pic-input');
-        const profilePicImage = document.getElementById('profile-pic-preview');
-        const profilePicError = document.getElementById('profile-pic-error');
-    
-        profilePicInput.addEventListener('change', function (event) {
-            const file = event.target.files[0];
-    
-            if (file && file.type.startsWith('image/')) {
-                const formData = new FormData();
-                formData.append('profile_picture', file);
-    
-                fetch("{% url 'customer:user_profile' %}", {
-                    method: "POST",
-                    body: formData,
-                    headers: {
-                        "X-CSRFToken": "{{ csrf_token }}" // Include CSRF token
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.profile_picture_url) {
-                        profilePicImage.src = data.profile_picture_url;  // Update image preview
-                        profilePicError.textContent = '';
-                    } else {
-                        profilePicError.textContent = 'Error uploading image.';
-                    }
-                })
-                .catch(() => {
-                    profilePicError.textContent = 'Failed to upload image.';
-                });
-    
-            } else {
-                profilePicError.textContent = 'Please select a valid image file.';
-                profilePicInput.value = ''; // Reset file input
-            }
-        });
-    </script>
- {% endcomment %}
 
  <script>
     // Event listener for the file input change
