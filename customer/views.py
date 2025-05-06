@@ -34,7 +34,6 @@ def homepage_customer(request):
         return redirect('customer:login')  # Redirect to login if not authenticated
 
     userInfo = Customer.objects.only('profile_picture').get(customerID=customerID)  # Get user profile data
-    print(userInfo.profile_picture.url)
 
     return render(request, "customer/homepage-customer.html", {"profile": userInfo})
 
